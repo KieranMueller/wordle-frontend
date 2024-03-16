@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-radius: 30px;
+  background-color: var(--blue);
+  width: 330px;
+  height: 110px;
+}
+
+img {
+  object-fit: contain;
+  height: 5rem;
+  width: 6rem;
+  cursor: pointer;
+}
