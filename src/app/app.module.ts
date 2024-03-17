@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -16,6 +17,9 @@ import { ProfileComponent } from './views/profile/profile.component';
 import { SocialMediaBlockComponent } from './components/social-media-block/social-media-block.component';
 import { EndGameModalComponent } from './overlays/end-game-modal/end-game-modal.component';
 import { ShareWordleModalComponent } from './overlays/share-wordle-modal/share-wordle-modal.component';
+import { SentEmailComponent } from './views/sent-email/sent-email.component';
+import { FormsModule } from '@angular/forms';
+import { ResetPasswordComponent } from './views/reset-password/reset-password.component';
 
 @NgModule({
   declarations: [
@@ -33,8 +37,10 @@ import { ShareWordleModalComponent } from './overlays/share-wordle-modal/share-w
     SocialMediaBlockComponent,
     EndGameModalComponent,
     ShareWordleModalComponent,
+    SentEmailComponent,
+    ResetPasswordComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule],
+  imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],
   providers: [],
   bootstrap: [AppComponent],
 })
