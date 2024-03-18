@@ -21,6 +21,7 @@ import { SentEmailComponent } from './views/sent-email/sent-email.component';
 import { FormsModule } from '@angular/forms';
 import { ResetPasswordComponent } from './views/reset-password/reset-password.component';
 import { CreateAccountEmailConfirmationComponent } from './views/create-account-email-confirmation/create-account-email-confirmation.component';
+import { TopBarComponent } from './components/top-bar/top-bar.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { CreateAccountEmailConfirmationComponent } from './views/create-account-
     SentEmailComponent,
     ResetPasswordComponent,
     CreateAccountEmailConfirmationComponent,
+    TopBarComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],
   providers: [],

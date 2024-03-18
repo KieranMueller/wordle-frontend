@@ -1,5 +1,94 @@
-.container {
+.background {
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--yellow);
+}
+
+.page {
   display: flex;
   flex-direction: column;
-  width: 200px;
+  align-items: center;
+}
+
+.outer {
+  border-radius: 32px;
+  margin-top: 20px;
+  width: 20rem;
+  background-color: var(--orange);
+}
+
+.container {
+  border-radius: 32px;
+  margin: 20px;
+  padding: 30px;
+  background-color: var(--green);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+  color: var(--red);
+  font-size: 3rem;
+}
+
+p {
+  margin: 0;
+}
+
+.red {
+  color: var(--red);
+}
+
+.blue {
+  color: var(--blue);
+}
+
+input {
+  border-radius: 32px;
+  border: none;
+  width: 14rem;
+  padding: 14px;
+}
+
+::placeholder {
+  color: white;
+}
+
+.username {
+  margin-bottom: 2rem;
+  background-color: var(--red);
+  color: white;
+}
+
+.password {
+  background-color: var(--blue);
+  color: white;
+}
+
+.need-account {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn {
+  margin-top: 20px;
+  text-align: center;
+  vertical-align: middle;
+  width: 10rem;
+  height: 3rem;
+  font-size: 1.5rem;
+  border-radius: 32px;
+  border: none;
+  outline: none;
+  background-color: var(--orange);
+  color: white;
+}
+
+.pword {
+  margin-top: 10px;
 }

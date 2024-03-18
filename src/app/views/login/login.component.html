@@ -1,8 +1,29 @@
-<div class="container">
-  <h1>login page</h1>
-  <input type="text" placeholder="username" [(ngModel)]="user.username" />
-  <input type="text" placeholder="password" [(ngModel)]="user.password" />
-  <button (click)="login()">Go</button>
-  <h3 routerLink="/create-account">or sign up</h3>
-  <h3 routerLink="/forgot-password">forgot password?</h3>
+<div class="background">
+  <app-top-bar color="red"></app-top-bar>
+  <div class="page">
+    <div class="outer">
+      <div class="container">
+        <h1 class="title">WELCOME!</h1>
+        <input
+          class="username"
+          type="text"
+          placeholder="username"
+          [(ngModel)]="user.username"
+        />
+        <input
+          class="password"
+          type="text"
+          placeholder="password"
+          [(ngModel)]="user.password"
+        />
+        <button class="btn" (click)="login()">go!</button>
+      </div>
+    </div>
+    <div class="need-account">
+      <p class="red">need an account?</p>
+      <p class="blue" routerLink="/create-account">sign up</p>
+    </div>
+    <app-social-media-block></app-social-media-block>
+    <p class="pword" routerLink="/forgot-password">forgot password?</p>
+  </div>
 </div>

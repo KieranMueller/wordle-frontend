@@ -5,3 +5,14 @@
   --green: #8cb369;
   --blue: #5b8e7d;
 }
+
+body {
+  margin: 0;
+}
+
+* {
+  font-family: "JetBrains Mono", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+}

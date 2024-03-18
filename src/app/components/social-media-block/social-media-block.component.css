@@ -1,17 +1,22 @@
 .container {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   padding: 20px;
   border-radius: 30px;
   background-color: var(--blue);
-  width: 330px;
-  height: 110px;
+  width: 240px;
+  height: 40px;
+}
+
+.image-div {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
 }
 
 img {
   object-fit: contain;
-  height: 5rem;
-  width: 6rem;
+  width: 3.5rem;
   cursor: pointer;
 }
