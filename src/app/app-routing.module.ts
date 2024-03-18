@@ -16,6 +16,7 @@ const routes: Routes = [
     pathMatch: 'full',
   },
   { path: 'login', component: LoginComponent },
+  { path: 'login/:username/:emailUuid', component: LoginComponent },
   { path: 'create-account', component: CreateAccountComponent },
   { path: 'created', component: CreateAccountEmailConfirmationComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },

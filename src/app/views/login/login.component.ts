@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/service/auth.service';
 
 @Component({
@@ -8,26 +8,26 @@ import { AuthService } from 'src/app/service/auth.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   user = {
     username: '',
     password: '',
+    emailUuid: '',
   };
 
   constructor(
-    private http: HttpClient,
     private authService: AuthService,
-    private router: Router
+    private route: ActivatedRoute
   ) {}
 
+  ngOnInit() {
+    if (this.route.snapshot.params['emailUuid']) {
+      this.user.emailUuid = this.route.snapshot.params['emailUuid'];
+      this.user.username = this.route.snapshot.params['username'];
+    }
+  }
+
   login() {
-    this.http.post('http://localhost:8080/login', this.user).subscribe({
-      next: (res) => {
-        if (res) {
-          this.authService.login();
-          this.router.navigateByUrl('/home');
-        }
-      },
-    });
+    this.authService.login(this.user);
   }
 }

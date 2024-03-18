@@ -23,8 +23,10 @@ export class CreateAccountComponent {
     this.http.post('http://localhost:8080/create', this.user).subscribe({
       next: (res) => {
         console.log(res);
+        this.router.navigateByUrl('/login');
       },
       error: (e) => {
+        alert(e.error.message);
         console.log(e);
       },
     });

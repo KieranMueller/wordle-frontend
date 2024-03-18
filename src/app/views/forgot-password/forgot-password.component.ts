@@ -21,8 +21,10 @@ export class ForgotPasswordComponent {
       .subscribe({
         next: (res) => {
           console.log(res);
+          this.router.navigateByUrl('/login');
         },
         error: (e) => {
+          alert(e.error.message);
           console.log(e);
         },
       });
