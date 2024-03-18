@@ -7,6 +7,7 @@ import { ForgotPasswordComponent } from './views/forgot-password/forgot-password
 import { SentEmailComponent } from './views/sent-email/sent-email.component';
 import { ResetPasswordComponent } from './views/reset-password/reset-password.component';
 import { CanActivate } from './guard/auth.guard';
+import { CreateAccountEmailConfirmationComponent } from './views/create-account-email-confirmation/create-account-email-confirmation.component';
 
 const routes: Routes = [
   {
@@ -16,9 +17,10 @@ const routes: Routes = [
   },
   { path: 'login', component: LoginComponent },
   { path: 'create-account', component: CreateAccountComponent },
+  { path: 'created', component: CreateAccountEmailConfirmationComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'reset-password-confirmation', component: SentEmailComponent },
-  { path: 'set-password', component: ResetPasswordComponent },
+  { path: 'set-password/:passwordUUID', component: ResetPasswordComponent },
   { path: 'home', component: HomeComponent, canActivate: [CanActivate] },
   { path: '**', redirectTo: '/login' },
 ];

@@ -20,6 +20,7 @@ import { ShareWordleModalComponent } from './overlays/share-wordle-modal/share-w
 import { SentEmailComponent } from './views/sent-email/sent-email.component';
 import { FormsModule } from '@angular/forms';
 import { ResetPasswordComponent } from './views/reset-password/reset-password.component';
+import { CreateAccountEmailConfirmationComponent } from './views/create-account-email-confirmation/create-account-email-confirmation.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { ResetPasswordComponent } from './views/reset-password/reset-password.co
     ShareWordleModalComponent,
     SentEmailComponent,
     ResetPasswordComponent,
+    CreateAccountEmailConfirmationComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],
   providers: [],

@@ -1,10 +1,45 @@
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+  Router,
+} from '@angular/router';
 
 @Component({
   selector: 'app-reset-password',
   templateUrl: './reset-password.component.html',
-  styleUrls: ['./reset-password.component.css']
+  styleUrls: ['./reset-password.component.css'],
 })
 export class ResetPasswordComponent {
+  newPasswordRequest = {
+    resetPasswordUuid: '',
+    password: '',
+  };
+  confirmPassword = '';
 
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private http: HttpClient
+  ) {}
+
+  submit() {
+    if (this.newPasswordRequest.password !== this.confirmPassword) return;
+    this.newPasswordRequest.resetPasswordUuid =
+      this.route.snapshot.params['passwordUUID'];
+    this.http
+      .post(
+        'http://localhost:8080/create-new-password',
+        this.newPasswordRequest
+      )
+      .subscribe({
+        next: (res) => {
+          console.log(res);
+        },
+        error: (e) => {
+          console.log(e);
+        },
+      });
+  }
 }
