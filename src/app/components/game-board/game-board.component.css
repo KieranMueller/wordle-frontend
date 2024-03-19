@@ -58,5 +58,9 @@
 }
 
 .keyboard-row button.wrong-spot {
-  background-color: orange;
+  background-color: var(--orange);
+}
+
+.keyboard-row button.right-spot {
+  background-color: var(--green);
 }

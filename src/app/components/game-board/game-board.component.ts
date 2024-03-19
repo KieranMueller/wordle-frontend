@@ -71,10 +71,19 @@ export class GameBoardComponent {
   }
 
   checkKeys(char: string) {
-    if (this.usedChars.includes(char) && this.word.includes(char)) {
+    if (this.charInRightSpot(char)) {
+      return 'right-spot'
+    } else if (this.usedChars.includes(char) && this.word.includes(char)) {
       return 'wrong-spot';
     } else if (this.usedChars.includes(char)) {
       return 'used';
     } else return;
+  }
+
+  charInRightSpot(char: string): boolean {
+    if (this.usedChars.includes(char)) {
+      return true;
+    }
+    return false;
   }
 }
