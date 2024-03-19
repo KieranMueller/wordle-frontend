@@ -9,13 +9,20 @@
 }
 
 .tile {
-  border: 1px solid grey;
   min-width: 50px;
   min-height: 50px;
   background-color: var(--yellow);
   color: black;
   font-size: 2rem;
   text-align: center;
+}
+
+.right-spot {
+  background-color: var(--green);
+}
+
+.wrong-spot {
+  background-color: var(--red);
 }
 
 .keyboard-container {
@@ -44,4 +51,8 @@
   opacity: 0.8;
   color: gray;
   background-color: rgb(36, 36, 36);
+}
+
+.keyboard-row button.used {
+  background-color: grey;
 }

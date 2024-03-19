@@ -1,35 +1,36 @@
 <div class="container">
   <div class="settings"></div>
   <div class="board">
-    <div class="tile" *ngFor="let num of charArr; let i = index">
+    <div class="tile" *ngFor="let num of charArr; let i = index"
+    >
       {{ charArr[i] ? charArr[i] : null }}
       <!-- {{ charArr[i] }} -->
     </div>
   </div>
   <div class="keyboard-container">
     <div class="keyboard-row">
-      <button (click)="type('q')">q</button>
-      <button (click)="type('w')">w</button>
-      <button (click)="type('e')">e</button>
-      <button (click)="type('r')">r</button>
-      <button (click)="type('t')">t</button>
-      <button (click)="type('y')">y</button>
-      <button (click)="type('u')">u</button>
-      <button (click)="type('i')">i</button>
-      <button (click)="type('o')">o</button>
-      <button (click)="type('p')">p</button>
+      <button [ngClass]="{'used': usedChars.includes('q')}" (click)="type('q')">q</button>
+      <button [ngClass]="{'used': usedChars.includes('w')}" (click)="type('w')">w</button>
+      <button [ngClass]="{'used': usedChars.includes('e')}" (click)="type('e')">e</button>
+      <button [ngClass]="{'used': usedChars.includes('r')}" (click)="type('r')">r</button>
+      <button [ngClass]="{'used': usedChars.includes('t')}" (click)="type('t')">t</button>
+      <button [ngClass]="{'used': usedChars.includes('y')}" (click)="type('y')">y</button>
+      <button [ngClass]="{'used': usedChars.includes('u')}" (click)="type('u')">u</button>
+      <button [ngClass]="{'used': usedChars.includes('i')}" (click)="type('i')">i</button>
+      <button [ngClass]="{'used': usedChars.includes('o')}" (click)="type('o')">o</button>
+      <button [ngClass]="{'used': usedChars.includes('p')}" (click)="type('p')">p</button>
     </div>
     <div class="keyboard-row">
       <div class="spacer-half"></div>
-      <button (click)="type('a')">a</button>
-      <button (click)="type('s')">s</button>
-      <button (click)="type('d')">d</button>
-      <button (click)="type('f')">f</button>
-      <button (click)="type('g')">g</button>
-      <button (click)="type('h')">h</button>
-      <button (click)="type('j')">j</button>
-      <button (click)="type('k')">k</button>
-      <button (click)="type('l')">l</button>
+      <button [ngClass]="{'used': usedChars.includes('a')}" (click)="type('a')">a</button>
+      <button [ngClass]="{'used': usedChars.includes('s')}" (click)="type('s')">s</button>
+      <button [ngClass]="{'used': usedChars.includes('d')}" (click)="type('d')">d</button>
+      <button [ngClass]="{'used': usedChars.includes('f')}" (click)="type('f')">f</button>
+      <button [ngClass]="{'used': usedChars.includes('g')}" (click)="type('g')">g</button>
+      <button [ngClass]="{'used': usedChars.includes('h')}" (click)="type('h')">h</button>
+      <button [ngClass]="{'used': usedChars.includes('j')}" (click)="type('j')">j</button>
+      <button [ngClass]="{'used': usedChars.includes('k')}" (click)="type('k')">k</button>
+      <button [ngClass]="{'used': usedChars.includes('l')}" (click)="type('l')">l</button>
     </div>
     <div class="keyboard-row">
       <button
@@ -39,13 +40,13 @@
       >
         Enter
       </button>
-      <button (click)="type('z')">z</button>
-      <button (click)="type('x')">x</button>
-      <button (click)="type('c')">c</button>
-      <button (click)="type('v')">v</button>
-      <button (click)="type('b')">b</button>
-      <button (click)="type('n')">n</button>
-      <button (click)="type('m')">m</button>
+      <button [ngClass]="{'used': usedChars.includes('z')}" (click)="type('z')">z</button>
+      <button [ngClass]="{'used': usedChars.includes('x')}" (click)="type('x')">x</button>
+      <button [ngClass]="{'used': usedChars.includes('c')}" (click)="type('c')">c</button>
+      <button [ngClass]="{'used': usedChars.includes('v')}" (click)="type('v')">v</button>
+      <button [ngClass]="{'used': usedChars.includes('b')}" (click)="type('b')">b</button>
+      <button [ngClass]="{'used': usedChars.includes('n')}" (click)="type('n')">n</button>
+      <button [ngClass]="{'used': usedChars.includes('m')}" (click)="type('m')">m</button>
       <button
         class="wide-button"
         [disabled]="currentGuessLength === 0"
