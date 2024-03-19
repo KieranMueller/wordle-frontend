@@ -22,6 +22,7 @@ import { FormsModule } from '@angular/forms';
 import { ResetPasswordComponent } from './views/reset-password/reset-password.component';
 import { CreateAccountEmailConfirmationComponent } from './views/create-account-email-confirmation/create-account-email-confirmation.component';
 import { TopBarComponent } from './components/top-bar/top-bar.component';
+import { GameBoardComponent } from './components/game-board/game-board.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { TopBarComponent } from './components/top-bar/top-bar.component';
     ResetPasswordComponent,
     CreateAccountEmailConfirmationComponent,
     TopBarComponent,
+    GameBoardComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],
   providers: [],

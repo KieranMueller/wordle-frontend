@@ -1,12 +1,47 @@
-<app-top-bar color="green"></app-top-bar>
-<div class="container">
-  <h1>Create Account Page</h1>
-  <h3>Create account</h3>
-  <input type="text" placeholder="first name" [(ngModel)]="user.firstName" />
-  <input type="text" placeholder="last name" [(ngModel)]="user.lastName" />
-  <input type="text" placeholder="phone (optional)" [(ngModel)]="user.phone" />
-  <input type="text" placeholder="username" [(ngModel)]="user.username" />
-  <input type="email" placeholder="email" [(ngModel)]="user.email" />
-  <input type="text" placeholder="password" [(ngModel)]="user.password" />
-  <button (click)="create()">Create</button>
+<div class="background">
+  <app-top-bar color="green"></app-top-bar>
+  <div class="page">
+    <div class="outer">
+      <div class="container">
+        <p class="title">create an account</p>
+        <input
+          class="red-input"
+          type="text"
+          placeholder="first name"
+          [(ngModel)]="user.firstName"
+        />
+        <input
+          class="blue-input"
+          type="text"
+          placeholder="last name"
+          [(ngModel)]="user.lastName"
+        />
+        <input
+          class="orange-input"
+          type="text"
+          placeholder="phone (optional)"
+          [(ngModel)]="user.phone"
+        />
+        <input
+          class="blue-input"
+          type="text"
+          placeholder="username"
+          [(ngModel)]="user.username"
+        />
+        <input
+          class="yellow-input"
+          type="email"
+          placeholder="email"
+          [(ngModel)]="user.email"
+        />
+        <input
+          class="blue-input"
+          type="text"
+          placeholder="password"
+          [(ngModel)]="user.password"
+        />
+        <button class="btn" (click)="create()">create!</button>
+      </div>
+    </div>
+  </div>
 </div>

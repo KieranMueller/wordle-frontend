@@ -1,0 +1,47 @@
+.board {
+  background-color: var(--blue);
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 2px;
+  padding: 10px;
+  box-sizing: border-box;
+  margin: 10px;
+}
+
+.tile {
+  border: 1px solid grey;
+  min-width: 50px;
+  min-height: 50px;
+  background-color: var(--yellow);
+  color: black;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.keyboard-container {
+  /* height: 300px; */
+}
+
+.keyboard-row {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 0;
+}
+
+.keyboard-row button {
+  border: none;
+  margin: 1px;
+  padding: 12px;
+  cursor: pointer;
+  height: 40px;
+  background-color: var(--red);
+  color: white;
+  user-select: none;
+}
+
+.keyboard-row button:disabled {
+  opacity: 0.8;
+  color: gray;
+  background-color: rgb(36, 36, 36);
+}
