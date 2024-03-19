@@ -56,3 +56,7 @@
 .keyboard-row button.used {
   background-color: grey;
 }
+
+.keyboard-row button.wrong-spot {
+  background-color: orange;
+}

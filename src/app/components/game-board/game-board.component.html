@@ -9,28 +9,28 @@
   </div>
   <div class="keyboard-container">
     <div class="keyboard-row">
-      <button [ngClass]="{'used': usedChars.includes('q')}" (click)="type('q')">q</button>
-      <button [ngClass]="{'used': usedChars.includes('w')}" (click)="type('w')">w</button>
-      <button [ngClass]="{'used': usedChars.includes('e')}" (click)="type('e')">e</button>
-      <button [ngClass]="{'used': usedChars.includes('r')}" (click)="type('r')">r</button>
-      <button [ngClass]="{'used': usedChars.includes('t')}" (click)="type('t')">t</button>
-      <button [ngClass]="{'used': usedChars.includes('y')}" (click)="type('y')">y</button>
-      <button [ngClass]="{'used': usedChars.includes('u')}" (click)="type('u')">u</button>
-      <button [ngClass]="{'used': usedChars.includes('i')}" (click)="type('i')">i</button>
-      <button [ngClass]="{'used': usedChars.includes('o')}" (click)="type('o')">o</button>
-      <button [ngClass]="{'used': usedChars.includes('p')}" (click)="type('p')">p</button>
+      <button [ngClass]="checkKeys('q')" (click)="type('q')">q</button>
+      <button [ngClass]="checkKeys('w')" (click)="type('w')">w</button>
+      <button [ngClass]="checkKeys('e')" (click)="type('e')">e</button>
+      <button [ngClass]="checkKeys('r')" (click)="type('r')">r</button>
+      <button [ngClass]="checkKeys('t')" (click)="type('t')">t</button>
+      <button [ngClass]="checkKeys('y')" (click)="type('y')">y</button>
+      <button [ngClass]="checkKeys('u')" (click)="type('u')">u</button>
+      <button [ngClass]="checkKeys('i')" (click)="type('i')">i</button>
+      <button [ngClass]="checkKeys('o')" (click)="type('o')">o</button>
+      <button [ngClass]="checkKeys('p')" (click)="type('p')">p</button>
     </div>
     <div class="keyboard-row">
       <div class="spacer-half"></div>
-      <button [ngClass]="{'used': usedChars.includes('a')}" (click)="type('a')">a</button>
-      <button [ngClass]="{'used': usedChars.includes('s')}" (click)="type('s')">s</button>
-      <button [ngClass]="{'used': usedChars.includes('d')}" (click)="type('d')">d</button>
-      <button [ngClass]="{'used': usedChars.includes('f')}" (click)="type('f')">f</button>
-      <button [ngClass]="{'used': usedChars.includes('g')}" (click)="type('g')">g</button>
-      <button [ngClass]="{'used': usedChars.includes('h')}" (click)="type('h')">h</button>
-      <button [ngClass]="{'used': usedChars.includes('j')}" (click)="type('j')">j</button>
-      <button [ngClass]="{'used': usedChars.includes('k')}" (click)="type('k')">k</button>
-      <button [ngClass]="{'used': usedChars.includes('l')}" (click)="type('l')">l</button>
+      <button [ngClass]="checkKeys('a')" (click)="type('a')">a</button>
+      <button [ngClass]="checkKeys('s')" (click)="type('s')">s</button>
+      <button [ngClass]="checkKeys('d')" (click)="type('d')">d</button>
+      <button [ngClass]="checkKeys('f')" (click)="type('f')">f</button>
+      <button [ngClass]="checkKeys('g')" (click)="type('g')">g</button>
+      <button [ngClass]="checkKeys('h')" (click)="type('h')">h</button>
+      <button [ngClass]="checkKeys('j')" (click)="type('j')">j</button>
+      <button [ngClass]="checkKeys('k')" (click)="type('k')">k</button>
+      <button [ngClass]="checkKeys('l')" (click)="type('l')">l</button>
     </div>
     <div class="keyboard-row">
       <button
@@ -40,13 +40,13 @@
       >
         Enter
       </button>
-      <button [ngClass]="{'used': usedChars.includes('z')}" (click)="type('z')">z</button>
-      <button [ngClass]="{'used': usedChars.includes('x')}" (click)="type('x')">x</button>
-      <button [ngClass]="{'used': usedChars.includes('c')}" (click)="type('c')">c</button>
-      <button [ngClass]="{'used': usedChars.includes('v')}" (click)="type('v')">v</button>
-      <button [ngClass]="{'used': usedChars.includes('b')}" (click)="type('b')">b</button>
-      <button [ngClass]="{'used': usedChars.includes('n')}" (click)="type('n')">n</button>
-      <button [ngClass]="{'used': usedChars.includes('m')}" (click)="type('m')">m</button>
+      <button [ngClass]="checkKeys('z')" (click)="type('z')">z</button>
+      <button [ngClass]="checkKeys('x')" (click)="type('x')">x</button>
+      <button [ngClass]="checkKeys('c')" (click)="type('c')">c</button>
+      <button [ngClass]="checkKeys('v')" (click)="type('v')">v</button>
+      <button [ngClass]="checkKeys('b')" (click)="type('b')">b</button>
+      <button [ngClass]="checkKeys('n')" (click)="type('n')">n</button>
+      <button [ngClass]="checkKeys('m')" (click)="type('m')">m</button>
       <button
         class="wide-button"
         [disabled]="currentGuessLength === 0"
