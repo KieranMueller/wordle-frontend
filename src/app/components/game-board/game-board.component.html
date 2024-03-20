@@ -1,59 +1,49 @@
 <div class="container">
   <div class="settings"></div>
   <div class="board">
-    <div class="tile" *ngFor="let num of charArr; let i = index"
+    <div
+      class="tile"
+      *ngFor="let char of charArr; let i = index"
+      [ngClass]="{
+        green: compareArr[i] === 'green',
+        orange: compareArr[i] === 'orange'
+      }"
     >
-      {{ charArr[i] ? charArr[i] : null }}
-      <!-- {{ charArr[i] }} -->
+      {{ char ? char : null }}
+      <!-- {{ char }} -->
     </div>
   </div>
   <div class="keyboard-container">
     <div class="keyboard-row">
-      <button [ngClass]="checkKeys('q')" (click)="type('q')">q</button>
-      <button [ngClass]="checkKeys('w')" (click)="type('w')">w</button>
-      <button [ngClass]="checkKeys('e')" (click)="type('e')">e</button>
-      <button [ngClass]="checkKeys('r')" (click)="type('r')">r</button>
-      <button [ngClass]="checkKeys('t')" (click)="type('t')">t</button>
-      <button [ngClass]="checkKeys('y')" (click)="type('y')">y</button>
-      <button [ngClass]="checkKeys('u')" (click)="type('u')">u</button>
-      <button [ngClass]="checkKeys('i')" (click)="type('i')">i</button>
-      <button [ngClass]="checkKeys('o')" (click)="type('o')">o</button>
-      <button [ngClass]="checkKeys('p')" (click)="type('p')">p</button>
-    </div>
-    <div class="keyboard-row">
-      <div class="spacer-half"></div>
-      <button [ngClass]="checkKeys('a')" (click)="type('a')">a</button>
-      <button [ngClass]="checkKeys('s')" (click)="type('s')">s</button>
-      <button [ngClass]="checkKeys('d')" (click)="type('d')">d</button>
-      <button [ngClass]="checkKeys('f')" (click)="type('f')">f</button>
-      <button [ngClass]="checkKeys('g')" (click)="type('g')">g</button>
-      <button [ngClass]="checkKeys('h')" (click)="type('h')">h</button>
-      <button [ngClass]="checkKeys('j')" (click)="type('j')">j</button>
-      <button [ngClass]="checkKeys('k')" (click)="type('k')">k</button>
-      <button [ngClass]="checkKeys('l')" (click)="type('l')">l</button>
+      <button
+        *ngFor="let key of keyboard.topRow; let i = index"
+        [ngClass]="checkKeys(key)"
+        (click)="type(key)"
+      >
+        {{ key }}
+      </button>
     </div>
     <div class="keyboard-row">
       <button
-        class="wide-button enter"
-        [disabled]="currentGuessLength !== word.length"
-        (click)="enter()"
+        *ngFor="let key of keyboard.midRow; let i = index"
+        [ngClass]="checkKeys(key)"
+        (click)="type(key)"
       >
+        {{ key }}
+      </button>
+    </div>
+    <div class="keyboard-row">
+      <button [disabled]="currentGuessLength !== word.length" (click)="enter()">
         Enter
       </button>
-      <button [ngClass]="checkKeys('z')" (click)="type('z')">z</button>
-      <button [ngClass]="checkKeys('x')" (click)="type('x')">x</button>
-      <button [ngClass]="checkKeys('c')" (click)="type('c')">c</button>
-      <button [ngClass]="checkKeys('v')" (click)="type('v')">v</button>
-      <button [ngClass]="checkKeys('b')" (click)="type('b')">b</button>
-      <button [ngClass]="checkKeys('n')" (click)="type('n')">n</button>
-      <button [ngClass]="checkKeys('m')" (click)="type('m')">m</button>
       <button
-        class="wide-button"
-        [disabled]="currentGuessLength === 0"
-        (click)="del()"
+        *ngFor="let key of keyboard.bottomRow; let i = index"
+        [ngClass]="checkKeys(key)"
+        (click)="type(key)"
       >
-        Del
+        {{ key }}
       </button>
+      <button [disabled]="currentGuessLength === 0" (click)="del()">Del</button>
     </div>
   </div>
 </div>

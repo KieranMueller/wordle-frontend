@@ -17,12 +17,12 @@
   text-align: center;
 }
 
-.right-spot {
+.green {
   background-color: var(--green);
 }
 
-.wrong-spot {
-  background-color: var(--red);
+.orange {
+  background-color: var(--orange);
 }
 
 .keyboard-container {
