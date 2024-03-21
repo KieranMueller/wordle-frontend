@@ -12,7 +12,7 @@ export class GameBoardComponent implements OnInit {
     bottomRow: ['z', 'x', 'c', 'v', 'b', 'n', 'm'],
   };
   currentGuessLength = 0;
-  word = 'jasper';
+  word = 'teethe';
   maxAttempts = 6;
   totalTiles = this.word.length * this.maxAttempts;
   lastGuess = '';
@@ -21,15 +21,17 @@ export class GameBoardComponent implements OnInit {
   correctArr = Array(this.totalTiles).fill(null);
   compareArr = Array(this.totalTiles).fill(null);
   keyMap = new Map<string, string>();
+  tileMap = new Map<number, string>();
+  occurencesOfCharInWordMap = new Map<string, number>();
   // Try to refactor check tile logic, similar to checkKey? map of all indicies with value as color it should be?
   // Todo - word with 3 e's, in guess, 2 e's in right spot, 2 e's in wrong spot, only ONE in wrong spot should be orange
   // currently the 2 in wrong spot are both orange
   currentRow = 0;
   currentGuessStartIndex = 0;
-  charCodeMap = new Map<number, string>();
 
   ngOnInit() {
     this.initializeCorrectArrs();
+    this.initializeOccurencesOfCharInWordMap();
   }
 
   initializeCorrectArrs() {
@@ -128,47 +130,48 @@ export class GameBoardComponent implements OnInit {
   }
 
   /* Notes
-  Each array is the size of the board (word.length * maxAttempts) or 'rows' * 'columns'
-  word = jasper
-  charArr is filled with null, as we type, we replace (from the beginning) null with the char we type
-  ['j', 'a', 's', null, null, null, null, null, null, null]...
-  correctArr is our entire game board in one 1D array
-  ['j', 'a', 's', 'p', 'e', 'r', 'j', 'a', 's', 'p', 'e', 'r']...
-  compareArr is initially full of null
-  [null, null, null, null, null, null, null, null, null, null]...
-  On enter, when a guess is successfully submitted. We loop over charArr and correctArr from the beginning
-  index of the guess (the first column of the row) to the last index (the last column of the row). If the elements
-  at that index are the same in each array, we have a correctly placed char, and we change the value in compareArr
-  at that index. if (charArr[i] === correctArr[i]) compareArr[i] = 'green'
-
-  Handles turning tiles green or orange when a new guess is entered.
-  Each loop only runs the duration of the current line (from start of row, to end of row)
-  First loop checks for chars in right place and turns green, the map helps the second loop
-  see if all occurences of a single letter in a word have been guessed correctly, or not, to solve the issue
-  of words with duplicate letters and coloring tiles appropriately.
-  second loop handles chars that are in word but incorrect place.
+  Handles turning tiles the correct color after each guess. OnInit, we initialize occurencesOfCharInWordMap to track
+  how many times a character appears in the word. This is important for setting the duplicate char tiles orange
+  example -> word has 3 e's, we guess 4, 2 in right spot should be green, the first e in wrong spot should be orange
+  and the last e in the wrong spot should be grey/nothing. We create numOccurencesOfCharInLastGuessMap to update
+  the char count from the last guess as we loop, this variable is used in the conditional for the loop responsible for
+  setting tiles orange. We do not enter the loop to set the fourth 'e' in our example orange since this map.get('e') is not
+  less than occurencesOfCharInWordMap.get('e'). They are equal, therefore we do NOT want to enter the conditional to set the
+  tile orange
   */
   checkTiles() {
-    let limit = this.currentGuessStartIndex + this.word.length;
-    const greenLettersMap = new Map<string, number>();
+    let occurencesOfCharInLastGuessMap = new Map<string, number>();
+    let span = this.currentGuessStartIndex + this.word.length;
 
-    for (let i = this.currentGuessStartIndex; i < limit; i++) {
-      let char = this.charArr[i];
-      if (char === this.correctArr[i]) {
-        this.compareArr[i] = 'green';
-        let greenCharCount = greenLettersMap.get(char);
-        greenLettersMap.set(char, greenCharCount ? ++greenCharCount : 1);
+    for (
+      let i = this.currentGuessStartIndex, j = 0;
+      i < span;
+      i++, j < this.word.length - 1 ? j++ : (j = 0)
+    ) {
+      let correctChar = this.word.charAt(j);
+      if (this.charArr[i] === correctChar) {
+        let count = occurencesOfCharInLastGuessMap.get(correctChar);
+        occurencesOfCharInLastGuessMap.set(correctChar, count ? ++count : 1);
+        this.tileMap.set(i, 'green');
       }
     }
 
-    for (let i = this.currentGuessStartIndex; i < limit; i++) {
+    for (let i = this.currentGuessStartIndex; i < span; i++) {
       let char = this.charArr[i];
       if (
         this.word.includes(char) &&
-        this.compareArr[i] !== 'green' &&
-        this.numOccurencesOfCharInWord(char) !== greenLettersMap.get(char)
-      )
-        this.compareArr[i] = 'orange';
+        !this.tileMap.get(i) &&
+        occurencesOfCharInLastGuessMap.get(char)! <
+          this.occurencesOfCharInWordMap.get(char)!
+      ) {
+        this.tileMap.set(i, 'orange');
+        occurencesOfCharInLastGuessMap.set(
+          char,
+          occurencesOfCharInLastGuessMap.get(char)!
+            ? occurencesOfCharInLastGuessMap.get(char)! + 1
+            : 1
+        );
+      }
     }
   }
 
@@ -176,9 +179,10 @@ export class GameBoardComponent implements OnInit {
   used to help color tiles in checkTiles() method, takes a char and returns the number
   of occurences of the char in the word (char: a, word: adam -> 2)
   */
-  numOccurencesOfCharInWord(char: string) {
-    let count = 0;
-    for (let letter of this.word) if (letter === char) count++;
-    return count;
+  initializeOccurencesOfCharInWordMap() {
+    for (let char of this.word) {
+      let count = this.occurencesOfCharInWordMap.get(char);
+      this.occurencesOfCharInWordMap.set(char, count ? ++count : 1);
+    }
   }
 }

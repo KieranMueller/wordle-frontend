@@ -4,13 +4,9 @@
     <div
       class="tile"
       *ngFor="let char of charArr; let i = index"
-      [ngClass]="{
-        green: compareArr[i] === 'green',
-        orange: compareArr[i] === 'orange'
-      }"
+      [ngClass]="tileMap.get(i)"
     >
       {{ char ? char : null }}
-      <!-- {{ char }} -->
     </div>
   </div>
   <div class="keyboard-container">
@@ -18,7 +14,7 @@
       <button
         class="btn"
         *ngFor="let key of keyboard.topRow"
-        [ngClass]="this.keyMap.get(key)"
+        [ngClass]="keyMap.get(key)"
         (click)="type(key)"
       >
         {{ key }}
