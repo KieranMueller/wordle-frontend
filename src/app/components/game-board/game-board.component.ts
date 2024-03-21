@@ -18,31 +18,16 @@ export class GameBoardComponent implements OnInit {
   lastGuess = '';
   currentAttempt = 0;
   charArr = Array(this.totalTiles).fill(null);
-  correctArr = Array(this.totalTiles).fill(null);
-  compareArr = Array(this.totalTiles).fill(null);
   keyMap = new Map<string, string>();
   tileMap = new Map<number, string>();
   occurencesOfCharInWordMap = new Map<string, number>();
   // Try to refactor check tile logic, similar to checkKey? map of all indicies with value as color it should be?
   // Todo - word with 3 e's, in guess, 2 e's in right spot, 2 e's in wrong spot, only ONE in wrong spot should be orange
   // currently the 2 in wrong spot are both orange
-  currentRow = 0;
   currentGuessStartIndex = 0;
 
   ngOnInit() {
-    this.initializeCorrectArrs();
     this.initializeOccurencesOfCharInWordMap();
-  }
-
-  initializeCorrectArrs() {
-    // fills correctArr with chars in word repeating [word = jasper] ('j', 'a', 's'...)
-    for (
-      let i = 0, j = 0;
-      i < this.totalTiles;
-      i++, j < this.word.length - 1 ? j++ : (j = 0)
-    ) {
-      this.correctArr[i] = this.word[j];
-    }
   }
 
   /* Notes
@@ -84,7 +69,6 @@ export class GameBoardComponent implements OnInit {
       this.gameOver('lose');
       return;
     }
-    this.currentRow++;
   }
 
   validateGuess(guess: string) {
