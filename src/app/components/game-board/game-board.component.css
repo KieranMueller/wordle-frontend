@@ -17,14 +17,6 @@
   text-align: center;
 }
 
-.green {
-  background-color: var(--green);
-}
-
-.orange {
-  background-color: var(--orange);
-}
-
 .keyboard-container {
   /* height: 300px; */
 }
@@ -42,7 +34,6 @@
   padding: 12px;
   cursor: pointer;
   height: 40px;
-  background-color: var(--red);
   color: white;
   user-select: none;
 }
@@ -53,14 +44,18 @@
   background-color: rgb(36, 36, 36);
 }
 
-.keyboard-row button.used {
-  background-color: grey;
+.btn {
+  background-color: var(--red);
 }
 
-.keyboard-row button.wrong-spot {
+.green {
+  background-color: var(--green);
+}
+
+.orange {
   background-color: var(--orange);
 }
 
-.keyboard-row button.right-spot {
-  background-color: var(--green);
+.grey {
+  background-color: grey;
 }

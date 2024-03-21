@@ -16,8 +16,9 @@
   <div class="keyboard-container">
     <div class="keyboard-row">
       <button
-        *ngFor="let key of keyboard.topRow; let i = index"
-        [ngClass]="checkKeys(key)"
+        class="btn"
+        *ngFor="let key of keyboard.topRow"
+        [ngClass]="this.keyMap.get(key)"
         (click)="type(key)"
       >
         {{ key }}
@@ -25,25 +26,33 @@
     </div>
     <div class="keyboard-row">
       <button
-        *ngFor="let key of keyboard.midRow; let i = index"
-        [ngClass]="checkKeys(key)"
+        class="btn"
+        *ngFor="let key of keyboard.midRow"
+        [ngClass]="this.keyMap.get(key)"
         (click)="type(key)"
       >
         {{ key }}
       </button>
     </div>
     <div class="keyboard-row">
-      <button [disabled]="currentGuessLength !== word.length" (click)="enter()">
+      <button
+        class="btn"
+        [disabled]="currentGuessLength !== word.length"
+        (click)="enter()"
+      >
         Enter
       </button>
       <button
-        *ngFor="let key of keyboard.bottomRow; let i = index"
-        [ngClass]="checkKeys(key)"
+        class="btn"
+        *ngFor="let key of keyboard.bottomRow"
+        [ngClass]="this.keyMap.get(key)"
         (click)="type(key)"
       >
         {{ key }}
       </button>
-      <button [disabled]="currentGuessLength === 0" (click)="del()">Del</button>
+      <button class="btn" [disabled]="currentGuessLength === 0" (click)="del()">
+        Del
+      </button>
     </div>
   </div>
 </div>

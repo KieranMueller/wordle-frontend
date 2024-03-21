@@ -12,7 +12,7 @@ export class GameBoardComponent implements OnInit {
     bottomRow: ['z', 'x', 'c', 'v', 'b', 'n', 'm'],
   };
   currentGuessLength = 0;
-  word = 'bleech';
+  word = 'jasper';
   maxAttempts = 6;
   totalTiles = this.word.length * this.maxAttempts;
   lastGuess = '';
@@ -20,15 +20,13 @@ export class GameBoardComponent implements OnInit {
   charArr = Array(this.totalTiles).fill(null);
   correctArr = Array(this.totalTiles).fill(null);
   compareArr = Array(this.totalTiles).fill(null);
-  charCodeArr = Array(this.totalTiles).fill(null);
-  correctCharCodeArr = Array(this.totalTiles).fill(null);
-  compareCharCodeArr = Array(this.totalTiles).fill(null);
-  // If I get these charCode arrs to work, I might be able to delete the other 3 char arrs and just use the
-  // 3 charCode arrs. Will need to refactor game and check tile methods
-  usedChars = new Set<string>();
-  charsInCorrectPlace = new Set<string>();
+  keyMap = new Map<string, string>();
+  // Try to refactor check tile logic, similar to checkKey? map of all indicies with value as color it should be?
+  // Todo - word with 3 e's, in guess, 2 e's in right spot, 2 e's in wrong spot, only ONE in wrong spot should be orange
+  // currently the 2 in wrong spot are both orange
   currentRow = 0;
   currentGuessStartIndex = 0;
+  charCodeMap = new Map<number, string>();
 
   ngOnInit() {
     this.initializeCorrectArrs();
@@ -42,14 +40,6 @@ export class GameBoardComponent implements OnInit {
       i++, j < this.word.length - 1 ? j++ : (j = 0)
     ) {
       this.correctArr[i] = this.word[j];
-    }
-
-    for (
-      let i = 0, j = 0;
-      i < this.totalTiles;
-      i++, j < this.word.length - 1 ? j++ : (j = 0)
-    ) {
-      this.correctCharCodeArr[i] = this.word[j].charCodeAt(0);
     }
   }
 
@@ -71,18 +61,20 @@ export class GameBoardComponent implements OnInit {
   Handles enter key, button is only enabled if the current guess length == word length.
   */
   enter() {
-    console.log(this.correctArr);
-    console.log(this.correctCharCodeArr);
     this.currentGuessLength = 0;
-    let startIndex = this.currentRow * this.word.length;
     let guess = '';
-    for (let i = startIndex; i < startIndex + this.word.length; i++) {
+    for (
+      let i = this.currentGuessStartIndex;
+      i < this.currentGuessStartIndex + this.word.length;
+      i++
+    ) {
       guess += this.charArr[i];
     }
     // handle valid word verification, else dont move on
     this.validateGuess(guess);
-    //
+    // if true
     this.lastGuess = guess;
+    this.checkKeys();
     this.checkTiles();
     this.currentAttempt++;
     this.currentGuessStartIndex += this.word.length;
@@ -90,8 +82,49 @@ export class GameBoardComponent implements OnInit {
       this.gameOver('lose');
       return;
     }
-    for (let char of guess) this.usedChars.add(char);
     this.currentRow++;
+  }
+
+  validateGuess(guess: string) {
+    if (guess === this.word) {
+      alert('Correct');
+      this.gameOver('win');
+      return;
+    }
+  }
+
+  gameOver(status: string) {
+    if (status === 'win') {
+      alert('You Win');
+    } else if (status === 'lose') {
+      alert('lost');
+      return;
+    }
+  }
+
+  /* Notes
+  backspace button, finds most recent typed char (which is the element before the first occurence of '0')
+  and 'removes it' by setting it equal to 0, decrement current guess length
+  */
+  del() {
+    this.charArr[this.charArr.indexOf(null) - 1] = null;
+    this.currentGuessLength--;
+  }
+
+  /* Notes
+  handles keyboard key highlighting based on keyMap<key, color>
+  */
+  checkKeys() {
+    for (let i = 0; i < this.word.length; i++) {
+      let char = this.lastGuess.charAt(i);
+      if (char === this.word.charAt(i)) {
+        this.keyMap.set(char, 'green');
+      } else if (this.word.includes(char) && !this.keyMap.get(char)) {
+        this.keyMap.set(char, 'orange');
+      } else if (!this.keyMap.get(char)) {
+        this.keyMap.set(char, 'grey');
+      }
+    }
   }
 
   /* Notes
@@ -148,56 +181,4 @@ export class GameBoardComponent implements OnInit {
     for (let letter of this.word) if (letter === char) count++;
     return count;
   }
-
-  validateGuess(guess: string) {
-    if (guess === this.word) {
-      alert('Correct');
-      this.gameOver('win');
-      return;
-    }
-  }
-
-  gameOver(status: string) {
-    if (status === 'win') {
-      alert('You Win');
-    } else if (status === 'lose') {
-      alert('lost');
-      return;
-    }
-  }
-
-  /* Notes
-  backspace button, finds most recent typed char (which is the element before the first occurence of '0')
-  and 'removes it' by setting it equal to 0, decrement current guess length
-  */
-  del() {
-    this.charArr[this.charArr.indexOf(0) - 1] = 0;
-    this.currentGuessLength--;
-  }
-
-  /* Notes
-  Handles css - changing color of keyboard keys based on character order in guesses.
-  grey = char not in word, orange = char in wrong spot, green = char in right spot
-  */
-  checkKeys(char: string) {
-    this.checkForCharsInCorrectPlace(char);
-    if (this.charsInCorrectPlace.has(char)) {
-      return 'right-spot';
-    } else if (this.usedChars.has(char) && this.word.includes(char)) {
-      return 'wrong-spot';
-    } else if (this.usedChars.has(char)) {
-      return 'used';
-    } else return;
-  }
-
-  /* Notes
-  checks if char is in right spot.
-  */
-  checkForCharsInCorrectPlace(char: string) {
-    if (this.lastGuess.charAt(this.word.indexOf(char)) === char) {
-      this.charsInCorrectPlace.add(char);
-    }
-  }
-
-  checkKeys1() {}
 }
