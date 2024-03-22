@@ -8,7 +8,8 @@
       'six-col': word.length === 6,
       'seven-col': word.length === 7,
       'eight-col': word.length === 8,
-      'nine-col': word.length === 9
+      'nine-col': word.length === 9,
+      'invalid-guess-animation': animateInvalidGuess
     }"
   >
     <div
@@ -52,7 +53,7 @@
     <div class="keyboard-row">
       <button
         class="btn"
-        [disabled]="currentGuessLength !== word.length"
+        [disabled]="currentGuessLength !== word.length || isGameOver"
         (click)="enter()"
       >
         Enter
@@ -65,7 +66,11 @@
       >
         {{ key }}
       </button>
-      <button class="btn" [disabled]="currentGuessLength === 0" (click)="del()">
+      <button
+        class="btn"
+        [disabled]="currentGuessLength === 0 || isGameOver"
+        (click)="del()"
+      >
         Del
       </button>
     </div>

@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, HostListener, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-game-board',
@@ -22,6 +24,11 @@ export class GameBoardComponent implements OnInit {
   tileMap = new Map<number, string>();
   occurencesOfCharInWordMap = new Map<string, number>();
   currentGuessStartIndex = 0;
+  isGameOver = false;
+  animateInvalidGuess = false;
+  hasChangedInvalidGuess = true;
+
+  constructor(private http: HttpClient) {}
 
   ngOnInit() {
     this.initializeFields();
@@ -29,7 +36,7 @@ export class GameBoardComponent implements OnInit {
   }
 
   initializeFields() {
-    localStorage.setItem('word', 'jasper');
+    localStorage.setItem('word', 'hound');
     if (localStorage.getItem('word')) {
       this.word = localStorage.getItem('word')!;
     } else {
@@ -44,6 +51,42 @@ export class GameBoardComponent implements OnInit {
     this.charArr = Array(this.totalTiles).fill(null);
   }
 
+  @HostListener('window:keydown', ['$event.key'])
+  onKeyDown($event: string) {
+    const validChars = [
+      'a',
+      'b',
+      'c',
+      'd',
+      'e',
+      'f',
+      'g',
+      'h',
+      'i',
+      'j',
+      'k',
+      'l',
+      'm',
+      'n',
+      'o',
+      'p',
+      'q',
+      'r',
+      's',
+      't',
+      'u',
+      'v',
+      'w',
+      'x',
+      'y',
+      'z',
+    ];
+    if (validChars.includes($event.toLocaleLowerCase()))
+      this.type($event.toLocaleLowerCase());
+    if ($event === 'Backspace') this.del();
+    if ($event === 'Enter') this.enter();
+  }
+
   /* Notes
   Board is initialized, charArr is initialized to array of width x height size, filled with 0's.
   Conditionally not rendering 0s in html
@@ -52,53 +95,10 @@ export class GameBoardComponent implements OnInit {
   until current guess length === word.length
   */
   type(value: any) {
+    if (this.charArr.indexOf(null) === -1) return;
     if (this.currentGuessLength < this.word.length) {
       this.charArr[this.charArr.indexOf(null)] = value;
       this.currentGuessLength++;
-    }
-  }
-
-  /* Notes
-  Handles enter key, button is only enabled if the current guess length == word length.
-  */
-  enter() {
-    this.currentGuessLength = 0;
-    let guess = '';
-    for (
-      let i = this.currentGuessStartIndex;
-      i < this.currentGuessStartIndex + this.word.length;
-      i++
-    ) {
-      guess += this.charArr[i];
-    }
-    // handle valid word verification, else dont move on
-    this.validateGuess(guess);
-    // if true
-    this.lastGuess = guess;
-    this.checkKeys();
-    this.checkTiles();
-    this.currentAttempt++;
-    this.currentGuessStartIndex += this.word.length;
-    if (this.currentAttempt === this.maxAttempts) {
-      this.gameOver('lose');
-      return;
-    }
-  }
-
-  validateGuess(guess: string) {
-    if (guess === this.word) {
-      alert('Correct');
-      this.gameOver('win');
-      return;
-    }
-  }
-
-  gameOver(status: string) {
-    if (status === 'win') {
-      alert('You Win');
-    } else if (status === 'lose') {
-      alert('lost');
-      return;
     }
   }
 
@@ -107,8 +107,81 @@ export class GameBoardComponent implements OnInit {
   and 'removes it' by setting it equal to 0, decrement current guess length
   */
   del() {
+    this.animateInvalidGuess = false;
+    this.hasChangedInvalidGuess = true;
+    if (this.currentGuessLength === 0 || this.isGameOver) return;
     this.charArr[this.charArr.indexOf(null) - 1] = null;
+    if (this.charArr.indexOf(null) < 0)
+      this.charArr[this.charArr.length - 1] = null;
     this.currentGuessLength--;
+  }
+
+  /* Notes
+  Handles enter key, button is only enabled if the current guess length == word length.
+  */
+  enter() {
+    if (this.currentGuessLength !== this.word.length) return;
+    if (!this.hasChangedInvalidGuess) return;
+    let guess = '';
+    for (
+      let i = this.currentGuessStartIndex;
+      i < this.currentGuessStartIndex + this.word.length;
+      i++
+    ) {
+      guess += this.charArr[i];
+    }
+
+    if (guess === this.word) {
+      this.handleWin();
+      return;
+    }
+    this.validateGuess(guess).subscribe({
+      next: () => this.handleValidGuess(guess),
+      error: () => this.handleInvalidGuess(),
+    });
+  }
+
+  validateGuess(guess: string): Observable<any> {
+    return this.http.get(
+      `https://api.dictionaryapi.dev/api/v2/entries/en/${guess}`
+    );
+  }
+
+  handleValidGuess(guess: string) {
+    console.log(`in handleValidGuess(${guess})`);
+    // this.currentGuessLength = 0;
+    this.lastGuess = guess;
+    this.handleKeyAndTileHighlight();
+    this.currentAttempt++;
+    if (this.currentAttempt === this.maxAttempts) {
+      this.handleLose();
+      return;
+    }
+    this.currentGuessLength = 0;
+    this.currentGuessStartIndex += this.word.length;
+  }
+
+  handleInvalidGuess() {
+    console.log('in handleInvalidGuess');
+    console.log(this.currentAttempt);
+    this.animateInvalidGuess = true;
+    this.hasChangedInvalidGuess = false;
+  }
+
+  handleWin() {
+    this.handleKeyAndTileHighlight();
+    this.isGameOver = true;
+    alert('You Win');
+  }
+
+  handleLose() {
+    this.isGameOver = true;
+    alert('You Lose');
+  }
+
+  handleKeyAndTileHighlight() {
+    this.checkKeys();
+    this.checkTiles();
   }
 
   /* Notes
