@@ -120,8 +120,14 @@ export class GameBoardComponent implements OnInit {
   Handles enter key, button is only enabled if the current guess length == word length.
   */
   enter() {
-    if (this.currentGuessLength !== this.word.length) return;
-    if (!this.hasChangedInvalidGuess) return;
+    if (
+      this.currentGuessLength !== this.word.length ||
+      !this.hasChangedInvalidGuess ||
+      this.isGameOver
+    )
+      return;
+    // if (!this.hasChangedInvalidGuess) return;
+    // if (this.isGameOver) return;
     let guess = '';
     for (
       let i = this.currentGuessStartIndex;

@@ -56,7 +56,11 @@
     <div class="keyboard-row">
       <button
         class="btn"
-        [disabled]="currentGuessLength !== word.length || isGameOver"
+        [disabled]="
+          currentGuessLength !== word.length ||
+          !hasChangedInvalidGuess ||
+          isGameOver
+        "
         (click)="enter()"
       >
         Enter
