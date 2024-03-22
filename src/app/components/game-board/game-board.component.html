@@ -23,7 +23,10 @@
         'eight-tile': word.length === 8,
         'nine-tile': word.length === 9,
         green: tileMap.get(i) === 'green',
-        orange: tileMap.get(i) === 'orange'
+        orange: tileMap.get(i) === 'orange',
+        'active-tile':
+          i === charArr.indexOf(null) &&
+          i < currentGuessStartIndex + word.length
       }"
     >
       {{ char ? char : null }}

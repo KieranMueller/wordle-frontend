@@ -8,11 +8,12 @@
 .board {
   background-color: var(--blue);
   display: grid;
-  gap: 2px;
+  gap: 1px;
   padding: 10px;
   box-sizing: border-box;
   margin: 10px;
   min-width: 355px;
+  box-shadow: -5px 8px 15px rgba(0, 0, 0, 0.34);
 }
 
 .four-col {
@@ -101,7 +102,7 @@
 .five-tile {
   font-size: 2rem;
   min-width: 50px;
-  min-height: 50px;
+  min-height: 60px;
 }
 
 .six-tile {
@@ -166,4 +167,21 @@
 
 .grey {
   background-color: grey;
+}
+
+.active-tile {
+  animation: active-tile-blink 0.8s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes active-tile-blink {
+  0% {
+    background-color: rgb(255, 255, 255);
+  }
+  50% {
+    background-color: var(--yellow);
+  }
+  100% {
+    background-color: rgb(255, 255, 255);
+  }
 }

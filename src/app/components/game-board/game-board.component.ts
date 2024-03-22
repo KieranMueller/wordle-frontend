@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -137,7 +137,14 @@ export class GameBoardComponent implements OnInit {
     }
     this.validateGuess(guess).subscribe({
       next: () => this.handleValidGuess(guess),
-      error: () => this.handleInvalidGuess(),
+      error: (e) => {
+        if (e.status.toString().startsWith('4')) this.handleInvalidGuess();
+        if (
+          e.status.toString().startsWith('5') ||
+          e.status.toString().startsWith('0')
+        )
+          this.handleFailedRequest(e);
+      },
     });
   }
 
@@ -149,7 +156,6 @@ export class GameBoardComponent implements OnInit {
 
   handleValidGuess(guess: string) {
     console.log(`in handleValidGuess(${guess})`);
-    // this.currentGuessLength = 0;
     this.lastGuess = guess;
     this.handleKeyAndTileHighlight();
     this.currentAttempt++;
@@ -163,9 +169,15 @@ export class GameBoardComponent implements OnInit {
 
   handleInvalidGuess() {
     console.log('in handleInvalidGuess');
-    console.log(this.currentAttempt);
     this.animateInvalidGuess = true;
     this.hasChangedInvalidGuess = false;
+  }
+
+  handleFailedRequest(e: HttpErrorResponse) {
+    console.log(e);
+    console.log(
+      'Experiencing internet connection issues.\nMessage is: ' + e.message
+    );
   }
 
   handleWin() {
