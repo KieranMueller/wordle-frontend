@@ -12,22 +12,36 @@ export class GameBoardComponent implements OnInit {
     bottomRow: ['z', 'x', 'c', 'v', 'b', 'n', 'm'],
   };
   currentGuessLength = 0;
-  word = 'teethe';
-  maxAttempts = 6;
-  totalTiles = this.word.length * this.maxAttempts;
+  word = ''; // must be between 4-9 chars inclusive
+  maxAttempts = 0;
+  totalTiles = 0;
   lastGuess = '';
   currentAttempt = 0;
-  charArr = Array(this.totalTiles).fill(null);
+  charArr: any;
   keyMap = new Map<string, string>();
   tileMap = new Map<number, string>();
   occurencesOfCharInWordMap = new Map<string, number>();
-  // Try to refactor check tile logic, similar to checkKey? map of all indicies with value as color it should be?
-  // Todo - word with 3 e's, in guess, 2 e's in right spot, 2 e's in wrong spot, only ONE in wrong spot should be orange
-  // currently the 2 in wrong spot are both orange
   currentGuessStartIndex = 0;
 
   ngOnInit() {
+    this.initializeFields();
     this.initializeOccurencesOfCharInWordMap();
+  }
+
+  initializeFields() {
+    localStorage.setItem('word', 'jasper');
+    if (localStorage.getItem('word')) {
+      this.word = localStorage.getItem('word')!;
+    } else {
+      alert('something went wrong');
+      return;
+    }
+    localStorage.setItem('maxAttempts', JSON.stringify(6));
+    if (localStorage.getItem('maxAttempts')) {
+      this.maxAttempts = JSON.parse(localStorage.getItem('maxAttempts')!);
+    } else this.maxAttempts = 6;
+    this.totalTiles = this.word.length * this.maxAttempts;
+    this.charArr = Array(this.totalTiles).fill(null);
   }
 
   /* Notes
@@ -145,8 +159,9 @@ export class GameBoardComponent implements OnInit {
       if (
         this.word.includes(char) &&
         !this.tileMap.get(i) &&
-        occurencesOfCharInLastGuessMap.get(char)! <
-          this.occurencesOfCharInWordMap.get(char)!
+        (occurencesOfCharInLastGuessMap.get(char)! <
+          this.occurencesOfCharInWordMap.get(char)! ||
+          !occurencesOfCharInLastGuessMap.get(char))
       ) {
         this.tileMap.set(i, 'orange');
         occurencesOfCharInLastGuessMap.set(

@@ -1,10 +1,29 @@
 <div class="container">
   <div class="settings"></div>
-  <div class="board">
+  <div
+    class="board"
+    [ngClass]="{
+      'four-col': word.length === 4,
+      'five-col': word.length === 5,
+      'six-col': word.length === 6,
+      'seven-col': word.length === 7,
+      'eight-col': word.length === 8,
+      'nine-col': word.length === 9
+    }"
+  >
     <div
       class="tile"
       *ngFor="let char of charArr; let i = index"
-      [ngClass]="tileMap.get(i)"
+      [ngClass]="{
+        'four-tile': word.length === 4,
+        'five-tile': word.length === 5,
+        'six-tile': word.length === 6,
+        'seven-tile': word.length === 7,
+        'eight-tile': word.length === 8,
+        'nine-tile': word.length === 9,
+        green: tileMap.get(i) === 'green',
+        orange: tileMap.get(i) === 'orange'
+      }"
     >
       {{ char ? char : null }}
     </div>

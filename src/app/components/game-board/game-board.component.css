@@ -1,24 +1,90 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .board {
   background-color: var(--blue);
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
   gap: 2px;
   padding: 10px;
   box-sizing: border-box;
   margin: 10px;
+  min-width: 355px;
+}
+
+.four-col {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.five-col {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.six-col {
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.seven-col {
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.eight-col {
+  grid-template-columns: repeat(8, 1fr);
+}
+
+.nine-col {
+  grid-template-columns: repeat(9, 1fr);
 }
 
 .tile {
-  min-width: 50px;
-  min-height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 35px;
+  min-height: 35px;
   background-color: var(--yellow);
   color: black;
-  font-size: 2rem;
   text-align: center;
+  transition: 0.5s;
 }
 
-.keyboard-container {
-  /* height: 300px; */
+.four-tile {
+  font-size: 2.2rem;
+  min-width: 50px;
+  min-height: 55px;
+}
+
+.five-tile {
+  font-size: 2rem;
+  min-width: 50px;
+  min-height: 50px;
+}
+
+.six-tile {
+  font-size: 2rem;
+  min-width: 50px;
+  min-height: 50px;
+}
+
+.seven-tile {
+  font-size: 1.8rem;
+  min-width: 45px;
+  min-height: 45px;
+}
+
+.eight-tile {
+  font-size: 1.6rem;
+  min-width: 40px;
+  min-height: 40px;
+}
+
+.nine-tile {
+  font-size: 1.5rem;
+  min-width: 35px;
+  min-height: 35px;
 }
 
 .keyboard-row {
@@ -46,6 +112,7 @@
 
 .btn {
   background-color: var(--red);
+  transition: 0.5s;
 }
 
 .green {
