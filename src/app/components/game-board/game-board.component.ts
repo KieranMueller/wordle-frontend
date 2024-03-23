@@ -18,6 +18,7 @@ export class GameBoardComponent implements OnInit {
   maxAttempts = 0;
   totalTiles = 0;
   lastGuess = '';
+  guessList: string[] = [];
   currentAttempt = 0;
   charArr: any;
   keyMap = new Map<string, string>();
@@ -27,12 +28,37 @@ export class GameBoardComponent implements OnInit {
   isGameOver = false;
   animateInvalidGuess = false;
   hasChangedInvalidGuess = true;
+  boardColor = '';
+  tileColor = '';
+  /* TODO
+  - Have UI keyboard buttons look like they are being clicked when using personal keyboard
+  - Remove the possibility of simply refreshing page to restart game and guesses
+  - Add sound effects
+  - Blinking active tile should be color of board, or tile
+  - Randomize color of keyboard
+  - Allow user to randomize colors of page by button, without reloading page or game, anytime
+  - Add ability to play the daily wordle
+  */
 
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
     this.initializeFields();
     this.initializeOccurencesOfCharInWordMap();
+    this.initalizeBoardAndTileColor();
+  }
+
+  initalizeBoardAndTileColor() {
+    let colors = ['red', 'green', 'yellow', 'orange', 'blue'];
+    let rando = Math.floor(Math.random() * colors.length);
+    this.boardColor = colors[rando];
+    colors.splice(colors.indexOf(this.boardColor), 1);
+    colors.splice(colors.indexOf('green'), 1);
+    colors.splice(colors.indexOf('orange'), 1);
+    rando = Math.floor(Math.random() * colors.length);
+    this.tileColor = colors[rando];
+    console.log(this.tileColor);
+    console.log(colors);
   }
 
   initializeFields() {
@@ -126,8 +152,6 @@ export class GameBoardComponent implements OnInit {
       this.isGameOver
     )
       return;
-    // if (!this.hasChangedInvalidGuess) return;
-    // if (this.isGameOver) return;
     let guess = '';
     for (
       let i = this.currentGuessStartIndex;
@@ -136,7 +160,10 @@ export class GameBoardComponent implements OnInit {
     ) {
       guess += this.charArr[i];
     }
-
+    if (this.guessList.includes(guess)) {
+      this.handleInvalidGuess();
+      return;
+    }
     if (guess === this.word) {
       this.handleWin();
       return;
@@ -163,6 +190,7 @@ export class GameBoardComponent implements OnInit {
   handleValidGuess(guess: string) {
     console.log(`in handleValidGuess(${guess})`);
     this.lastGuess = guess;
+    this.guessList.push(this.lastGuess);
     this.handleKeyAndTileHighlight();
     this.currentAttempt++;
     if (this.currentAttempt === this.maxAttempts) {

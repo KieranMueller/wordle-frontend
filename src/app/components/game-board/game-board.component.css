@@ -6,7 +6,6 @@
 }
 
 .board {
-  background-color: var(--blue);
   display: grid;
   gap: 1px;
   padding: 10px;
@@ -14,6 +13,26 @@
   margin: 10px;
   min-width: 355px;
   box-shadow: -5px 8px 15px rgba(0, 0, 0, 0.34);
+}
+
+.blue-board {
+  background-color: var(--blue);
+}
+
+.green-board {
+  background-color: var(--green);
+}
+
+.orange-board {
+  background-color: var(--orange);
+}
+
+.yellow-board {
+  background-color: var(--yellow);
+}
+
+.red-board {
+  background-color: var(--red);
 }
 
 .four-col {
@@ -93,6 +112,18 @@
   transition: 0.5s;
 }
 
+.red-tile {
+  background-color: var(--red);
+}
+
+.yellow-tile {
+  background-color: var(--yellow);
+}
+
+.blue-tile {
+  background-color: var(--blue);
+}
+
 .four-tile {
   font-size: 2.2rem;
   min-width: 50px;
@@ -159,14 +190,33 @@
 
 .green {
   background-color: var(--green);
+  animation: green-tile-animation 0.5s;
+  box-shadow: 1px 1px 20px black;
+}
+
+@keyframes green-tile-animation {
+  50% {
+    transform: translate(1px, -1px) rotate(-20deg);
+    scale: 1.1;
+  }
 }
 
 .orange {
   background-color: var(--orange);
+  animation: orange-tile-animation 0.5s;
+  box-shadow: 1px 1px 20px black;
+}
+
+@keyframes orange-tile-animation {
+  50% {
+    transform: translate(1px, -1px) rotate(20deg);
+    scale: 1.1;
+  }
 }
 
 .grey {
   background-color: grey;
+  box-shadow: 1px 3px 20px black;
 }
 
 .active-tile {
@@ -179,7 +229,7 @@
     background-color: rgb(255, 255, 255);
   }
   50% {
-    background-color: var(--yellow);
+    background-color: black;
   }
   100% {
     background-color: rgb(255, 255, 255);

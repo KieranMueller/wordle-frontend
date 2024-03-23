@@ -9,7 +9,12 @@
       'seven-col': word.length === 7,
       'eight-col': word.length === 8,
       'nine-col': word.length === 9,
-      'invalid-guess-animation': animateInvalidGuess
+      'invalid-guess-animation': animateInvalidGuess,
+      'red-board': boardColor === 'red',
+      'green-board': boardColor === 'green',
+      'yellow-board': boardColor === 'yellow',
+      'orange-board': boardColor === 'orange',
+      'blue-board': boardColor === 'blue'
     }"
   >
     <div
@@ -26,7 +31,10 @@
         orange: tileMap.get(i) === 'orange',
         'active-tile':
           i === charArr.indexOf(null) &&
-          i < currentGuessStartIndex + word.length
+          i < currentGuessStartIndex + word.length,
+        'red-tile': tileColor === 'red',
+        'yellow-tile': tileColor === 'yellow',
+        'blue-tile': tileColor === 'blue'
       }"
     >
       {{ char ? char : null }}
