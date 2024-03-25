@@ -167,25 +167,65 @@
   margin: 0;
 }
 
-.keyboard-row button {
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border: none;
-  margin: 1px;
-  padding: 12px;
+  margin: 0.75px;
+  width: 35px;
+  height: 50px;
+  font-size: 20px;
   cursor: pointer;
-  height: 40px;
   color: white;
-  user-select: none;
+  touch-action: manipulation;
+  background-color: var(--red);
+  transition: 0.5s;
 }
 
-.keyboard-row button:disabled {
+.enter-btn {
+  width: 80px;
+}
+
+.enter-btn:enabled {
+  background-color: var(--green);
+  animation: enter-btn-enabled 0.8s;
+  animation-iteration-count: infinite;
+  box-shadow: 1px 1px 50px black;
+}
+
+@keyframes enter-btn-enabled {
+  35% {
+    transform: translate(1px, -1px) rotate(-5deg);
+    scale: 1.1;
+  }
+
+  65% {
+    transform: translate(1px, -1px) rotate(5deg);
+  }
+}
+
+.del-btn {
+  width: 50px;
+}
+
+.invalid-guess-del {
+  background-color: var(--red);
+  animation: flash-del-btn 0.8s;
+  animation-iteration-count: infinite;
+  box-shadow: 1px 1px 50px black;
+}
+
+@keyframes flash-del-btn {
+  50% {
+    scale: 1.1;
+  }
+}
+
+.btn:disabled {
   opacity: 0.8;
   color: gray;
   background-color: rgb(36, 36, 36);
-}
-
-.btn {
-  background-color: var(--red);
-  transition: 0.5s;
 }
 
 .green {

@@ -1,0 +1,39 @@
+.container {
+  background-color: var(--yellow);
+  height: 55px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+p {
+  margin: 0;
+}
+
+button {
+  border-radius: 32px;
+  outline: none;
+  border: none;
+  padding: 10px;
+  box-shadow: -1px 1px 10px rgba(0, 0, 0, 0.229);
+  touch-action: manipulation;
+}
+
+.play-btn {
+  background-color: var(--green);
+  color: white;
+}
+
+.my-wordles-btn {
+  background-color: var(--orange);
+}
+
+.find-user-btn {
+  background-color: var(--red);
+  color: white;
+}
+
+.profile-btn {
+  background-color: var(--blue);
+  color: white;
+}

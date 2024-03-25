@@ -1,0 +1,59 @@
+<div class="container">
+  <div class="content">
+    <p class="header">create a custom 4-9 letter wordle</p>
+    <p>stump your friends and family!</p>
+    <div
+      class="tile-container"
+      [ngClass]="{ 'tile-container-small': charArr.length >= 6 }"
+    >
+      <div
+        class="tile"
+        *ngFor="let char of charArr; let i = index"
+        [ngClass]="{
+          active: charArr.indexOf(null) === i || charArr.indexOf('...') === i,
+          'tile-small': charArr.length >= 6
+        }"
+      >
+        {{ char }}
+      </div>
+    </div>
+    <button class="create-btn">create!</button>
+    <div class="keyboard-container">
+      <div class="keyboard-row">
+        <button
+          class="btn"
+          *ngFor="let key of keyboard.topRow"
+          [ngClass]="{ green: word.includes(key) }"
+          (click)="type(key)"
+        >
+          {{ key }}
+        </button>
+      </div>
+      <div class="keyboard-row">
+        <button
+          class="btn"
+          *ngFor="let key of keyboard.midRow"
+          [ngClass]="{ green: word.includes(key) }"
+          (click)="type(key)"
+        >
+          {{ key }}
+        </button>
+      </div>
+      <div class="keyboard-row">
+        <button class="btn enter-btn">help</button>
+        <button
+          class="btn"
+          *ngFor="let key of keyboard.bottomRow"
+          [ngClass]="{ green: word.includes(key) }"
+          (click)="type(key)"
+        >
+          {{ key }}
+        </button>
+        <button class="btn del-btn" (click)="del()" [disabled]="!charArr[0]">
+          Del
+        </button>
+      </div>
+    </div>
+  </div>
+  <button (click)="test()">Test stuff</button>
+</div>

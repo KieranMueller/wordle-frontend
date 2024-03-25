@@ -63,7 +63,7 @@
     </div>
     <div class="keyboard-row">
       <button
-        class="btn"
+        class="btn enter-btn"
         [disabled]="
           currentGuessLength !== word.length ||
           !hasChangedInvalidGuess ||
@@ -82,12 +82,14 @@
         {{ key }}
       </button>
       <button
-        class="btn"
+        class="btn del-btn"
+        [ngClass]="{ 'invalid-guess-del': !hasChangedInvalidGuess }"
         [disabled]="currentGuessLength === 0 || isGameOver"
         (click)="del()"
       >
         Del
       </button>
     </div>
+    <button class="test" (keydown.a)="test()">Test</button>
   </div>
 </div>

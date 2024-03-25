@@ -23,6 +23,8 @@ import { ResetPasswordComponent } from './views/reset-password/reset-password.co
 import { CreateAccountEmailConfirmationComponent } from './views/create-account-email-confirmation/create-account-email-confirmation.component';
 import { TopBarComponent } from './components/top-bar/top-bar.component';
 import { GameBoardComponent } from './components/game-board/game-board.component';
+import { MiddleBarComponent } from './components/middle-bar/middle-bar.component';
+import { CreateWordleComponent } from './components/create-wordle/create-wordle.component';
 
 @NgModule({
   declarations: [
@@ -45,9 +47,11 @@ import { GameBoardComponent } from './components/game-board/game-board.component
     CreateAccountEmailConfirmationComponent,
     TopBarComponent,
     GameBoardComponent,
+    MiddleBarComponent,
+    CreateWordleComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],
-  providers: [],
+  providers: [Window],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

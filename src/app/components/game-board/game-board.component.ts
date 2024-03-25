@@ -30,14 +30,45 @@ export class GameBoardComponent implements OnInit {
   hasChangedInvalidGuess = true;
   boardColor = '';
   tileColor = '';
+  validChars = [
+    'a',
+    'b',
+    'c',
+    'd',
+    'e',
+    'f',
+    'g',
+    'h',
+    'i',
+    'j',
+    'k',
+    'l',
+    'm',
+    'n',
+    'o',
+    'p',
+    'q',
+    'r',
+    's',
+    't',
+    'u',
+    'v',
+    'w',
+    'x',
+    'y',
+    'z',
+  ];
   /* TODO
   - Have UI keyboard buttons look like they are being clicked when using personal keyboard
+  - Add a how to play button/modal for first timers + instructions (How the game works, what colors mean etc.)
   - Remove the possibility of simply refreshing page to restart game and guesses
   - Add sound effects
-  - Blinking active tile should be color of board, or tile
   - Randomize color of keyboard
   - Allow user to randomize colors of page by button, without reloading page or game, anytime
   - Add ability to play the daily wordle
+  - Figure out how to differentiate in offline vs online mode (loading spinner after guess while checking?)
+  - Implement scoring system, show on game over modal based on num guesses, correct guesses etc
+  - Implement timer for timed mode
   */
 
   constructor(private http: HttpClient) {}
@@ -57,8 +88,6 @@ export class GameBoardComponent implements OnInit {
     colors.splice(colors.indexOf('orange'), 1);
     rando = Math.floor(Math.random() * colors.length);
     this.tileColor = colors[rando];
-    console.log(this.tileColor);
-    console.log(colors);
   }
 
   initializeFields() {
@@ -77,40 +106,22 @@ export class GameBoardComponent implements OnInit {
     this.charArr = Array(this.totalTiles).fill(null);
   }
 
+  // @HostListener('window:beforeunload', ['$event'])
+  // handlePageRefresh(event: Event) {
+  //   alert();
+  //   console.log('yo');
+  // }
+
   @HostListener('window:keydown', ['$event.key'])
   onKeyDown($event: string) {
-    const validChars = [
-      'a',
-      'b',
-      'c',
-      'd',
-      'e',
-      'f',
-      'g',
-      'h',
-      'i',
-      'j',
-      'k',
-      'l',
-      'm',
-      'n',
-      'o',
-      'p',
-      'q',
-      'r',
-      's',
-      't',
-      'u',
-      'v',
-      'w',
-      'x',
-      'y',
-      'z',
-    ];
-    if (validChars.includes($event.toLocaleLowerCase()))
+    if (this.validChars.includes($event.toLocaleLowerCase()))
       this.type($event.toLocaleLowerCase());
     if ($event === 'Backspace') this.del();
     if ($event === 'Enter') this.enter();
+  }
+
+  test() {
+    alert();
   }
 
   /* Notes
@@ -120,7 +131,7 @@ export class GameBoardComponent implements OnInit {
   this type() method, finds first element that is 0, replaces with the typed character,
   until current guess length === word.length
   */
-  type(value: any) {
+  type(value: string) {
     if (this.charArr.indexOf(null) === -1) return;
     if (this.currentGuessLength < this.word.length) {
       this.charArr[this.charArr.indexOf(null)] = value;

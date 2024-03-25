@@ -8,6 +8,7 @@ import { SentEmailComponent } from './views/sent-email/sent-email.component';
 import { ResetPasswordComponent } from './views/reset-password/reset-password.component';
 import { CanActivate } from './guard/auth.guard';
 import { CreateAccountEmailConfirmationComponent } from './views/create-account-email-confirmation/create-account-email-confirmation.component';
+import { PlayComponent } from './views/play/play.component';
 
 const routes: Routes = [
   {
@@ -23,6 +24,7 @@ const routes: Routes = [
   { path: 'reset-password-confirmation', component: SentEmailComponent },
   { path: 'set-password/:passwordUUID', component: ResetPasswordComponent },
   { path: 'home', component: HomeComponent, canActivate: [CanActivate] },
+  { path: 'play', component: PlayComponent },
   { path: '**', redirectTo: '/login' },
 ];
 
