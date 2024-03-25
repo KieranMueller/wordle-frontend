@@ -1,3 +1,4 @@
+<app-help-modal (emitter)="closeModal()" *ngIf="showHelpModal"></app-help-modal>
 <div class="container">
   <div class="content">
     <p class="header">create a custom 4-9 letter wordle</p>
@@ -17,7 +18,9 @@
         {{ char }}
       </div>
     </div>
-    <button class="create-btn">create!</button>
+    <button class="create-btn" [ngClass]="{ 'hide-create': word.length < 4 }">
+      create!
+    </button>
     <div class="keyboard-container">
       <div class="keyboard-row">
         <button
@@ -40,7 +43,9 @@
         </button>
       </div>
       <div class="keyboard-row">
-        <button class="btn enter-btn">help</button>
+        <button class="btn enter-btn" (click)="showHelpModal = true">
+          help
+        </button>
         <button
           class="btn"
           *ngFor="let key of keyboard.bottomRow"

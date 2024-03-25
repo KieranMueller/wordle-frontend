@@ -41,19 +41,20 @@ export class CreateWordleComponent {
     'y',
     'z',
   ];
+  showHelpModal = false;
 
   /*
-  - Have keys turn green as you type your word
-  - Create array of random placeletter wordles
-  - Word must be dictionary word
-  - Animate enter button when ready, get rid of enter button? Just have submit btn pop up?
-  - Have transition time applied to letters typed in boxes
-  - Add keyboard ability
+  - Animate create button
+  - Add dictionary check OFF button, then inform the user it will make it harder for the player, and that they can guess any invalid word they want
   */
 
   test() {
     console.log(this.charArr.indexOf(null));
     console.log('word: ' + this.word + ': ' + this.word.length);
+  }
+
+  closeModal() {
+    this.showHelpModal = false;
   }
 
   @HostListener('window:keydown', ['$event.key'])

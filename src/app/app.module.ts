@@ -25,6 +25,7 @@ import { TopBarComponent } from './components/top-bar/top-bar.component';
 import { GameBoardComponent } from './components/game-board/game-board.component';
 import { MiddleBarComponent } from './components/middle-bar/middle-bar.component';
 import { CreateWordleComponent } from './components/create-wordle/create-wordle.component';
+import { HelpModalComponent } from './overlays/help-modal/help-modal.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { CreateWordleComponent } from './components/create-wordle/create-wordle.
     GameBoardComponent,
     MiddleBarComponent,
     CreateWordleComponent,
+    HelpModalComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],
   providers: [Window],

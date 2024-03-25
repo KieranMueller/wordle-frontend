@@ -17,6 +17,10 @@
   font-weight: 800;
 }
 
+button {
+  touch-action: manipulation;
+}
+
 p {
   margin: 0;
   color: white;
@@ -32,7 +36,7 @@ p {
 }
 
 .tile-container-small {
-  border: 2px solid white;
+  border: 1px solid white;
 }
 
 .tile {
@@ -45,12 +49,40 @@ p {
   width: 50px;
   color: white;
   font-size: 30px;
+  animation: add-letter 0.5s;
 }
 
 .tile-small {
   font-size: 22px;
   height: 35px;
   width: 35px;
+}
+
+@keyframes add-letter {
+  25% {
+    scale: 1.02;
+    transform: translate(1px, -1px) rotate(-3deg);
+  }
+
+  50% {
+    scale: 0.95;
+    transform: translate(1px, 1px) rotate(3deg);
+  }
+
+  70% {
+    scale: 1.02;
+    transform: translate(1px, -1px) rotate(-2deg);
+  }
+
+  85% {
+    scale: 1.01;
+    transform: translate(1px, 1px) rotate(2deg);
+  }
+
+  95% {
+    scale: 1.005;
+    transform: translate(1px, -1px) rotate(-1deg);
+  }
 }
 
 .active {
@@ -91,7 +123,6 @@ p {
   font-size: 20px;
   cursor: pointer;
   color: white;
-  touch-action: manipulation;
   background-color: rgba(43, 43, 43, 0.744);
   transition: 0.5s;
   box-shadow: -1px 1px 5px rgba(0, 0, 0, 0.709);
@@ -121,6 +152,10 @@ p {
   padding: 10px;
   font-size: 20px;
   box-shadow: -10px 10px 20px rgba(0, 0, 0, 0.48);
+}
+
+.hide-create {
+  visibility: hidden;
 }
 
 .green {

@@ -1,0 +1,24 @@
+<div class="container">
+  <div class="content">
+    <div class="inner">
+      <img
+        (click)="emitClose()"
+        class="x-mark"
+        src="../../../assets/icons/x-mark.png"
+        alt="close modal"
+      />
+      <img src="../../../assets/icons/wordle-game.png" alt="wordle game" />
+      <p>this is a game of wordle</p>
+      <ul>
+        <li>on this page, you are creating a word for someone else to guess</li>
+        <li>players have a set number of attempts (rows) to guess the word</li>
+        <li>player receive feedback each guess</li>
+        <ul>
+          <li>green tile: letter in correct spot</li>
+          <li>orange tile: letter exists in word, wrong spot</li>
+          <li>same color as board: letter does not exist in word</li>
+        </ul>
+      </ul>
+    </div>
+  </div>
+</div>
