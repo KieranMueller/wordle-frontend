@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, HostListener } from '@angular/core';
 
 @Component({
@@ -42,31 +43,31 @@ export class CreateWordleComponent {
     'z',
   ];
   showHelpModal = false;
+  showCreateWordleOptionsModal = false;
+  isNotWord = false;
 
   /*
-  - Animate create button
-  - Add dictionary check OFF button, then inform the user it will make it harder for the player, and that they can guess any invalid word they want
+  - Turn create button into loading spinner on click
   */
 
-  test() {
-    console.log(this.charArr.indexOf(null));
-    console.log('word: ' + this.word + ': ' + this.word.length);
-  }
+  constructor(private http: HttpClient) {}
 
   closeModal() {
     this.showHelpModal = false;
+    this.showCreateWordleOptionsModal = false;
   }
 
   @HostListener('window:keydown', ['$event.key'])
   onKeyDown($event: string) {
-    console.log($event);
     if (this.validChars.includes($event.toLocaleLowerCase()))
       this.type($event.toLocaleLowerCase());
     else if ($event === 'Backspace') this.del();
+    else if ($event === 'Enter') this.handleEnter();
     else return;
   }
 
   type(key: string) {
+    if (this.showCreateWordleOptionsModal || this.showHelpModal) return;
     if (this.charArr.length >= 10) return;
     if (this.charArr.indexOf(null) > 2 && this.charArr.length < 9) {
       this.charArr[this.charArr.indexOf(null)] = key;
@@ -79,6 +80,7 @@ export class CreateWordleComponent {
   }
 
   del() {
+    if (this.showCreateWordleOptionsModal || this.showHelpModal) return;
     if (!this.charArr[0]) return;
     this.word = this.word.substring(0, this.word.length - 1);
     let i = this.charArr.length - 1;
@@ -89,5 +91,40 @@ export class CreateWordleComponent {
     } else {
       this.charArr[i] = null;
     }
+  }
+
+  handleEnter() {
+    if (this.word.length >= 4) this.validateWord();
+  }
+
+  validateWord() {
+    this.http
+      .get(`https://api.dictionaryapi.dev/api/v2/entries/en/${this.word}`)
+      .subscribe({
+        next: () => {
+          this.showCreateWordleOptionsModal = true;
+        },
+        error: (e) => {
+          if (e.status.toString().startsWith('4')) this.showNotWordMessage(e);
+          if (
+            e.status.toString().startsWith('5') ||
+            e.status.toString().startsWith('0')
+          )
+            this.handleFailedRequest(e);
+        },
+      });
+  }
+
+  showNotWordMessage(e: any) {
+    console.log(e);
+    this.isNotWord = true;
+    setTimeout(() => {
+      this.isNotWord = false;
+    }, 1000);
+  }
+
+  handleFailedRequest(e: any) {
+    alert('bad internet connection');
+    console.log(e);
   }
 }

@@ -1,12 +1,12 @@
-.container {
+.container1 {
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 20px;
-  border-radius: 30px;
+  border-radius: 20px;
   background-color: var(--blue);
   width: 240px;
-  height: 40px;
+  height: 80px;
 }
 
 .image-div {

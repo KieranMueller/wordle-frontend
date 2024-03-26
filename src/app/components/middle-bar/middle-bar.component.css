@@ -11,12 +11,12 @@ p {
 }
 
 button {
-  border-radius: 32px;
   outline: none;
   border: none;
-  padding: 10px;
-  box-shadow: -1px 1px 10px rgba(0, 0, 0, 0.229);
-  touch-action: manipulation;
+  border-radius: 4px;
+  padding: 7px;
+  max-height: 60px;
+  margin: 2px;
 }
 
 .play-btn {
@@ -26,6 +26,7 @@ button {
 
 .my-wordles-btn {
   background-color: var(--orange);
+  color: black;
 }
 
 .find-user-btn {

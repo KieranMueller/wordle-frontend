@@ -25,6 +25,7 @@ const routes: Routes = [
   { path: 'set-password/:passwordUUID', component: ResetPasswordComponent },
   { path: 'home', component: HomeComponent, canActivate: [CanActivate] },
   { path: 'play', component: PlayComponent },
+  { path: 'play/:uuidLink', component: PlayComponent },
   { path: '**', redirectTo: '/login' },
 ];
 

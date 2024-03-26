@@ -1,5 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, HostListener, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -66,17 +67,78 @@ export class GameBoardComponent implements OnInit {
   - Randomize color of keyboard
   - Allow user to randomize colors of page by button, without reloading page or game, anytime
   - Add ability to play the daily wordle
-  - Figure out how to differentiate in offline vs online mode (loading spinner after guess while checking?)
+  - Add loading spinner while API checks word
   - Implement scoring system, show on game over modal based on num guesses, correct guesses etc
   - Implement timer for timed mode
+  - Add ability for unlimited guesses? Have game board scroll if so?
+  - Add bad internet connection modal
+  - Add option to turn off blinking active tile
+  - Add win/lose end game modal!
+  - Create bad request modal (couldn't retrieve wordle with uuid, add option to play with random word)
   */
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private route: ActivatedRoute) {}
 
   ngOnInit() {
-    this.initializeFields();
+    if (this.route.snapshot.params['uuidLink']) {
+      const uuid = this.route.snapshot.params['uuidLink'];
+      this.getWordleFromDB(uuid);
+    } else this.initializeFields();
     this.initializeOccurencesOfCharInWordMap();
     this.initalizeBoardAndTileColor();
+  }
+
+  getWordleFromDB(uuid: string) {
+    this.http.get(`http://localhost:8080/free-wordle/${uuid}`).subscribe({
+      next: (res) => {
+        this.initalizeFieldsFromDBWordle(res);
+      },
+      error: (e) => {
+        if (e.status.toString().startsWith('4')) this.handleBadRequest(e);
+        if (
+          e.status.toString().startsWith('5') ||
+          e.status.toString().startsWith('0')
+        )
+          this.handleFailedRequest(e);
+      },
+    });
+  }
+
+  initalizeFieldsFromDBWordle(wordle: any) {
+    console.log(wordle);
+    this.word = wordle.word;
+    this.maxAttempts = wordle.attempts;
+    this.totalTiles = this.word.length * this.maxAttempts;
+    this.charArr = Array(this.totalTiles).fill(null);
+  }
+
+  handleBadRequest(error: any) {
+    console.log(error);
+  }
+
+  initializeFields() {
+    // refactor logic for all of this, local storage??
+    if (localStorage.getItem('word')) {
+      this.word = localStorage.getItem('word')!;
+    } else {
+      this.word = 'indigo';
+    }
+    if (localStorage.getItem('maxAttempts')) {
+      this.maxAttempts = JSON.parse(localStorage.getItem('maxAttempts')!);
+    } else this.maxAttempts = 6;
+    this.totalTiles = this.word.length * this.maxAttempts;
+    this.charArr = Array(this.totalTiles).fill(null);
+  }
+
+  /* Notes
+  used to help color tiles in checkTiles() method, takes a char and returns the number
+  of occurences of the char in the word (char: a, word: adam -> 2)
+  */
+  initializeOccurencesOfCharInWordMap() {
+    for (let char of this.word) {
+      let count = this.occurencesOfCharInWordMap.get(char);
+      this.occurencesOfCharInWordMap.set(char, count ? ++count : 1);
+    }
   }
 
   initalizeBoardAndTileColor() {
@@ -90,38 +152,12 @@ export class GameBoardComponent implements OnInit {
     this.tileColor = colors[rando];
   }
 
-  initializeFields() {
-    localStorage.setItem('word', 'hound');
-    if (localStorage.getItem('word')) {
-      this.word = localStorage.getItem('word')!;
-    } else {
-      alert('something went wrong');
-      return;
-    }
-    localStorage.setItem('maxAttempts', JSON.stringify(6));
-    if (localStorage.getItem('maxAttempts')) {
-      this.maxAttempts = JSON.parse(localStorage.getItem('maxAttempts')!);
-    } else this.maxAttempts = 6;
-    this.totalTiles = this.word.length * this.maxAttempts;
-    this.charArr = Array(this.totalTiles).fill(null);
-  }
-
-  // @HostListener('window:beforeunload', ['$event'])
-  // handlePageRefresh(event: Event) {
-  //   alert();
-  //   console.log('yo');
-  // }
-
   @HostListener('window:keydown', ['$event.key'])
   onKeyDown($event: string) {
     if (this.validChars.includes($event.toLocaleLowerCase()))
       this.type($event.toLocaleLowerCase());
     if ($event === 'Backspace') this.del();
     if ($event === 'Enter') this.enter();
-  }
-
-  test() {
-    alert();
   }
 
   /* Notes
@@ -199,7 +235,6 @@ export class GameBoardComponent implements OnInit {
   }
 
   handleValidGuess(guess: string) {
-    console.log(`in handleValidGuess(${guess})`);
     this.lastGuess = guess;
     this.guessList.push(this.lastGuess);
     this.handleKeyAndTileHighlight();
@@ -213,7 +248,6 @@ export class GameBoardComponent implements OnInit {
   }
 
   handleInvalidGuess() {
-    console.log('in handleInvalidGuess');
     this.animateInvalidGuess = true;
     this.hasChangedInvalidGuess = false;
   }
@@ -301,17 +335,6 @@ export class GameBoardComponent implements OnInit {
             : 1
         );
       }
-    }
-  }
-
-  /* Notes
-  used to help color tiles in checkTiles() method, takes a char and returns the number
-  of occurences of the char in the word (char: a, word: adam -> 2)
-  */
-  initializeOccurencesOfCharInWordMap() {
-    for (let char of this.word) {
-      let count = this.occurencesOfCharInWordMap.get(char);
-      this.occurencesOfCharInWordMap.set(char, count ? ++count : 1);
     }
   }
 }

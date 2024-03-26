@@ -13,6 +13,9 @@
   margin: 10px;
   min-width: 355px;
   box-shadow: -5px 8px 15px rgba(0, 0, 0, 0.34);
+  min-height: 385px;
+  max-height: 450px;
+  overflow-y: scroll;
 }
 
 .blue-board {
@@ -127,7 +130,7 @@
 .four-tile {
   font-size: 2.2rem;
   min-width: 50px;
-  min-height: 55px;
+  min-height: 50px;
 }
 
 .five-tile {
@@ -173,7 +176,7 @@
   align-items: center;
   border: none;
   margin: 0.75px;
-  width: 35px;
+  width: 33px;
   height: 50px;
   font-size: 20px;
   cursor: pointer;
@@ -181,6 +184,7 @@
   touch-action: manipulation;
   background-color: var(--red);
   transition: 0.5s;
+  border-radius: 4px;
 }
 
 .enter-btn {
@@ -231,7 +235,8 @@
 .green {
   background-color: var(--green);
   animation: green-tile-animation 0.5s;
-  box-shadow: 1px 1px 20px black;
+  box-shadow: -4px 4px 20px rgba(0, 0, 0, 0.569);
+  scale: 1.05;
 }
 
 @keyframes green-tile-animation {
@@ -244,7 +249,8 @@
 .orange {
   background-color: var(--orange);
   animation: orange-tile-animation 0.5s;
-  box-shadow: 1px 1px 20px black;
+  box-shadow: -4px 4px 20px rgba(0, 0, 0, 0.562);
+  scale: 1.02;
 }
 
 @keyframes orange-tile-animation {
@@ -256,7 +262,8 @@
 
 .grey {
   background-color: grey;
-  box-shadow: 1px 3px 20px black;
+  box-shadow: -4px 4px 20px rgba(0, 0, 0, 0.542);
+  scale: 1.01;
 }
 
 .active-tile {

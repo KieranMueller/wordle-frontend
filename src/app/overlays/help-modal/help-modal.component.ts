@@ -7,9 +7,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 })
 export class HelpModalComponent {
   @Output() emitter = new EventEmitter<boolean>();
-  modalClosed = false;
   emitClose() {
-    this.modalClosed = true;
-    this.emitter.emit(this.modalClosed);
+    this.emitter.emit();
   }
 }

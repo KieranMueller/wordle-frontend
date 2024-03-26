@@ -9,7 +9,6 @@ import { ForgotPasswordComponent } from './views/forgot-password/forgot-password
 import { CreateAccountComponent } from './views/create-account/create-account.component';
 import { HomeComponent } from './views/home/home.component';
 import { AiPromptComponent } from './views/ai-prompt/ai-prompt.component';
-import { PlaySettingsComponent } from './views/play-settings/play-settings.component';
 import { PlayComponent } from './views/play/play.component';
 import { WordleListComponent } from './views/wordle-list/wordle-list.component';
 import { FindUserComponent } from './views/find-user/find-user.component';
@@ -26,6 +25,10 @@ import { GameBoardComponent } from './components/game-board/game-board.component
 import { MiddleBarComponent } from './components/middle-bar/middle-bar.component';
 import { CreateWordleComponent } from './components/create-wordle/create-wordle.component';
 import { HelpModalComponent } from './overlays/help-modal/help-modal.component';
+import { CreateWordleOptionsModalComponent } from './overlays/create-wordle-options-modal/create-wordle-options-modal.component';
+import { ClipboardModule } from 'ngx-clipboard';
+import { GameBoardOptionsBarComponent } from './components/game-board-options-bar/game-board-options-bar.component';
+import { PlaySettingsComponent } from './overlays/play-settings/play-settings.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +38,6 @@ import { HelpModalComponent } from './overlays/help-modal/help-modal.component';
     CreateAccountComponent,
     HomeComponent,
     AiPromptComponent,
-    PlaySettingsComponent,
     PlayComponent,
     WordleListComponent,
     FindUserComponent,
@@ -51,8 +53,17 @@ import { HelpModalComponent } from './overlays/help-modal/help-modal.component';
     MiddleBarComponent,
     CreateWordleComponent,
     HelpModalComponent,
+    CreateWordleOptionsModalComponent,
+    GameBoardOptionsBarComponent,
+    PlaySettingsComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    HttpClientModule,
+    ClipboardModule,
+  ],
   providers: [Window],
   bootstrap: [AppComponent],
 })

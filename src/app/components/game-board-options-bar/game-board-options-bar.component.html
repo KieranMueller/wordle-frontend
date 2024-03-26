@@ -1,0 +1,8 @@
+<div class="container">
+  <p>time: 43s</p>
+  <button class="options" (click)="showSettings = true">settings</button>
+  <app-play-settings
+    *ngIf="showSettings"
+    (emitter)="closeSettings()"
+  ></app-play-settings>
+</div>

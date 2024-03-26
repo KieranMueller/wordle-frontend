@@ -1,0 +1,161 @@
+.container {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.874);
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.content {
+  position: fixed;
+  background-color: var(--green);
+  margin-top: 30px;
+  border-radius: 20px;
+  width: 85%;
+  height: 75%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.inner {
+  background-color: rgb(26, 26, 26);
+  border-radius: 20px;
+  width: 98%;
+  height: 98%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  color: white;
+  overflow-y: scroll;
+}
+
+.stuff {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+  margin-top: 40px;
+}
+
+.skip {
+  background-color: var(--red);
+  padding: 6px;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.guesses-box {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.only-green-box {
+  width: 80%;
+}
+
+.only-green-text {
+  font-size: 14px;
+}
+
+select {
+  width: 80px;
+  padding: 3px;
+  outline: none;
+  border: none;
+  margin: 3px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+img {
+  margin-top: 15px;
+  width: 150px;
+}
+
+p {
+  margin: 0;
+  margin-top: 3px;
+}
+
+ul {
+  padding: 0;
+  margin: 0;
+  margin-top: 5px;
+  margin-left: 25px;
+  margin-right: 5px;
+  font-size: 14px;
+}
+
+.x-mark {
+  position: absolute;
+  width: 25px;
+  top: -2px;
+  right: 12px;
+}
+
+.radio-option-box {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+button {
+  outline: none;
+  border: none;
+  color: black;
+  background-color: rgb(255, 255, 255);
+  padding: 7px;
+  border-radius: 10px;
+  box-shadow: -1px 1px 20px rgba(255, 255, 255, 0.359);
+  margin-bottom: 10px;
+  margin-top: 6px;
+}
+
+button:disabled {
+  background-color: rgb(159, 159, 159);
+}
+
+.tile-container {
+  outline: 2px solid white;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tile {
+  margin: 1px 1px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--green);
+  color: white;
+  width: 35px;
+  height: 35px;
+  font-size: 20px;
+}
+
+.tile-small {
+  width: 25px;
+  height: 25px;
+}
+
+.gameLink {
+  height: 60px;
+  width: 80%;
+  font-size: 12px;
+  margin-bottom: 10px;
+  background-color: rgb(26, 26, 26);
+  border: 1px solid grey;
+  color: white;
+  padding: 6px;
+  overflow: hidden;
+}

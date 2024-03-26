@@ -1,0 +1,70 @@
+<div class="container1">
+  <div class="inner">
+    <img
+      class="x-mark"
+      src="../../../assets/icons/x-mark.png"
+      alt="close modal"
+      (click)="emitClose()"
+    />
+    <div class="tile-blink-box">
+      <p>active tile flash</p>
+      <div class="tile-blink-inner">
+        <div>
+          <input
+            type="radio"
+            name="disable-blink"
+            value="false"
+            checked="checked"
+          />
+          <label for="disable-blink">on</label>
+        </div>
+        <div>
+          <input type="radio" name="disable-blink" value="true" />
+          <label for="disable-blink">off</label>
+        </div>
+      </div>
+    </div>
+    <hr />
+    <div class="tile-blink-box">
+      <p>sound effects</p>
+      <div class="tile-blink-inner">
+        <div>
+          <input
+            type="radio"
+            name="disable-sound"
+            value="false"
+            checked="checked"
+          />
+          <label for="disable-sound">on</label>
+        </div>
+        <div>
+          <input type="radio" name="disable-sound" value="true" />
+          <label for="disable-sound">off</label>
+        </div>
+      </div>
+    </div>
+    <hr />
+    <div class="tile-blink-box">
+      <p>display timer</p>
+      <div class="tile-blink-inner">
+        <div>
+          <input
+            type="radio"
+            name="disable-timer"
+            value="false"
+            checked="checked"
+          />
+          <label for="disable-timer">on</label>
+        </div>
+        <div>
+          <input type="radio" name="disable-timer" value="true" />
+          <label for="disable-timer">off</label>
+        </div>
+      </div>
+    </div>
+    <hr />
+    <button class="btn">randomize board color</button>
+    <hr />
+    <button class="btn">how to play</button>
+  </div>
+</div>
