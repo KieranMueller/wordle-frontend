@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -29,6 +28,10 @@ import { CreateWordleOptionsModalComponent } from './overlays/create-wordle-opti
 import { ClipboardModule } from 'ngx-clipboard';
 import { GameBoardOptionsBarComponent } from './components/game-board-options-bar/game-board-options-bar.component';
 import { PlaySettingsComponent } from './overlays/play-settings/play-settings.component';
+import { BrowserModule } from '@angular/platform-browser';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -63,8 +66,10 @@ import { PlaySettingsComponent } from './overlays/play-settings/play-settings.co
     FormsModule,
     HttpClientModule,
     ClipboardModule,
+    MatProgressSpinnerModule,
+    BrowserAnimationsModule,
   ],
-  providers: [Window],
+  providers: [Window, provideAnimationsAsync()],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
