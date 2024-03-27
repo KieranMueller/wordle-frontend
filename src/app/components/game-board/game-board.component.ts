@@ -59,6 +59,7 @@ export class GameBoardComponent implements OnInit {
     'y',
     'z',
   ];
+
   /* TODO
   - Have UI keyboard buttons look like they are being clicked when using personal keyboard
   - Add a how to play button/modal for first timers + instructions (How the game works, what colors mean etc.)
@@ -108,6 +109,7 @@ export class GameBoardComponent implements OnInit {
     console.log(wordle);
     this.word = wordle.word;
     this.maxAttempts = wordle.attempts;
+    this.startTimer(wordle.timeLimit);
     this.totalTiles = this.word.length * this.maxAttempts;
     this.charArr = Array(this.totalTiles).fill(null);
   }
@@ -150,6 +152,34 @@ export class GameBoardComponent implements OnInit {
     colors.splice(colors.indexOf('orange'), 1);
     rando = Math.floor(Math.random() * colors.length);
     this.tileColor = colors[rando];
+  }
+
+  startTimer(timeLimit: string) {
+    if (timeLimit === 'none') return;
+    console.log(timeLimit);
+    let time = 1000 * 60 * 60;
+    switch (timeLimit) {
+      case '30s': {
+        time = 1000 * 30;
+        break;
+      }
+      case '1m': {
+        time = 1000 * 60;
+        break;
+      }
+      case '2m': {
+        time = 1000 * 60 * 2;
+        break;
+      }
+      case '5m': {
+        time = 1000 * 60 * 5;
+        break;
+      }
+      case '10m': {
+        time = 1000 * 60 * 10;
+        break;
+      }
+    }
   }
 
   @HostListener('window:keydown', ['$event.key'])
