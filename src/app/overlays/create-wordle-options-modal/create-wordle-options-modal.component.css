@@ -107,28 +107,29 @@ ul {
   align-items: center;
 }
 
-button {
-  outline: none;
-  border: none;
-  color: black;
-  background-color: rgb(255, 255, 255);
-  padding: 7px;
-  border-radius: 10px;
-  box-shadow: -1px 1px 20px rgba(255, 255, 255, 0.359);
-  margin-bottom: 10px;
-  margin-top: 6px;
-}
-
-button:disabled {
-  background-color: rgb(159, 159, 159);
-}
-
 .tile-container {
   outline: 2px solid white;
   background-color: white;
   display: flex;
   justify-content: center;
   align-items: center;
+  animation: pulse 2s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes pulse {
+  25% {
+    scale: 1.02;
+    transform: translate(-1px, 1px) rotate(-1deg);
+  }
+  50% {
+    scale: 0.98;
+    transform: translate(1px, -1px) rotate(-1deg);
+  }
+  75% {
+    scale: 1.02;
+    transform: translate(1px, 1px) rotate(1deg);
+  }
 }
 
 .tile {
@@ -158,4 +159,32 @@ button:disabled {
   color: white;
   padding: 6px;
   overflow: hidden;
+}
+
+button {
+  outline: none;
+  border: none;
+  color: rgb(26, 26, 26);
+  background-color: rgb(255, 255, 255);
+  padding: 7px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  margin-top: 6px;
+}
+
+.create-btn {
+  position: relative;
+  width: 130px;
+  height: 60px;
+  text-align: center;
+}
+
+button:disabled {
+  background-color: rgb(159, 159, 159);
+}
+
+.spinner {
+  position: absolute;
+  top: 15px;
+  left: 50px;
 }

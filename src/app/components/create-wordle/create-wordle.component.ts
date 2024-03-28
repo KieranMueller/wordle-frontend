@@ -45,16 +45,24 @@ export class CreateWordleComponent {
   showHelpModal = false;
   showCreateWordleOptionsModal = false;
   isNotWord = false;
+  validatingWord = false;
+  errorMessage = '';
 
   /*
-  - Turn create button into loading spinner on click
+  - Wipe page when coming back after closing create worlde options modal
   */
 
   constructor(private http: HttpClient) {}
 
-  closeModal() {
+  closeModal(createdWord: boolean) {
+    if (createdWord) this.wipePage();
     this.showHelpModal = false;
     this.showCreateWordleOptionsModal = false;
+  }
+
+  wipePage() {
+    this.word = '';
+    this.charArr = Array(4).fill(null);
   }
 
   @HostListener('window:keydown', ['$event.key'])
@@ -98,25 +106,26 @@ export class CreateWordleComponent {
   }
 
   validateWord() {
+    this.validatingWord = true;
     this.http
       .get(`https://api.dictionaryapi.dev/api/v2/entries/en/${this.word}`)
       .subscribe({
         next: () => {
+          this.validatingWord = false;
           this.showCreateWordleOptionsModal = true;
         },
         error: (e) => {
           if (e.status.toString().startsWith('4')) this.showNotWordMessage(e);
-          if (
-            e.status.toString().startsWith('5') ||
-            e.status.toString().startsWith('0')
-          )
-            this.handleFailedRequest(e);
+          if (e.status.toString().startsWith('5')) this.handleFailedRequest(e);
+          if (e.status.toString().startsWith('0'))
+            this.handleNoInternetConnection(e);
         },
       });
   }
 
   showNotWordMessage(e: any) {
     console.log(e);
+    this.validatingWord = false;
     this.isNotWord = true;
     setTimeout(() => {
       this.isNotWord = false;
@@ -124,7 +133,23 @@ export class CreateWordleComponent {
   }
 
   handleFailedRequest(e: any) {
-    alert('bad internet connection');
+    this.validatingWord = false;
+    console.log('unable to communicate with dictionary API to check word');
+    this.errorMessage =
+      'unable to communicate with dictionary API to check word, please try again later';
+    setTimeout(() => {
+      this.errorMessage = '';
+    }, 5000);
+    console.log(e);
+  }
+
+  handleNoInternetConnection(e: any) {
+    this.validatingWord = false;
+    console.log('no internet connection');
+    this.errorMessage = 'no internet connection!';
+    setTimeout(() => {
+      this.errorMessage = '';
+    }, 4000);
     console.log(e);
   }
 }

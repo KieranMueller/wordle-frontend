@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ClipboardService } from 'ngx-clipboard';
 
 @Component({
@@ -7,8 +7,8 @@ import { ClipboardService } from 'ngx-clipboard';
   templateUrl: './create-wordle-options-modal.component.html',
   styleUrls: ['./create-wordle-options-modal.component.css'],
 })
-export class CreateWordleOptionsModalComponent {
-  @Output() emitter = new EventEmitter<boolean>();
+export class CreateWordleOptionsModalComponent implements OnInit {
+  @Output() closeEmitter = new EventEmitter<boolean>();
   @Input() word = '';
   request = {
     word: '',
@@ -19,6 +19,7 @@ export class CreateWordleOptionsModalComponent {
   gameLink = '';
   created = false;
   generateBtnText = 'generate link!';
+  loading = false;
 
   /*
   - Have generate button turn into loading spinner while waiting for response
@@ -27,11 +28,16 @@ export class CreateWordleOptionsModalComponent {
 
   constructor(private http: HttpClient, private clipBoard: ClipboardService) {}
 
-  emitClose() {
-    this.emitter.emit();
+  ngOnInit() {
+    this.created = false;
+  }
+
+  emitClose(createdWord: boolean) {
+    this.closeEmitter.emit(createdWord);
   }
 
   create() {
+    this.loading = true;
     this.request.word = this.word;
     this.http
       .post(`http://localhost:8080/free-wordle`, this.request)
@@ -49,6 +55,7 @@ export class CreateWordleOptionsModalComponent {
   }
 
   handleSuccess(res: any) {
+    this.loading = false;
     console.log(res);
     console.log(res.uuidLink);
     this.created = true;
@@ -58,11 +65,15 @@ export class CreateWordleOptionsModalComponent {
 
   handleInvalidRequest(e: any) {
     console.log('invalid request');
+    this.generateBtnText = 'oops...';
+    this.loading = false;
     console.log(e);
   }
 
   handleFailedRequest(e: any) {
-    console.log('something went wrong');
+    console.log('internal server error');
+    this.loading = false;
+    this.generateBtnText = 'oops...';
     console.log(e);
   }
 

@@ -17,6 +17,7 @@ button {
   padding: 7px;
   max-height: 40px;
   margin: 2px;
+  box-shadow: -5px 2px 5px rgba(0, 0, 0, 0.645);
 }
 
 .play-btn {

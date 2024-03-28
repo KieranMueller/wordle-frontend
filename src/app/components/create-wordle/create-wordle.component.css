@@ -141,6 +141,11 @@ p {
 
 .create-btn {
   background-color: rgb(31, 31, 31);
+  width: 100px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   color: white;
   outline: none;
   border: none;
@@ -150,6 +155,7 @@ p {
   box-shadow: -10px 10px 20px rgba(0, 0, 0, 0.48);
   animation: pulse 2s;
   animation-iteration-count: infinite;
+  position: relative;
 }
 
 @keyframes pulse {
@@ -237,9 +243,8 @@ p {
   }
 }
 
-/* .spinner {
-  width: 20px;
-  z-index: 2;
-  color: rgb(208, 20, 20);
-  background-color: rgb(152, 149, 149);
-} */
+.spinner {
+  position: absolute;
+  top: 10px;
+  left: 35px;
+}

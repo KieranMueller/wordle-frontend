@@ -5,7 +5,7 @@
         class="x-mark"
         src="../../../assets/icons/x-mark.png"
         alt="close modal"
-        (click)="emitClose()"
+        (click)="emitClose(created)"
       />
       <div class="stuff">
         <p class="title">add custom rules to this game?</p>
@@ -72,8 +72,15 @@
             <label for="onlyGreenTiles">off</label>
           </div>
         </div>
-        <button (click)="create()" [disabled]="created">
-          {{ generateBtnText }}
+        <button class="create-btn" (click)="create()" [disabled]="created">
+          {{ loading ? "" : generateBtnText }}
+          <mat-spinner
+            diameter="30"
+            value="4"
+            color="warn"
+            class="spinner"
+            *ngIf="loading"
+          ></mat-spinner>
         </button>
         <button
           class="gameLink"

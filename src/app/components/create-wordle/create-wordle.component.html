@@ -1,7 +1,10 @@
-<app-help-modal (emitter)="closeModal()" *ngIf="showHelpModal"></app-help-modal>
+<app-help-modal
+  (emitter)="closeModal($event)"
+  *ngIf="showHelpModal"
+></app-help-modal>
 <app-create-wordle-options-modal
   [word]="word"
-  (emitter)="closeModal()"
+  (closeEmitter)="closeModal($event)"
   *ngIf="showCreateWordleOptionsModal"
 ></app-create-wordle-options-modal>
 <div class="container">
@@ -10,6 +13,7 @@
     <p>stump your friends and family!</p>
     <div class="not-word-box">
       <p class="not-word" *ngIf="isNotWord">(not a word)</p>
+      <p class="not-word" *ngIf="errorMessage">{{ errorMessage }}</p>
     </div>
     <div
       class="tile-container"
@@ -29,16 +33,24 @@
         {{ char }}
       </div>
     </div>
-    <button
-      class="create-btn"
+    <div
+      class="create-box"
       [ngClass]="{
         'hide-create':
           word.length < 4 || showCreateWordleOptionsModal || showHelpModal
       }"
-      (click)="validateWord()"
     >
-      create!
-    </button>
+      <button class="create-btn" (click)="validateWord()">
+        {{ !validatingWord ? "create!" : "" }}
+        <mat-spinner
+          diameter="30"
+          value="4"
+          color="warn"
+          class="spinner"
+          *ngIf="validatingWord"
+        ></mat-spinner>
+      </button>
+    </div>
     <div class="keyboard-container">
       <div class="keyboard-row">
         <button
@@ -77,12 +89,5 @@
         </button>
       </div>
     </div>
-    <p>test</p>
-    <mat-spinner
-      diameter="40"
-      value="4"
-      color="warn"
-      class="spinner"
-    ></mat-spinner>
   </div>
 </div>
