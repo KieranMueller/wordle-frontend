@@ -18,7 +18,7 @@
   <p class="error-msg" *ngIf="errorMessage">{{ errorMessage }}</p>
   <div class="spinner-div">
     <mat-spinner
-      *ngIf="checkingWord"
+      *ngIf="loading"
       diameter="20"
       color="warn"
       class="spinner"
@@ -41,7 +41,8 @@
       'green-board': boardColor === 'green',
       'yellow-board': boardColor === 'yellow',
       'orange-board': boardColor === 'orange',
-      'blue-board': boardColor === 'blue'
+      'blue-board': boardColor === 'blue',
+      'fade-board-in': !boardInitialized
     }"
   >
     <div
