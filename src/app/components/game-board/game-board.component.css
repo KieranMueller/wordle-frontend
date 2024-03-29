@@ -271,6 +271,10 @@
   animation-iteration-count: infinite;
 }
 
+.flash-off {
+  background-color: rgba(255, 255, 255, 0.677);
+}
+
 @keyframes active-tile-blink {
   0% {
     background-color: rgb(255, 255, 255);
@@ -281,4 +285,17 @@
   100% {
     background-color: rgb(255, 255, 255);
   }
+}
+
+.error-msg {
+  margin: 0;
+  color: var(--red);
+}
+
+.hidden {
+  visibility: none;
+}
+
+.spinner-div {
+  height: 20px;
 }

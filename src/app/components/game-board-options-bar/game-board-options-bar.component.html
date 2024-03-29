@@ -1,8 +1,16 @@
+<app-how-to-play-modal
+  (emitter)="closeModal()"
+  *ngIf="showHelpModal"
+></app-how-to-play-modal>
+<app-play-settings
+  *ngIf="showSettings"
+  (closeModalEmitter)="closeSettings()"
+  (changeGameColorsEmitter)="changeGameBoardColorsEmitter.emit()"
+  (quitEmitter)="handleQuit()"
+></app-play-settings>
 <div class="container">
-  <p>time: 43s</p>
+  <p *ngIf="seconds">time: {{ seconds }}s</p>
   <button class="options" (click)="showSettings = true">settings</button>
-  <app-play-settings
-    *ngIf="showSettings"
-    (emitter)="closeSettings()"
-  ></app-play-settings>
+  <button class="options" (click)="showHelpModal = true">help</button>
+  <!-- <button (click)="test()">test</button> -->
 </div>

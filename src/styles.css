@@ -8,6 +8,11 @@
 
 body {
   margin: 0;
+  background-image: linear-gradient(
+    to bottom right,
+    rgb(237, 220, 220),
+    rgb(255, 255, 255)
+  );
 }
 
 * {
@@ -17,5 +22,15 @@ body {
   font-style: normal;
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+button {
+  touch-action: manipulation;
+}

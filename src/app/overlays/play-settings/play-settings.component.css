@@ -20,6 +20,7 @@
   height: 70%;
   border-radius: 22px;
   padding: 20px;
+  padding-top: 50px;
   position: relative;
 }
 
@@ -53,14 +54,14 @@
   font-size: 18px;
 }
 
-p {
-  font-size: 18px;
-}
-
 .x-mark {
   position: absolute;
   width: 25px;
   top: 10px;
   right: 8px;
   cursor: pointer;
+}
+
+* {
+  font-size: 26px;
 }

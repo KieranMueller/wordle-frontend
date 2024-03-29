@@ -1,7 +1,9 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, HostListener, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
+import { GameSettingsService } from 'src/app/service/game-settings.service';
+import { wordsList } from './randomWordsList';
 
 @Component({
   selector: 'app-game-board',
@@ -59,32 +61,51 @@ export class GameBoardComponent implements OnInit {
     'y',
     'z',
   ];
+  timeLimit = new BehaviorSubject<number | null>(null);
+  flashOff: any;
+  soundOff = false;
+  canRefresh = false;
+  win = false;
+  lose = false;
+  errorMessage = '';
+  checkingWord = false;
+  exchangesBetweenRandomWordApiAndDictionaryApiCounter = 0;
 
   /* TODO
   - Have UI keyboard buttons look like they are being clicked when using personal keyboard
-  - Add a how to play button/modal for first timers + instructions (How the game works, what colors mean etc.)
   - Remove the possibility of simply refreshing page to restart game and guesses
   - Add sound effects
   - Randomize color of keyboard
-  - Allow user to randomize colors of page by button, without reloading page or game, anytime
   - Add ability to play the daily wordle
   - Add loading spinner while API checks word
   - Implement scoring system, show on game over modal based on num guesses, correct guesses etc
   - Implement timer for timed mode
   - Add ability for unlimited guesses? Have game board scroll if so?
   - Add bad internet connection modal
-  - Add option to turn off blinking active tile
   - Add win/lose end game modal!
-  - Create bad request modal (couldn't retrieve wordle with uuid, add option to play with random word)
+  - After win or lose modal shows, ensure word is killed, game no longer exists when refreshing page
+  - option to share game results after game
+  - Currently, if word that has been guessed is guessed again, error message says "not a word"
+  - Continue work on getRandomWord method for free play!
   */
 
-  constructor(private http: HttpClient, private route: ActivatedRoute) {}
+  constructor(
+    private http: HttpClient,
+    private route: ActivatedRoute,
+    private router: Router,
+    private settingsService: GameSettingsService,
+  ) {}
 
   ngOnInit() {
+    console.log(wordsList)
+    this.handleSettings();
     if (this.route.snapshot.params['uuidLink']) {
       const uuid = this.route.snapshot.params['uuidLink'];
       this.getWordleFromDB(uuid);
-    } else this.initializeFields();
+    } else {
+      // this.initializeFields();
+      this.getRandomWordRequest();
+    }
     this.initializeOccurencesOfCharInWordMap();
     this.initalizeBoardAndTileColor();
   }
@@ -96,11 +117,8 @@ export class GameBoardComponent implements OnInit {
       },
       error: (e) => {
         if (e.status.toString().startsWith('4')) this.handleBadRequest(e);
-        if (
-          e.status.toString().startsWith('5') ||
-          e.status.toString().startsWith('0')
-        )
-          this.handleFailedRequest(e);
+        if (e.status.toString().startsWith('5')) this.handleFailedRequest(e);
+        if (e.status.toString().startsWith('0')) this.handleNoInternet(e);
       },
     });
   }
@@ -116,15 +134,77 @@ export class GameBoardComponent implements OnInit {
 
   handleBadRequest(error: any) {
     console.log(error);
+    this.router.navigateByUrl('/not-found');
+  }
+
+  handleNoInternet(error: any) {
+    this.checkingWord = false;
+    console.log(error);
+    this.errorMessage = 'no internet connection...';
+    setTimeout(() => {
+      this.errorMessage = '';
+    }, 1000);
+  }
+
+  handleFailedRequest(e: HttpErrorResponse) {
+    this.checkingWord = false;
+    this.errorMessage = 'issues communicating with our servers...';
+    setTimeout(() => {
+      this.errorMessage = '';
+    }, 1000);
+    console.log(e);
+    console.log(
+      'Experiencing internet connection issues.\nMessage is: ' + e.message
+    );
+  }
+
+  getRandomWordRequest() {
+    let length = Math.floor(Math.random() * 6) + 4;
+    console.log(length);
+    this.http
+      .get(`https://random-word-api.herokuapp.com/word?length=${length}`)
+      .subscribe({
+        next: (res) => {
+          console.log(res.toString());
+          this.ensureRandomWordExistsInDictionaryAPI(res.toString())
+        },
+        error: (e) => {
+          alert('error fetching random word');
+          console.log(e);
+          this.manuallySetRandomWord();
+        },
+      });
+  }
+
+  ensureRandomWordExistsInDictionaryAPI(word: string) {
+    this.exchangesBetweenRandomWordApiAndDictionaryApiCounter++;
+    if (this.exchangesBetweenRandomWordApiAndDictionaryApiCounter > 4) {
+      alert('something went wrong, server down')
+      return;
+    }
+    console.log(word);
+    this.http
+    .get(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
+    .subscribe({
+      next: res => {
+        console.log(res)
+        this.word = word;
+        this.initializeFields()
+      },
+      error: e => {
+        console.log(e)
+        if (e.status.toString().startsWith('4')) this.getRandomWordRequest();
+        if (e.status.toString().startsWith('5')) this.handleFailedRequest(e);
+        if (e.status.toString().startsWith('0')) this.handleNoInternet(e);
+      }
+    });
+  }
+
+  manuallySetRandomWord() {
+    alert('need to implement');
   }
 
   initializeFields() {
-    // refactor logic for all of this, local storage??
-    if (localStorage.getItem('word')) {
-      this.word = localStorage.getItem('word')!;
-    } else {
-      this.word = 'indigo';
-    }
     if (localStorage.getItem('maxAttempts')) {
       this.maxAttempts = JSON.parse(localStorage.getItem('maxAttempts')!);
     } else this.maxAttempts = 6;
@@ -180,6 +260,7 @@ export class GameBoardComponent implements OnInit {
         break;
       }
     }
+    this.timeLimit.next(time);
   }
 
   @HostListener('window:keydown', ['$event.key'])
@@ -245,26 +326,21 @@ export class GameBoardComponent implements OnInit {
       this.handleWin();
       return;
     }
-    this.validateGuess(guess).subscribe({
-      next: () => this.handleValidGuess(guess),
-      error: (e) => {
-        if (e.status.toString().startsWith('4')) this.handleInvalidGuess();
-        if (
-          e.status.toString().startsWith('5') ||
-          e.status.toString().startsWith('0')
-        )
-          this.handleFailedRequest(e);
-      },
-    });
-  }
-
-  validateGuess(guess: string): Observable<any> {
-    return this.http.get(
-      `https://api.dictionaryapi.dev/api/v2/entries/en/${guess}`
-    );
+    this.checkingWord = true;
+    this.http
+      .get(`https://api.dictionaryapi.dev/api/v2/entries/en/${guess}`)
+      .subscribe({
+        next: () => this.handleValidGuess(guess),
+        error: (e) => {
+          if (e.status.toString().startsWith('4')) this.handleInvalidGuess();
+          if (e.status.toString().startsWith('5')) this.handleFailedRequest(e);
+          if (e.status.toString().startsWith('0')) this.handleNoInternet(e);
+        },
+      });
   }
 
   handleValidGuess(guess: string) {
+    this.checkingWord = false;
     this.lastGuess = guess;
     this.guessList.push(this.lastGuess);
     this.handleKeyAndTileHighlight();
@@ -278,26 +354,28 @@ export class GameBoardComponent implements OnInit {
   }
 
   handleInvalidGuess() {
+    this.checkingWord = false;
+    this.errorMessage = '(not a word)';
+    setTimeout(() => {
+      this.errorMessage = '';
+    }, 1000);
     this.animateInvalidGuess = true;
     this.hasChangedInvalidGuess = false;
-  }
-
-  handleFailedRequest(e: HttpErrorResponse) {
-    console.log(e);
-    console.log(
-      'Experiencing internet connection issues.\nMessage is: ' + e.message
-    );
   }
 
   handleWin() {
     this.handleKeyAndTileHighlight();
     this.isGameOver = true;
-    alert('You Win');
+    setTimeout(() => {
+      this.win = true;
+    }, 600);
   }
 
   handleLose() {
     this.isGameOver = true;
-    alert('You Lose');
+    setTimeout(() => {
+      this.lose = true;
+    }, 600);
   }
 
   handleKeyAndTileHighlight() {
@@ -366,5 +444,14 @@ export class GameBoardComponent implements OnInit {
         );
       }
     }
+  }
+
+  handleSettings() {
+    this.settingsService.flashOff.subscribe((val) => (this.flashOff = val));
+    this.settingsService.soundOff.subscribe((val) => (this.soundOff = val));
+  }
+
+  handleQuit() {
+    alert(this.word);
   }
 }

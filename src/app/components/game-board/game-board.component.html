@@ -1,5 +1,32 @@
 <div class="container">
-  <app-game-board-options-bar></app-game-board-options-bar>
+  <app-game-board-options-bar
+    [timeLimit$]="timeLimit"
+    (emitToGameComponent)="handleSettings()"
+    (changeGameBoardColorsEmitter)="initalizeBoardAndTileColor()"
+    (quitEmitter)="handleQuit()"
+  ></app-game-board-options-bar>
+  <app-win-modal
+    *ngIf="win"
+    [attempts]="currentAttempt + 1"
+    [word]="word!"
+  ></app-win-modal>
+  <app-lose-modal
+    *ngIf="lose"
+    [attempts]="currentAttempt"
+    [word]="word!"
+  ></app-lose-modal>
+  <p class="error-msg" *ngIf="errorMessage">{{ errorMessage }}</p>
+  <div class="spinner-div">
+    <mat-spinner
+      *ngIf="checkingWord"
+      diameter="20"
+      color="warn"
+      class="spinner"
+    ></mat-spinner>
+  </div>
+  <p style="visibility: hidden; margin: 0" *ngIf="!errorMessage">
+    error message placeholder
+  </p>
   <div
     class="board"
     [ngClass]="{
@@ -29,9 +56,14 @@
         'nine-tile': word.length === 9,
         green: tileMap.get(i) === 'green',
         orange: tileMap.get(i) === 'orange',
-        'active-tile':
-          i === charArr.indexOf(null) &&
-          i < currentGuessStartIndex + word.length,
+        'active-tile': flashOff
+          ? false
+          : i === charArr.indexOf(null) &&
+            i < currentGuessStartIndex + word.length,
+        'flash-off': !flashOff
+          ? false
+          : i === charArr.indexOf(null) &&
+            i < currentGuessStartIndex + word.length,
         'red-tile': tileColor === 'red',
         'yellow-tile': tileColor === 'yellow',
         'blue-tile': tileColor === 'blue'
@@ -90,6 +122,6 @@
         Del
       </button>
     </div>
-    <p>test</p>
+    <!-- <p>test</p> -->
   </div>
 </div>
