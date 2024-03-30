@@ -3,6 +3,8 @@
   justify-content: center;
   align-items: center;
   padding: 8px;
+  position: relative;
+  margin: 0;
 }
 
 .red {
@@ -31,4 +33,13 @@
 p {
   margin: 0;
   font-size: 1.5rem;
+}
+
+.home {
+  height: 30px;
+  position: absolute;
+  left: 20px;
+  cursor: pointer;
+  padding-right: 10px;
+  border-right: 2px solid rgb(35, 35, 35);
 }

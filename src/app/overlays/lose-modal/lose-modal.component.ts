@@ -8,4 +8,8 @@ import { Component, Input } from '@angular/core';
 export class LoseModalComponent {
   @Input() attempts = 0
   @Input() word = ''
+
+  newGame() {
+    location.reload()
+  }
 }

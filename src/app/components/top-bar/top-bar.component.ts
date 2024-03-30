@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { ActivatedRoute } from '@angular/router'
 
 @Component({
   selector: 'app-top-bar',
@@ -7,6 +8,15 @@ import { Component, Input } from '@angular/core';
 })
 export class TopBarComponent {
   @Input() color = 'red';
+  hideHome = false;
+
+  constructor(private route: ActivatedRoute) {}
+
+  ngOnInit() {
+    if (this.route.snapshot.url[0].path === 'home') {
+      this.hideHome = true;
+    }
+  }
 
   getColor() {
     return {

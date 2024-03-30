@@ -17,7 +17,7 @@ export class GameBoardComponent implements OnInit {
     bottomRow: ['z', 'x', 'c', 'v', 'b', 'n', 'm'],
   };
   currentGuessLength = 0;
-  word = ''; // must be between 4-9 chars inclusive
+  word = '';
   maxAttempts = 0;
   totalTiles = 0;
   lastGuess = '';
@@ -63,32 +63,33 @@ export class GameBoardComponent implements OnInit {
   ];
   timeLimit = new BehaviorSubject<number | null>(null);
   flashOff: any;
-  soundOff = false;
   canRefresh = false;
   win = false;
   lose = false;
   errorMessage = '';
   loading = false;
   exchangesBetweenRandomWordApiAndDictionaryApiCounter = 0;
-  boardInitialized = false
+  boardInitialized = false;
+  hasInternetConnection = true;
 
   /* TODO
   - Have UI keyboard buttons look like they are being clicked when using personal keyboard
   - Remove the possibility of simply refreshing page to restart game and guesses
-  - Add sound effects
   - Randomize color of keyboard
   - Add ability to play the daily wordle
-  - Add loading spinner while API checks word
   - Implement scoring system, show on game over modal based on num guesses, correct guesses etc
   - Implement timer for timed mode
   - Add ability for unlimited guesses? Have game board scroll if so?
-  - Add bad internet connection modal
-  - Add win/lose end game modal!
-  - After win or lose modal shows, ensure word is killed, game no longer exists when refreshing page
   - option to share game results after game
-  - Currently, if word that has been guessed is guessed again, error message says "not a word"
-  - Continue work on getRandomWord method for free play!
+  - Allow configuration of word length and guess attempts in free play mode
   - fill up wordslist for manually setting word
+  - Create modals or banner popups for these no internet alerts etc.
+  - Better background color
+  - Randomize background color of top bar?
+  - add modern theme color scheme option?
+  - add haptic feedback to button clicks?
+  - store settings in local storage (including tile blink)
+  - set stored settings in free play mode (local storage) ensure not to in game sent by someone else
   */
 
   constructor(
@@ -101,8 +102,8 @@ export class GameBoardComponent implements OnInit {
   ngOnInit() {
     this.loading = true;
     setTimeout(() => {
-      this.boardInitialized = true
-    }, 1000)
+      this.boardInitialized = true;
+    }, 1000);
     this.handleSettings();
     if (this.route.snapshot.params['uuidLink']) {
       const uuid = this.route.snapshot.params['uuidLink'];
@@ -181,7 +182,7 @@ export class GameBoardComponent implements OnInit {
 
   ensureRandomWordExistsInDictionaryAPI(word: string) {
     this.exchangesBetweenRandomWordApiAndDictionaryApiCounter++;
-    if (this.exchangesBetweenRandomWordApiAndDictionaryApiCounter > 4) {
+    if (this.exchangesBetweenRandomWordApiAndDictionaryApiCounter > 6) {
       alert('something went wrong, server down');
       this.handleFailedRequest(null);
       return;
@@ -204,10 +205,11 @@ export class GameBoardComponent implements OnInit {
   }
 
   manuallySetRandomWord() {
-    alert('manually setting word');
+    alert('manually setting word, guesses will NOT be checked with dictionary');
     let length = Math.floor(Math.random() * 6) + 4;
     this.word = wordsList['4'][0];
     this.loading = false;
+    this.hasInternetConnection = false;
     this.initializeFields();
   }
 
@@ -325,7 +327,7 @@ export class GameBoardComponent implements OnInit {
       guess += this.charArr[i];
     }
     if (this.guessList.includes(guess)) {
-      this.handleInvalidGuess();
+      this.handleInvalidGuess('(already used this word)');
       return;
     }
     if (guess === this.word) {
@@ -333,16 +335,21 @@ export class GameBoardComponent implements OnInit {
       return;
     }
     this.loading = true;
-    this.http
-      .get(`https://api.dictionaryapi.dev/api/v2/entries/en/${guess}`)
-      .subscribe({
-        next: () => this.handleValidGuess(guess),
-        error: (e) => {
-          if (e.status.toString().startsWith('4')) this.handleInvalidGuess();
-          if (e.status.toString().startsWith('5')) this.handleFailedRequest(e);
-          if (e.status.toString().startsWith('0')) this.handleNoInternet(e);
-        },
-      });
+    if (this.hasInternetConnection) {
+      this.http
+        .get(`https://api.dictionaryapi.dev/api/v2/entries/en/${guess}`)
+        .subscribe({
+          next: () => this.handleValidGuess(guess),
+          error: (e) => {
+            if (e.status.toString().startsWith('4')) this.handleInvalidGuess();
+            if (e.status.toString().startsWith('5'))
+              this.handleFailedRequest(e);
+            if (e.status.toString().startsWith('0')) this.handleNoInternet(e);
+          },
+        });
+    } else {
+      this.handleValidGuess(guess);
+    }
   }
 
   handleValidGuess(guess: string) {
@@ -359,9 +366,9 @@ export class GameBoardComponent implements OnInit {
     this.currentGuessStartIndex += this.word.length;
   }
 
-  handleInvalidGuess() {
+  handleInvalidGuess(message: string = '(not a word)') {
     this.loading = false;
-    this.errorMessage = '(not a word)';
+    this.errorMessage = message;
     setTimeout(() => {
       this.errorMessage = '';
     }, 1000);
@@ -454,10 +461,9 @@ export class GameBoardComponent implements OnInit {
 
   handleSettings() {
     this.settingsService.flashOff.subscribe((val) => (this.flashOff = val));
-    this.settingsService.soundOff.subscribe((val) => (this.soundOff = val));
   }
 
   handleQuit() {
-    alert(this.word);
+    this.handleLose()
   }
 }
