@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { GameSettingsService } from 'src/app/service/game-settings.service';
 
 @Component({
@@ -24,7 +24,7 @@ export class PlaySettingsComponent implements OnInit {
   - settings not working properly, they revert to default state when modal is closed then opened again
   */
 
-  constructor(private settingsService: GameSettingsService, private route: ActivatedRoute) {}
+  constructor(private settingsService: GameSettingsService, private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit() {
     if (this.route.snapshot.params['uuidLink']) {
@@ -54,11 +54,17 @@ export class PlaySettingsComponent implements OnInit {
   }
 
   handleClose() {
-    this.saveSettings();
+    this.saveAnyModeSettings();
     this.emitClose();
   }
 
-  saveSettings() {
+  saveAnyModeSettings() {
+
+
+    this.settingsService.setFlashOff(this.flashOff);
+  }
+
+  saveFreePlaySettings() {
     localStorage.setItem(
       'wordLengthSetting',
       JSON.stringify(this.wordLengthSetting)
@@ -68,8 +74,6 @@ export class PlaySettingsComponent implements OnInit {
       'attemptsSetting',
       JSON.stringify(this.attemptsSetting)
     );
-
-    this.settingsService.setFlashOff(this.flashOff);
   }
 
   emitClose() {
@@ -87,5 +91,10 @@ export class PlaySettingsComponent implements OnInit {
       this.closeModalEmitter.emit();
       this.quitEmitter.emit();
     }
+  }
+
+  loadGame() {
+    this.saveFreePlaySettings()
+    location.reload()
   }
 }

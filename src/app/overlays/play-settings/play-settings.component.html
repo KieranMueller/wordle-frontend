@@ -75,13 +75,13 @@
             <option value="4">4</option>
             <option value="6">6</option>
             <option value="8">8</option>
-            <option value="9">100</option>
+            <option value="100">100</option>
           </select>
         </div>
       </div>
     </div>
     <div>
-      <button class="btn green" [disabled]="!isFreePlay">load game</button>
+      <button class="btn green" [disabled]="!isFreePlay" (click)="loadGame()">load game</button>
     </div>
   </div>
 </div>

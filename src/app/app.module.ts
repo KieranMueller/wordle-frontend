@@ -37,6 +37,7 @@ import { HowToPlayModalComponent } from './overlays/how-to-play-modal/how-to-pla
 import { GameSettingsService } from './service/game-settings.service'
 import { WinModalComponent } from './overlays/win-modal/win-modal.component'
 import { LoseModalComponent } from './overlays/lose-modal/lose-modal.component'
+import { WordleService } from './service/wordle.service'
 
 @NgModule({
   declarations: [
@@ -67,7 +68,7 @@ import { LoseModalComponent } from './overlays/lose-modal/lose-modal.component'
     NotFoundComponent,
     HowToPlayModalComponent,
     WinModalComponent,
-    LoseModalComponent
+    LoseModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -78,7 +79,7 @@ import { LoseModalComponent } from './overlays/lose-modal/lose-modal.component'
     MatProgressSpinnerModule,
     BrowserAnimationsModule,
   ],
-  providers: [Window, provideAnimationsAsync(), GameSettingsService],
+  providers: [Window, provideAnimationsAsync(), GameSettingsService, WordleService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -1,16 +1,12 @@
-.container {
+.container1 {
   background-color: var(--green);
   color: white;
-  padding: 10px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  border-radius: 10px;
   box-shadow: -2px 5px 10px rgba(0, 0, 0, 0.534);
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
-  width: 300px;
-  height: 70px;
+  margin: 0;
+  width: 100vw;
 }
 
 p {
@@ -24,12 +20,27 @@ button {
 }
 
 .options {
-  background-color: var(--yellow);
+  width: 110px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 8px;
-  border-radius: 6px;
-  box-shadow: -4px 7px 5px rgba(0, 0, 0, 0.255);
+  background-color: rgba(0, 0, 0, 0.281);
+  cursor: pointer;
+  transition: 0.4s;
+}
+
+.br {
+  border-right: 4px solid rgba(255, 255, 255, 0.24);
 }
 
 .hidden {
   color: black;
+}
+
+@media screen and (min-width: 700px) {
+  .options:hover {
+    background-color: rgba(0, 0, 0, 0.508);
+  }
 }

@@ -1,9 +1,20 @@
-.container {
+.container2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.container1 {
+  padding-left: 10px;
+  padding-right: 10px;
   background-color: var(--yellow);
   height: 55px;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: center;
+  width: 700px;
+  border-radius: 5px;
 }
 
 p {
@@ -14,10 +25,10 @@ button {
   outline: none;
   border: none;
   border-radius: 4px;
-  padding: 7px;
+  padding: 6px;
   max-height: 40px;
   margin: 2px;
-  box-shadow: -5px 2px 5px rgba(0, 0, 0, 0.645);
+  box-shadow: -5px 5px 5px rgba(0, 0, 0, 0.418);
 }
 
 .play-btn {

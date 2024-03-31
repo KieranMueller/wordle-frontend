@@ -8,9 +8,9 @@
   (changeGameColorsEmitter)="changeGameBoardColorsEmitter.emit()"
   (quitEmitter)="handleQuit()"
 ></app-play-settings>
-<div class="container">
+<div class="container1">
   <p *ngIf="seconds">time: {{ seconds }}s</p>
-  <button class="options" (click)="showSettings = true">settings</button>
-  <button class="options" (click)="showHelpModal = true">help</button>
+  <div class="options br" (click)="showSettings = true">settings</div>
+  <div class="options" (click)="showHelpModal = true">help</div>
   <!-- <button (click)="test()">test</button> -->
 </div>

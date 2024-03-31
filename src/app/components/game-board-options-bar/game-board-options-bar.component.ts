@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, map, take, timer } from 'rxjs';
-import { GameSettingsService } from 'src/app/service/game-settings.service';
+import { WordleService } from 'src/app/service/wordle.service'
 
 @Component({
   selector: 'app-game-board-options-bar',
@@ -16,10 +17,15 @@ export class GameBoardOptionsBarComponent {
   minutes = 0;
   seconds = 0;
   showHelpModal = false;
+  gameUuid = '';
 
   // show time remaining as mm:ss
+  // tweak local storage key to include uuid for this game so that multiple games can be played with independent timers
+
+  constructor(private route: ActivatedRoute, private wordleService: WordleService) {}
 
   ngOnInit() {
+    this.gameUuid = this.route.snapshot.url[1].path;
     this.timeLimit$.subscribe({
       next: (secs) => {
         this.startTimer(secs);
@@ -34,8 +40,10 @@ export class GameBoardOptionsBarComponent {
   startTimer(ms: any) {
     if (!ms) return;
     let secs = ms / 1000;
-    if (localStorage.getItem('timeRemaining')) {
-      secs = JSON.parse(localStorage.getItem('timeRemaining')!);
+    if (localStorage.getItem(`timeRemainingFor:${this.gameUuid}`)) {
+      secs = JSON.parse(
+        localStorage.getItem(`timeRemainingFor:${this.gameUuid}`)!
+      );
     }
     timer(0, 1000)
       .pipe(
@@ -43,14 +51,21 @@ export class GameBoardOptionsBarComponent {
         map((s) => secs - s)
       )
       .subscribe((secs) => {
-        if (secs === 1) this.handleTimeRanout();
+        if (secs === 1) this.handleQuit();
         this.formatTime(secs);
       });
   }
 
   formatTime(secs: any) {
-    localStorage.setItem('timeRemaining', JSON.stringify(secs));
-    this.seconds = secs;
+    if (localStorage.getItem(`timeRemainingFor:${this.gameUuid}`) !== '0') {
+      localStorage.setItem(
+        `timeRemainingFor:${this.gameUuid}`,
+        JSON.stringify(secs)
+      );
+      this.seconds = secs;
+    } else {
+      this.handleQuit();
+    }
   }
 
   closeSettings() {
@@ -58,11 +73,14 @@ export class GameBoardOptionsBarComponent {
     this.emitToGameComponent.emit();
   }
 
-  handleTimeRanout() {
-    console.log('timeout!');
-  }
-
   handleQuit() {
+    if (localStorage.getItem(`timeRemainingFor:${this.gameUuid}`)) {
+      localStorage.setItem(
+        `timeRemainingFor:${this.gameUuid}`!,
+        JSON.stringify(0)
+      );
+    }
+    this.wordleService.deleteWordleByUuidLink(this.gameUuid).subscribe()
     this.quitEmitter.emit();
   }
 }

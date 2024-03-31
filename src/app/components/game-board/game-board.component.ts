@@ -71,6 +71,9 @@ export class GameBoardComponent implements OnInit {
   exchangesBetweenRandomWordApiAndDictionaryApiCounter = 0;
   boardInitialized = false;
   hasInternetConnection = true;
+  wordLengthPreference = 'random'
+  attemptsPreference = 'random'
+  isFreePlay = true;
 
   /* TODO
   - Have UI keyboard buttons look like they are being clicked when using personal keyboard
@@ -78,7 +81,7 @@ export class GameBoardComponent implements OnInit {
   - Randomize color of keyboard
   - Add ability to play the daily wordle
   - Implement scoring system, show on game over modal based on num guesses, correct guesses etc
-  - Implement timer for timed mode
+  - Implement timer for free play mode
   - Add ability for unlimited guesses? Have game board scroll if so?
   - option to share game results after game
   - Allow configuration of word length and guess attempts in free play mode
@@ -88,8 +91,15 @@ export class GameBoardComponent implements OnInit {
   - Randomize background color of top bar?
   - add modern theme color scheme option?
   - add haptic feedback to button clicks?
-  - store settings in local storage (including tile blink)
-  - set stored settings in free play mode (local storage) ensure not to in game sent by someone else
+  - store tile blink in local storage
+  - Ensure I wipe timers from local storage after custom games end (can't figure out how)
+  - Implement only show green tiles option
+  - Delete worlde in DB after win
+  - Ensure boxes are square no matter what dimensions
+  - Let user know somewhere/somehow that game link is only valid for one play (if deleting wordle in db after games)
+  - Add button hover events etc for laptop
+  - Get CSS looking good!
+  - Ensure user settings work with no internet game (generated word)
   */
 
   constructor(
@@ -104,11 +114,13 @@ export class GameBoardComponent implements OnInit {
     setTimeout(() => {
       this.boardInitialized = true;
     }, 1000);
-    this.handleSettings();
+    this.handleAnyModeSettings();
     if (this.route.snapshot.params['uuidLink']) {
+      this.isFreePlay = false;
       const uuid = this.route.snapshot.params['uuidLink'];
       this.getWordleFromDB(uuid);
     } else {
+      this.handleFreePlaySettings()
       this.getRandomWordRequest();
     }
     this.initializeOccurencesOfCharInWordMap();
@@ -165,6 +177,7 @@ export class GameBoardComponent implements OnInit {
 
   getRandomWordRequest() {
     let length = Math.floor(Math.random() * 6) + 4;
+    if (this.wordLengthPreference !== 'random') length = parseInt(this.wordLengthPreference);
     this.http
       .get(`https://random-word-api.herokuapp.com/word?length=${length}`)
       .subscribe({
@@ -214,9 +227,11 @@ export class GameBoardComponent implements OnInit {
   }
 
   initializeFields() {
-    if (localStorage.getItem('maxAttempts')) {
-      this.maxAttempts = JSON.parse(localStorage.getItem('maxAttempts')!);
-    } else this.maxAttempts = 6;
+    if (this.isFreePlay) {
+      this.maxAttempts = parseInt(this.attemptsPreference)
+    } else {
+      this.maxAttempts = 6;
+    }
     this.totalTiles = this.word.length * this.maxAttempts;
     this.charArr = Array(this.totalTiles).fill(null);
   }
@@ -459,11 +474,20 @@ export class GameBoardComponent implements OnInit {
     }
   }
 
-  handleSettings() {
+  handleAnyModeSettings() {
     this.settingsService.flashOff.subscribe((val) => (this.flashOff = val));
   }
 
-  handleQuit() {
-    this.handleLose()
+  handleFreePlaySettings() {
+    if (localStorage.getItem('wordLengthSetting')) {
+      this.wordLengthPreference = JSON.parse(localStorage.getItem('wordLengthSetting')!)
+    } else {
+      this.wordLengthPreference = 'random'
+    }
+    if (localStorage.getItem('attemptsSetting')) {
+      this.attemptsPreference = JSON.parse(localStorage.getItem('attemptsSetting')!)
+    } else {
+      this.attemptsPreference = '6'
+    }
   }
 }

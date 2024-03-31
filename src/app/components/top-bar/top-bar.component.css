@@ -1,8 +1,8 @@
-.container {
+.container1 {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 8px;
+  padding: 7px;
   position: relative;
   margin: 0;
 }

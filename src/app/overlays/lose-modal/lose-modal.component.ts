@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { Router } from '@angular/router'
 
 @Component({
   selector: 'app-lose-modal',
@@ -9,7 +10,10 @@ export class LoseModalComponent {
   @Input() attempts = 0
   @Input() word = ''
 
+  constructor(private router: Router) {}
+
   newGame() {
     location.reload()
+    this.router.navigateByUrl('/play')
   }
 }

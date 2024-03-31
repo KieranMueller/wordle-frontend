@@ -7,10 +7,14 @@
   (closeEmitter)="closeModal($event)"
   *ngIf="showCreateWordleOptionsModal"
 ></app-create-wordle-options-modal>
-<div class="container">
+<div class="container1">
   <div class="content">
-    <p class="header">create a custom 4-9 letter wordle</p>
-    <p>stump your friends and family!</p>
+    <div class="top-text">
+      <p class="header">create a custom 4-9 letter wordle</p>
+      <div class="line"></div>
+      <p>stump your friends and family!</p>
+      <p>(links are destroyed after 1 play)</p>
+    </div>
     <div class="not-word-box">
       <p class="not-word" *ngIf="isNotWord">(not a word)</p>
       <p class="not-word" *ngIf="errorMessage">{{ errorMessage }}</p>

@@ -1,9 +1,9 @@
 <div class="container1">
   <app-game-board-options-bar
     [timeLimit$]="timeLimit"
-    (emitToGameComponent)="handleSettings()"
+    (emitToGameComponent)="handleAnyModeSettings()"
     (changeGameBoardColorsEmitter)="initalizeBoardAndTileColor()"
-    (quitEmitter)="handleQuit()"
+    (quitEmitter)="handleLose()"
   ></app-game-board-options-bar>
   <app-win-modal
     *ngIf="win"
@@ -15,18 +15,15 @@
     [attempts]="currentAttempt"
     [word]="word!"
   ></app-lose-modal>
-  <p class="error-msg" *ngIf="errorMessage">{{ errorMessage }}</p>
-  <div class="spinner-div">
-    <mat-spinner
-      *ngIf="loading"
-      diameter="20"
-      color="warn"
-      class="spinner"
-    ></mat-spinner>
+  <div class="error-div">
+    <p class="error-msg" *ngIf="errorMessage">{{ errorMessage }}</p>
+      <mat-spinner
+        *ngIf="loading"
+        diameter="20"
+        color="warn"
+        class="spinner"
+      ></mat-spinner>
   </div>
-  <p style="visibility: hidden; margin: 0" *ngIf="!errorMessage">
-    error message placeholder
-  </p>
   <div
     class="board"
     [ngClass]="{
