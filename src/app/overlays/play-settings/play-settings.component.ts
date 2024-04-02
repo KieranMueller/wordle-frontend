@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router'
 import { GameSettingsService } from 'src/app/service/game-settings.service';
 
@@ -18,19 +18,30 @@ export class PlaySettingsComponent implements OnInit {
   wordLengthSetting = 'random';
   attemptsSetting = '6';
   isFreePlay = true;
+  @Input() randomBtnColor = ''
+  randomBtnBorder: any;
 
   /*
   - turn inputs into cool switches/dials
   - settings not working properly, they revert to default state when modal is closed then opened again
   */
 
-  constructor(private settingsService: GameSettingsService, private route: ActivatedRoute, private router: Router) {}
+  constructor(private settingsService: GameSettingsService, private route: ActivatedRoute, private router: Router, private ref: ChangeDetectorRef) {}
 
   ngOnInit() {
+    this.settingsService.gameBorderColor.subscribe(color => this.randomBtnBorder = color)
     if (this.route.snapshot.params['uuidLink']) {
       this.isFreePlay = false;
     }
     this.initializeSettings();
+  }
+
+  test() {
+    console.log(this.randomBtnBorder)
+  }
+
+  changeGameColors() {
+    this.changeGameColorsEmitter.emit()
   }
 
   initializeSettings() {

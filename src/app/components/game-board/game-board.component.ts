@@ -186,7 +186,6 @@ export class GameBoardComponent implements OnInit {
           this.ensureRandomWordExistsInDictionaryAPI(res.toString());
         },
         error: (e) => {
-          alert('error fetching random word, generating one manually');
           console.log(e);
           this.manuallySetRandomWord();
         },
@@ -218,9 +217,12 @@ export class GameBoardComponent implements OnInit {
   }
 
   manuallySetRandomWord() {
-    alert('manually setting word, guesses will NOT be checked with dictionary');
+    this.errorMessage = 'error fetching word, setting manually, guesses will NOT be checked'
     let length = Math.floor(Math.random() * 6) + 4;
-    this.word = wordsList['4'][0];
+    if (this.wordLengthPreference !== 'random') length = parseInt(this.wordLengthPreference);
+    let arrToSelectFrom = wordsList[length]
+    let randomIndex = Math.floor(Math.random() * arrToSelectFrom.length)
+    this.word = arrToSelectFrom[randomIndex]
     this.loading = false;
     this.hasInternetConnection = false;
     this.initializeFields();
@@ -251,6 +253,7 @@ export class GameBoardComponent implements OnInit {
     let colors = ['red', 'green', 'yellow', 'orange', 'blue'];
     let rando = Math.floor(Math.random() * colors.length);
     this.boardColor = colors[rando];
+    this.settingsService.gameBorderColor.next(this.boardColor)
     colors.splice(colors.indexOf(this.boardColor), 1);
     colors.splice(colors.indexOf('green'), 1);
     colors.splice(colors.indexOf('orange'), 1);

@@ -6,6 +6,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class GameSettingsService {
   flashOff = new BehaviorSubject<boolean>(false);
+  gameBorderColor = new BehaviorSubject('')
 
   setFlashOff(val: boolean) {
     this.flashOff.next(val);

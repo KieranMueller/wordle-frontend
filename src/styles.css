@@ -6,13 +6,12 @@
   --blue: #5b8e7d;
 }
 
+*::-webkit-scrollbar {
+  display: none;
+}
+
 body {
   margin: 0;
-  /* background-image: linear-gradient(
-    to bottom right,
-    rgb(237, 220, 220),
-    rgb(255, 255, 255)
-  ); */
 }
 
 * {

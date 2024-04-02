@@ -3,6 +3,7 @@
   *ngIf="showHelpModal"
 ></app-how-to-play-modal>
 <app-play-settings
+  [randomBtnColor]="randomBtnColor"
   *ngIf="showSettings"
   (closeModalEmitter)="closeSettings()"
   (changeGameColorsEmitter)="changeGameBoardColorsEmitter.emit()"

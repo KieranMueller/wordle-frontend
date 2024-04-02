@@ -339,12 +339,12 @@
 }
 
 .error-div {
-  margin-top: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 40px;
   position: relative;
+  margin: 20px;
 }
 
 .spinner {

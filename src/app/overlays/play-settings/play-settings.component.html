@@ -10,7 +10,7 @@
       <div class="option-box">
         <p>active tile flash</p>
         <div class="option-inner">
-          <div>
+          <div class="radio-box">
             <input
               type="radio"
               name="disable-blink"
@@ -20,7 +20,7 @@
             />
             <label for="disable-blink">on</label>
           </div>
-          <div>
+          <div class="radio-box">
             <input
               type="radio"
               name="disable-blink"
@@ -31,7 +31,20 @@
           </div>
         </div>
       </div>
-      <button class="btn" (click)="changeGameColorsEmitter.emit()">
+      <button class="btn" (click)="changeGameColors()"
+      [ngClass]="{
+        'green': randomBtnColor === 'green',
+        'red': randomBtnColor === 'red',
+        'orange': randomBtnColor === 'orange',
+        'blue': randomBtnColor === 'blue',
+        'yellow': randomBtnColor === 'yellow',
+        'green-border': randomBtnBorder === 'green',
+        'red-border': randomBtnBorder === 'red',
+        'orange-border': randomBtnBorder === 'orange',
+        'blue-border': randomBtnBorder === 'blue',
+        'yellow-border': randomBtnBorder === 'yellow'
+      }"
+      >
         randomize board color
       </button>
       <button
@@ -81,7 +94,7 @@
       </div>
     </div>
     <div>
-      <button class="btn green" [disabled]="!isFreePlay" (click)="loadGame()">load game</button>
+      <button class="btn green load-game" [disabled]="!isFreePlay" (click)="loadGame()">load game</button>
     </div>
   </div>
 </div>
