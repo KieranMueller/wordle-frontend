@@ -74,6 +74,8 @@ export class GameBoardComponent implements OnInit {
   wordLengthPreference = 'random';
   attemptsPreference = 'random';
   isFreePlay = true;
+  gameUuid = '';
+  hasGameHistory = false;
 
   /* TODO
   - Have UI keyboard buttons look like they are being clicked when using personal keyboard
@@ -89,6 +91,7 @@ export class GameBoardComponent implements OnInit {
   - Implement only show green tiles option
   - Add button hover events etc for laptop
   - Get CSS looking good!
+  - Wipe wordle DB after a win as well
   - Remove the possibility of simply refreshing page to restart game and guesses on created word game
       - ensure all is removed from local storage after game, ensure guess list is saved too
 
@@ -110,6 +113,10 @@ export class GameBoardComponent implements OnInit {
     if (this.route.snapshot.params['uuidLink']) {
       this.isFreePlay = false;
       const uuid = this.route.snapshot.params['uuidLink'];
+      this.gameUuid = uuid;
+      if (JSON.parse(localStorage.getItem('gameHistory')!) === this.gameUuid) {
+        this.hasGameHistory = true;
+      }
       this.getWordleFromDB(uuid);
     } else {
       this.handleFreePlaySettings();
@@ -138,9 +145,39 @@ export class GameBoardComponent implements OnInit {
     this.word = wordle.word;
     this.maxAttempts = wordle.attempts;
     this.startTimer(wordle.timeLimit);
-    this.totalTiles = this.word.length * this.maxAttempts;
-    this.charArr = Array(this.totalTiles).fill(null);
+    if (!this.hasGameHistory) {
+      this.totalTiles = this.word.length * this.maxAttempts;
+      this.charArr = Array(this.totalTiles).fill(null);
+    } else {
+      this.loadGameHistory();
+    }
     this.loading = false;
+  }
+
+  loadGameHistory() {
+    let histCharArr = JSON.parse(
+      localStorage.getItem('charArr' + this.gameUuid)!
+    );
+    if (histCharArr) this.charArr = histCharArr;
+    let histGuessList = JSON.parse(
+      localStorage.getItem('guessList' + this.gameUuid)!
+    );
+    if (histGuessList) this.guessList = histGuessList;
+    let histCurrentAttempt = JSON.parse(
+      localStorage.getItem('currentAttempt' + this.gameUuid)!
+    );
+    if (histCurrentAttempt) this.currentAttempt = histCurrentAttempt;
+    let histCurrentGuessStartIndex = JSON.parse(
+      localStorage.getItem('currentGuessStartIndex' + this.gameUuid)!
+    );
+    if (histCurrentGuessStartIndex)
+      this.currentGuessStartIndex = histCurrentGuessStartIndex;
+    this.keyMap = new Map(
+      JSON.parse(localStorage.getItem('keyMap' + this.gameUuid)!)
+    );
+    this.tileMap = new Map(
+      JSON.parse(localStorage.getItem('tileMap' + this.gameUuid)!)
+    );
   }
 
   handleBadRequest(error: any) {
@@ -373,7 +410,28 @@ export class GameBoardComponent implements OnInit {
     }
     this.currentGuessLength = 0;
     this.currentGuessStartIndex += this.word.length;
-    // localStorage.setItem('charArr', JSON.stringify(this.charArr))
+    this.setGameHistoryInRankedMode();
+  }
+
+  setGameHistoryInRankedMode() {
+    if (this.isFreePlay) return;
+    localStorage.setItem('gameHistory', JSON.stringify(this.gameUuid));
+    localStorage.setItem(
+      'charArr' + this.gameUuid,
+      JSON.stringify(this.charArr)
+    );
+    localStorage.setItem(
+      'guessList' + this.gameUuid,
+      JSON.stringify(this.guessList)
+    );
+    localStorage.setItem(
+      'currentAttempt' + this.gameUuid,
+      JSON.stringify(this.currentAttempt)
+    );
+    localStorage.setItem(
+      'currentGuessStartIndex' + this.gameUuid,
+      JSON.stringify(this.currentGuessStartIndex)
+    );
   }
 
   handleInvalidGuess(message: string = '(not a word)') {
@@ -392,6 +450,7 @@ export class GameBoardComponent implements OnInit {
     setTimeout(() => {
       this.win = true;
     }, 600);
+    this.clearGameHistoryFromLocalStorage();
   }
 
   handleLose() {
@@ -399,6 +458,17 @@ export class GameBoardComponent implements OnInit {
     setTimeout(() => {
       this.lose = true;
     }, 600);
+    this.clearGameHistoryFromLocalStorage();
+  }
+
+  clearGameHistoryFromLocalStorage() {
+    localStorage.removeItem('charArr' + this.gameUuid);
+    localStorage.removeItem('gameHistory');
+    localStorage.removeItem('guessList' + this.gameUuid);
+    localStorage.removeItem('currentAttempt' + this.gameUuid);
+    localStorage.removeItem('currentGuessStartIndex' + this.gameUuid);
+    localStorage.removeItem('keyMap' + this.gameUuid);
+    localStorage.removeItem('tileMap' + this.gameUuid);
   }
 
   handleKeyAndTileHighlight() {
@@ -420,6 +490,10 @@ export class GameBoardComponent implements OnInit {
         this.keyMap.set(char, 'grey');
       }
     }
+    localStorage.setItem(
+      'keyMap' + this.gameUuid,
+      JSON.stringify(Array.from(this.keyMap))
+    );
   }
 
   /* Notes
@@ -467,6 +541,10 @@ export class GameBoardComponent implements OnInit {
         );
       }
     }
+    localStorage.setItem(
+      'tileMap' + this.gameUuid,
+      JSON.stringify(Array.from(this.tileMap))
+    );
   }
 
   handleAnyModeSettings() {
