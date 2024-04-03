@@ -114,7 +114,7 @@ export class GameBoardComponent implements OnInit {
       this.isFreePlay = false;
       const uuid = this.route.snapshot.params['uuidLink'];
       this.gameUuid = uuid;
-      if (JSON.parse(localStorage.getItem('gameHistory')!) === this.gameUuid) {
+      if (JSON.parse(localStorage.getItem('gameHistory' + this.gameUuid)!)) {
         this.hasGameHistory = true;
       }
       this.getWordleFromDB(uuid);
@@ -415,7 +415,7 @@ export class GameBoardComponent implements OnInit {
 
   setGameHistoryInRankedMode() {
     if (this.isFreePlay) return;
-    localStorage.setItem('gameHistory', JSON.stringify(this.gameUuid));
+    localStorage.setItem('gameHistory' + this.gameUuid, JSON.stringify(true));
     localStorage.setItem(
       'charArr' + this.gameUuid,
       JSON.stringify(this.charArr)
@@ -463,7 +463,6 @@ export class GameBoardComponent implements OnInit {
 
   clearGameHistoryFromLocalStorage() {
     localStorage.removeItem('charArr' + this.gameUuid);
-    localStorage.removeItem('gameHistory');
     localStorage.removeItem('guessList' + this.gameUuid);
     localStorage.removeItem('currentAttempt' + this.gameUuid);
     localStorage.removeItem('currentGuessStartIndex' + this.gameUuid);
