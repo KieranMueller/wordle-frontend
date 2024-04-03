@@ -463,6 +463,7 @@ export class GameBoardComponent implements OnInit {
 
   clearGameHistoryFromLocalStorage() {
     localStorage.removeItem('charArr' + this.gameUuid);
+    localStorage.removeItem('gameHistory' + this.gameUuid);
     localStorage.removeItem('guessList' + this.gameUuid);
     localStorage.removeItem('currentAttempt' + this.gameUuid);
     localStorage.removeItem('currentGuessStartIndex' + this.gameUuid);
