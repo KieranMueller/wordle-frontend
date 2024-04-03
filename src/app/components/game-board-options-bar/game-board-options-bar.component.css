@@ -39,6 +39,30 @@ button {
   color: black;
 }
 
+.timer {
+  margin-right: 10px;
+}
+
+.warning {
+  color: rgb(125, 61, 34);
+  font-weight: 800;
+  animation: danger-animation 2s;
+  animation-iteration-count: infinite;
+}
+
+.danger {
+  color: var(--red);
+  font-weight: 800;
+  animation: danger-animation 1s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes danger-animation {
+  25% {
+    scale: 1.1;
+  }
+}
+
 @media screen and (min-width: 700px) {
   .options:hover {
     background-color: rgba(0, 0, 0, 0.508);

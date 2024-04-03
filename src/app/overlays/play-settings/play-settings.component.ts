@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router'
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { GameSettingsService } from 'src/app/service/game-settings.service';
 
 @Component({
@@ -11,14 +11,14 @@ export class PlaySettingsComponent implements OnInit {
   @Output() closeModalEmitter = new EventEmitter();
   @Output() changeGameColorsEmitter = new EventEmitter();
   @Output() quitEmitter = new EventEmitter();
-  flashOff: any;
+  @Input() randomBtnColor = '';
+  flashOff = false;
   soundOff: any;
   giveUpMessage = 'give up';
   disableBtn = false;
   wordLengthSetting = 'random';
   attemptsSetting = '6';
   isFreePlay = true;
-  @Input() randomBtnColor = ''
   randomBtnBorder: any;
 
   /*
@@ -26,10 +26,15 @@ export class PlaySettingsComponent implements OnInit {
   - settings not working properly, they revert to default state when modal is closed then opened again
   */
 
-  constructor(private settingsService: GameSettingsService, private route: ActivatedRoute, private router: Router, private ref: ChangeDetectorRef) {}
+  constructor(
+    private settingsService: GameSettingsService,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
-    this.settingsService.gameBorderColor.subscribe(color => this.randomBtnBorder = color)
+    this.settingsService.gameBorderColor.subscribe(
+      (color) => (this.randomBtnBorder = color)
+    );
     if (this.route.snapshot.params['uuidLink']) {
       this.isFreePlay = false;
     }
@@ -37,11 +42,11 @@ export class PlaySettingsComponent implements OnInit {
   }
 
   test() {
-    console.log(this.randomBtnBorder)
+    console.log(this.randomBtnBorder);
   }
 
   changeGameColors() {
-    this.changeGameColorsEmitter.emit()
+    this.changeGameColorsEmitter.emit();
   }
 
   initializeSettings() {
@@ -58,10 +63,13 @@ export class PlaySettingsComponent implements OnInit {
       if (setting >= 4 && setting <= 100) {
         this.attemptsSetting = setting;
       } else {
-        this.attemptsSetting = 'random';
+        this.attemptsSetting = '6';
       }
     }
-    this.settingsService.flashOff.subscribe((val) => (this.flashOff = val));
+    if (localStorage.getItem('flashOff')) {
+      let setting = JSON.parse(localStorage.getItem('flashOff')!);
+      this.flashOff = setting;
+    }
   }
 
   handleClose() {
@@ -70,9 +78,7 @@ export class PlaySettingsComponent implements OnInit {
   }
 
   saveAnyModeSettings() {
-
-
-    this.settingsService.setFlashOff(this.flashOff);
+    localStorage.setItem('flashOff', JSON.stringify(this.flashOff));
   }
 
   saveFreePlaySettings() {
@@ -105,7 +111,7 @@ export class PlaySettingsComponent implements OnInit {
   }
 
   loadGame() {
-    this.saveFreePlaySettings()
-    location.reload()
+    this.saveFreePlaySettings();
+    location.reload();
   }
 }

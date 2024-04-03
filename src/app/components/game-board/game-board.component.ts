@@ -62,7 +62,7 @@ export class GameBoardComponent implements OnInit {
     'z',
   ];
   timeLimit = new BehaviorSubject<number | null>(null);
-  flashOff: any;
+  flashOff = false;
   canRefresh = false;
   win = false;
   lose = false;
@@ -71,35 +71,27 @@ export class GameBoardComponent implements OnInit {
   exchangesBetweenRandomWordApiAndDictionaryApiCounter = 0;
   boardInitialized = false;
   hasInternetConnection = true;
-  wordLengthPreference = 'random'
-  attemptsPreference = 'random'
+  wordLengthPreference = 'random';
+  attemptsPreference = 'random';
   isFreePlay = true;
 
   /* TODO
   - Have UI keyboard buttons look like they are being clicked when using personal keyboard
-  - Remove the possibility of simply refreshing page to restart game and guesses
   - Randomize color of keyboard
   - Add ability to play the daily wordle
   - Implement scoring system, show on game over modal based on num guesses, correct guesses etc
   - Implement timer for free play mode
-  - Add ability for unlimited guesses? Have game board scroll if so?
   - option to share game results after game
-  - Allow configuration of word length and guess attempts in free play mode
   - fill up wordslist for manually setting word
-  - Create modals or banner popups for these no internet alerts etc.
-  - Better background color
-  - Randomize background color of top bar?
   - add modern theme color scheme option?
   - add haptic feedback to button clicks?
-  - store tile blink in local storage
   - Ensure I wipe timers from local storage after custom games end (can't figure out how)
   - Implement only show green tiles option
-  - Delete worlde in DB after win
-  - Ensure boxes are square no matter what dimensions
-  - Let user know somewhere/somehow that game link is only valid for one play (if deleting wordle in db after games)
   - Add button hover events etc for laptop
   - Get CSS looking good!
-  - Ensure user settings work with no internet game (generated word)
+  - Remove the possibility of simply refreshing page to restart game and guesses on created word game
+      - ensure all is removed from local storage after game, ensure guess list is saved too
+
   */
 
   constructor(
@@ -120,7 +112,7 @@ export class GameBoardComponent implements OnInit {
       const uuid = this.route.snapshot.params['uuidLink'];
       this.getWordleFromDB(uuid);
     } else {
-      this.handleFreePlaySettings()
+      this.handleFreePlaySettings();
       this.getRandomWordRequest();
     }
     this.initializeOccurencesOfCharInWordMap();
@@ -177,7 +169,8 @@ export class GameBoardComponent implements OnInit {
 
   getRandomWordRequest() {
     let length = Math.floor(Math.random() * 6) + 4;
-    if (this.wordLengthPreference !== 'random') length = parseInt(this.wordLengthPreference);
+    if (this.wordLengthPreference !== 'random')
+      length = parseInt(this.wordLengthPreference);
     this.http
       .get(`https://random-word-api.herokuapp.com/word?length=${length}`)
       .subscribe({
@@ -206,7 +199,7 @@ export class GameBoardComponent implements OnInit {
           console.log(res);
           this.word = word;
           this.loading = false;
-          this.initializeFields();
+          this.initializeFreePlayFields();
         },
         error: (e) => {
           if (e.status.toString().startsWith('4')) this.getRandomWordRequest();
@@ -217,23 +210,21 @@ export class GameBoardComponent implements OnInit {
   }
 
   manuallySetRandomWord() {
-    this.errorMessage = 'error fetching word, setting manually, guesses will NOT be checked'
+    this.errorMessage =
+      'error fetching word, setting manually, guesses will NOT be checked';
     let length = Math.floor(Math.random() * 6) + 4;
-    if (this.wordLengthPreference !== 'random') length = parseInt(this.wordLengthPreference);
-    let arrToSelectFrom = wordsList[length]
-    let randomIndex = Math.floor(Math.random() * arrToSelectFrom.length)
-    this.word = arrToSelectFrom[randomIndex]
+    if (this.wordLengthPreference !== 'random')
+      length = parseInt(this.wordLengthPreference);
+    let arrToSelectFrom = wordsList[length];
+    let randomIndex = Math.floor(Math.random() * arrToSelectFrom.length);
+    this.word = arrToSelectFrom[randomIndex];
     this.loading = false;
     this.hasInternetConnection = false;
-    this.initializeFields();
+    this.initializeFreePlayFields();
   }
 
-  initializeFields() {
-    if (this.isFreePlay) {
-      this.maxAttempts = parseInt(this.attemptsPreference)
-    } else {
-      this.maxAttempts = 6;
-    }
+  initializeFreePlayFields() {
+    this.maxAttempts = parseInt(this.attemptsPreference);
     this.totalTiles = this.word.length * this.maxAttempts;
     this.charArr = Array(this.totalTiles).fill(null);
   }
@@ -253,7 +244,7 @@ export class GameBoardComponent implements OnInit {
     let colors = ['red', 'green', 'yellow', 'orange', 'blue'];
     let rando = Math.floor(Math.random() * colors.length);
     this.boardColor = colors[rando];
-    this.settingsService.gameBorderColor.next(this.boardColor)
+    this.settingsService.gameBorderColor.next(this.boardColor);
     colors.splice(colors.indexOf(this.boardColor), 1);
     colors.splice(colors.indexOf('green'), 1);
     colors.splice(colors.indexOf('orange'), 1);
@@ -382,6 +373,7 @@ export class GameBoardComponent implements OnInit {
     }
     this.currentGuessLength = 0;
     this.currentGuessStartIndex += this.word.length;
+    // localStorage.setItem('charArr', JSON.stringify(this.charArr))
   }
 
   handleInvalidGuess(message: string = '(not a word)') {
@@ -478,19 +470,25 @@ export class GameBoardComponent implements OnInit {
   }
 
   handleAnyModeSettings() {
-    this.settingsService.flashOff.subscribe((val) => (this.flashOff = val));
+    if (localStorage.getItem('flashOff')) {
+      this.flashOff = JSON.parse(localStorage.getItem('flashOff')!);
+    }
   }
 
   handleFreePlaySettings() {
     if (localStorage.getItem('wordLengthSetting')) {
-      this.wordLengthPreference = JSON.parse(localStorage.getItem('wordLengthSetting')!)
+      this.wordLengthPreference = JSON.parse(
+        localStorage.getItem('wordLengthSetting')!
+      );
     } else {
-      this.wordLengthPreference = 'random'
+      this.wordLengthPreference = 'random';
     }
     if (localStorage.getItem('attemptsSetting')) {
-      this.attemptsPreference = JSON.parse(localStorage.getItem('attemptsSetting')!)
+      this.attemptsPreference = JSON.parse(
+        localStorage.getItem('attemptsSetting')!
+      );
     } else {
-      this.attemptsPreference = '6'
+      this.attemptsPreference = '6';
     }
   }
 }

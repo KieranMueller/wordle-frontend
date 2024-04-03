@@ -21,7 +21,6 @@ export class GameBoardOptionsBarComponent {
   @Input() randomBtnColor = ''
 
   // show time remaining as mm:ss
-  // tweak local storage key to include uuid for this game so that multiple games can be played with independent timers
 
   constructor(private route: ActivatedRoute, private wordleService: WordleService) {}
 
