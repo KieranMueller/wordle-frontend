@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, map, take, timer } from 'rxjs';
-import { WordleService } from 'src/app/service/wordle.service'
 
 @Component({
   selector: 'app-game-board-options-bar',
@@ -18,11 +17,11 @@ export class GameBoardOptionsBarComponent {
   seconds = 0;
   showHelpModal = false;
   gameUuid = '';
-  @Input() randomBtnColor = ''
+  @Input() randomBtnColor = '';
 
   // show time remaining as mm:ss
 
-  constructor(private route: ActivatedRoute, private wordleService: WordleService) {}
+  constructor(private route: ActivatedRoute) {}
 
   ngOnInit() {
     this.gameUuid = this.route.snapshot.url[1].path;
@@ -45,13 +44,16 @@ export class GameBoardOptionsBarComponent {
         localStorage.getItem(`timeRemainingFor:${this.gameUuid}`)!
       );
     }
-    timer(0, 1000)
+    const timer$ = timer(0, 1000)
       .pipe(
         take(secs),
         map((s) => secs - s)
       )
       .subscribe((secs) => {
-        if (secs === 1) this.handleQuit();
+        if (secs === 1) {
+          timer$.unsubscribe();
+          this.handleQuit();
+        }
         this.formatTime(secs);
       });
   }
@@ -76,11 +78,10 @@ export class GameBoardOptionsBarComponent {
   handleQuit() {
     if (localStorage.getItem(`timeRemainingFor:${this.gameUuid}`)) {
       localStorage.setItem(
-        `timeRemainingFor:${this.gameUuid}`!,
+        `timeRemainingFor:${this.gameUuid}`,
         JSON.stringify(0)
       );
     }
-    this.wordleService.deleteWordleByUuidLink(this.gameUuid).subscribe()
     this.quitEmitter.emit();
   }
 }

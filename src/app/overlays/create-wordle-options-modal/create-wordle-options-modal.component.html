@@ -56,19 +56,19 @@
             [disabled]="created"
             [(ngModel)]="request.greenTilesOnly"
           />
-          <label for="onlyGreenTiles">on</label>
+          <label class="radio-label" for="onlyGreenTiles">on</label>
         </div>
         <div class="radio-option-box">
           <input
             type="radio"
-            id="onlyGreenTiles"
-            name="onlyGreenTiles"
+            id="onlyGreenTilesOff"
+            name="onlyGreenTilesOff"
             value="false"
             [value]="false"
             [disabled]="created"
             [(ngModel)]="request.greenTilesOnly"
           />
-          <label for="onlyGreenTiles">off</label>
+          <label class="radio-label" for="onlyGreenTilesOff">off</label>
         </div>
       </div>
       <button class="create-btn" (click)="create()" [disabled]="created">

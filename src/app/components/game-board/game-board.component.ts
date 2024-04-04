@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { GameSettingsService } from 'src/app/service/game-settings.service';
 import { wordsList } from './randomWordsList';
+import { WordleService } from 'src/app/service/wordle.service';
 
 @Component({
   selector: 'app-game-board',
@@ -91,15 +92,16 @@ export class GameBoardComponent implements OnInit {
   - Implement only show green tiles option
   - Add button hover events etc for laptop
   - Get CSS looking good!
-  - Wipe wordle DB after a win as well
   - Find a better random word API
+  - Stop countdown timer in ranked game after win! (does it continue after lose?) lost modal popped up on top of win modal
   */
 
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
     private router: Router,
-    private settingsService: GameSettingsService
+    private settingsService: GameSettingsService,
+    private wordleService: WordleService
   ) {}
 
   ngOnInit() {
@@ -107,6 +109,7 @@ export class GameBoardComponent implements OnInit {
     setTimeout(() => {
       this.boardInitialized = true;
     }, 1000);
+    this.wipeExpiredLocalStorageTimers();
     this.handleAnyModeSettings();
     if (this.route.snapshot.params['uuidLink']) {
       this.isFreePlay = false;
@@ -122,6 +125,17 @@ export class GameBoardComponent implements OnInit {
     }
     this.initializeOccurencesOfCharInWordMap();
     this.initalizeBoardAndTileColor();
+  }
+
+  wipeExpiredLocalStorageTimers() {
+    for (let i = 0; i < localStorage.length; i++) {
+      let key = localStorage.key(i);
+      if (key?.startsWith('timeRemainingFor:')) {
+        if (JSON.parse(localStorage.getItem(key)!) === 0) {
+          localStorage.removeItem(key);
+        }
+      }
+    }
   }
 
   getWordleFromDB(uuid: string) {
@@ -448,6 +462,8 @@ export class GameBoardComponent implements OnInit {
     setTimeout(() => {
       this.win = true;
     }, 600);
+    if (!this.isFreePlay)
+      this.wordleService.deleteWordleByUuidLink(this.gameUuid).subscribe();
     this.clearGameHistoryFromLocalStorage();
   }
 
@@ -456,6 +472,8 @@ export class GameBoardComponent implements OnInit {
     setTimeout(() => {
       this.lose = true;
     }, 600);
+    if (!this.isFreePlay)
+      this.wordleService.deleteWordleByUuidLink(this.gameUuid).subscribe();
     this.clearGameHistoryFromLocalStorage();
   }
 

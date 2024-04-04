@@ -76,6 +76,10 @@
   scale: 1.3;
 }
 
+input, .radio-label {
+  cursor: pointer;
+}
+
 .btn {
   outline: none;
   border: none;
@@ -112,6 +116,7 @@ select {
   padding: 3px;
   border-radius: 10px;
   width: 100%;
+  cursor: pointer;
 }
 
 select:disabled {

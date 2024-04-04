@@ -14,20 +14,22 @@
             <input
               type="radio"
               name="disable-blink"
+              id="disable-blink-false"
               value="false"
               [value]="false"
               [(ngModel)]="flashOff"
             />
-            <label for="disable-blink">on</label>
+            <label class="radio-label" for="disable-blink-false">on</label>
           </div>
           <div class="radio-box">
             <input
               type="radio"
               name="disable-blink"
+              id="disable-blink-true"
               value="true"
               [(ngModel)]="flashOff"
             />
-            <label for="disable-blink">off</label>
+            <label class="radio-label" for="disable-blink-true">off</label>
           </div>
         </div>
       </div>
