@@ -92,9 +92,7 @@ export class GameBoardComponent implements OnInit {
   - Add button hover events etc for laptop
   - Get CSS looking good!
   - Wipe wordle DB after a win as well
-  - Remove the possibility of simply refreshing page to restart game and guesses on created word game
-      - ensure all is removed from local storage after game, ensure guess list is saved too
-
+  - Find a better random word API
   */
 
   constructor(

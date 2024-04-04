@@ -1,31 +1,42 @@
 <div class="background">
   <div class="inner">
-    <img (click)="closeModal()" class="x" src="../../../assets/icons/x-mark.png" alt="x out">
-    <img src="../../../assets/icons/wordle-game.png" alt="wordle game" />
-    <h3>this is a game of wordle</h3>
-    <ul>
-      <li>you are trying to guess a pre-defined word</li>
-      <li>the length of the word equals the amount of boxes in a row</li>
-      <li>each row is one guess, if there are 6 rows, you have 6 attempts</li>
-      <li>the goal is to guess the word in as few attempts as possible</li>
-      <li>
-        tiles that turn green represent letters in the same position as the
-        secret word
-      </li>
-      <li>
-        tiles that turn orange are present in the secret word, but not in that
-        position
-      </li>
-      <li>
-        tiles that remain the color of the board, and turn gray on the keyboard,
-        are not in the secret word
-      </li>
-      <li>
-        click
-        <span routerLink="/home">here</span>
-        to create a secret word for a friend to guess!
-      </li>
-    </ul>
-    <button (click)="navigateToPortfolio()">about the creator</button>
+      <img
+        (click)="closeModal()"
+        class="x"
+        src="../../../assets/icons/x-mark.png"
+        alt="x out"
+      />
+      <div class="img-div">
+        <img
+        class="game-pic"
+        src="../../../assets/icons/wordle-game.png"
+        alt="wordle game"
+        />
+      </div>
+      <h3>this is a game of wordle</h3>
+      <ul>
+        <li>you are trying to guess a pre-defined word</li>
+        <li>the length of the word equals the amount of boxes in a row</li>
+        <li>each row is one guess, if there are 6 rows, you have 6 attempts</li>
+        <li>the goal is to guess the word in as few attempts as possible</li>
+        <li>
+          tiles that turn green represent letters in the same position as the
+          secret word
+        </li>
+        <li>
+          tiles that turn orange are present in the secret word, but not in that
+          position
+        </li>
+        <li>
+          tiles that remain the color of the board, and turn gray on the keyboard,
+          are not in the secret word
+        </li>
+        <li>
+          click
+          <span routerLink="/home">here</span>
+          to create a secret word for a friend to guess!
+        </li>
+      </ul>
+      <div class="btn-div"><button (click)="navigateToPortfolio()">about the creator</button></div>
   </div>
 </div>

@@ -1,4 +1,4 @@
-.container {
+.container1 {
   position: absolute;
   background-color: rgba(0, 0, 0, 0.874);
   width: 100vw;
@@ -6,31 +6,25 @@
   display: flex;
   justify-content: center;
   align-items: flex-start;
-}
-
-.content {
-  position: fixed;
-  background-color: var(--green);
-  margin-top: 30px;
-  border-radius: 20px;
-  width: 85%;
-  height: 75%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  z-index: 2;
 }
 
 .inner {
+  position: fixed;
+  margin-top: 20px;
+  overflow-y: scroll;
   background-color: rgb(26, 26, 26);
   border-radius: 20px;
-  width: 98%;
-  height: 98%;
+  width: 90%;
+  max-width: 350px;
+  height: 78vh;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   color: white;
   overflow-y: scroll;
+  border: 5px solid var(--green);
 }
 
 .stuff {
@@ -83,6 +77,8 @@ img {
 p {
   margin: 0;
   margin-top: 3px;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 ul {
@@ -187,4 +183,10 @@ button:disabled {
   position: absolute;
   top: 15px;
   left: 50px;
+}
+
+@media screen and (min-width: 700px) {
+  .inner {
+    width: 50vw;
+  }
 }

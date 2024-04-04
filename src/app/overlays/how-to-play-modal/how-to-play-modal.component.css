@@ -15,21 +15,14 @@
 .inner {
   border: 10px solid var(--yellow);
   background-color: var(--green);
-  width: 90%;
+  width: 90vw;
   height: 80%;
   border-radius: 20px;
   padding: 15px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr;
+  position: relative;
   overflow-y: scroll;
-}
-
-img {
-  width: 50%;
-  margin-top: 110px;
-  margin-bottom: 20px;
 }
 
 * {
@@ -38,7 +31,8 @@ img {
 
 h3 {
   text-align: center;
-  font-size: 20px;
+  font-size: 24px;
+  font-weight: 800;
 }
 
 span {
@@ -51,9 +45,22 @@ span {
 
 .x {
   position: absolute;
-  top: 0;
-  right: 40px;
-  width: 30px;
+  top: 15px;
+  right: 15px;
+  cursor: pointer;
+  width: 7%;
+}
+
+.img-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.game-pic {
+  width: 40vw;
+  margin-bottom: 30px;
+  display: inline-block;
 }
 
 button {
@@ -64,4 +71,15 @@ button {
   border-radius: 10px;
   background-color: var(--yellow);
   box-shadow: -5px 5px 20px rgba(0, 0, 0, 0.439);
+  /* width: 30vw; */
+}
+
+@media screen and (min-width: 700px) {
+  .x {
+    width: 4%;
+  }
+
+  .game-pic {
+    width: 20vw;
+  }
 }

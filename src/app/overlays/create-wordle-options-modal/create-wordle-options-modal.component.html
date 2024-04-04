@@ -1,102 +1,100 @@
-<div class="container">
-  <div class="content">
-    <div class="inner">
-      <img
-        class="x-mark"
-        src="../../../assets/icons/x-mark.png"
-        alt="close modal"
-        (click)="emitClose(created)"
-      />
-      <div class="stuff">
-        <p class="title">add custom rules to this game?</p>
-        <p class="skip">(skip for the default wordle experience)</p>
-        <div class="guesses-box">
-          <label for="attempts">how many guesses?</label>
-          <select
-            name="attempts"
-            id="attempts"
-            [disabled]="created"
-            [(ngModel)]="request.attempts"
-          >
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6" selected="selected">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-          </select>
-        </div>
-        <label for="time">time limit?</label>
+<div class="container1">
+  <div class="inner">
+    <img
+      class="x-mark"
+      src="../../../assets/icons/x-mark.png"
+      alt="close modal"
+      (click)="emitClose(created)"
+    />
+    <div class="stuff">
+      <p class="title">add custom rules to this game?</p>
+      <p class="skip">(skip for the default wordle experience)</p>
+      <div class="guesses-box">
+        <label for="attempts">how many guesses?</label>
         <select
-          name="time"
-          id="time"
+          name="attempts"
+          id="attempts"
           [disabled]="created"
-          [(ngModel)]="request.timeLimit"
+          [(ngModel)]="request.attempts"
         >
-          <option value="none" selected="selected">none</option>
-          <option value="30s">30s</option>
-          <option value="1m">1m</option>
-          <option value="2m">2m</option>
-          <option value="5m">5m</option>
-          <option value="10m">10m</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6" selected="selected">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
         </select>
-        <div class="only-green-box">
-          <p class="only-green-text">ONLY show green tiles</p>
-          <p class="only-green-text">
-            note: this will increase difficulty (no orange tiles)
-          </p>
+      </div>
+      <label for="time">time limit?</label>
+      <select
+        name="time"
+        id="time"
+        [disabled]="created"
+        [(ngModel)]="request.timeLimit"
+      >
+        <option value="none" selected="selected">none</option>
+        <option value="30s">30s</option>
+        <option value="1m">1m</option>
+        <option value="2m">2m</option>
+        <option value="5m">5m</option>
+        <option value="10m">10m</option>
+      </select>
+      <div class="only-green-box">
+        <p class="only-green-text">ONLY show green tiles</p>
+        <p class="only-green-text">
+          note: this will increase difficulty (no orange tiles)
+        </p>
+      </div>
+      <div class="radio-options-box">
+        <div class="radio-option-box">
+          <input
+            type="radio"
+            id="onlyGreenTiles"
+            name="onlyGreenTiles"
+            value="true"
+            [disabled]="created"
+            [(ngModel)]="request.greenTilesOnly"
+          />
+          <label for="onlyGreenTiles">on</label>
         </div>
-        <div class="radio-options-box">
-          <div class="radio-option-box">
-            <input
-              type="radio"
-              id="onlyGreenTiles"
-              name="onlyGreenTiles"
-              value="true"
-              [disabled]="created"
-              [(ngModel)]="request.greenTilesOnly"
-            />
-            <label for="onlyGreenTiles">on</label>
-          </div>
-          <div class="radio-option-box">
-            <input
-              type="radio"
-              id="onlyGreenTiles"
-              name="onlyGreenTiles"
-              value="false"
-              [value]="false"
-              [disabled]="created"
-              [(ngModel)]="request.greenTilesOnly"
-            />
-            <label for="onlyGreenTiles">off</label>
-          </div>
+        <div class="radio-option-box">
+          <input
+            type="radio"
+            id="onlyGreenTiles"
+            name="onlyGreenTiles"
+            value="false"
+            [value]="false"
+            [disabled]="created"
+            [(ngModel)]="request.greenTilesOnly"
+          />
+          <label for="onlyGreenTiles">off</label>
         </div>
-        <button class="create-btn" (click)="create()" [disabled]="created">
-          {{ loading ? "" : generateBtnText }}
-          <mat-spinner
-            diameter="30"
-            value="4"
-            color="warn"
-            class="spinner"
-            *ngIf="loading"
-          ></mat-spinner>
-        </button>
-        <button
-          class="gameLink"
-          [hidden]="!created"
-          (click)="copy('copied again!')"
+      </div>
+      <button class="create-btn" (click)="create()" [disabled]="created">
+        {{ loading ? "" : generateBtnText }}
+        <mat-spinner
+          diameter="30"
+          value="4"
+          color="warn"
+          class="spinner"
+          *ngIf="loading"
+        ></mat-spinner>
+      </button>
+      <button
+        class="gameLink"
+        [hidden]="!created"
+        (click)="copy('copied again!')"
+      >
+        {{ gameLink }}
+      </button>
+      <div class="tile-container">
+        <div
+          class="tile"
+          *ngFor="let char of word.split('')"
+          [ngClass]="{ 'tile-small': word.length > 7 }"
         >
-          {{ gameLink }}
-        </button>
-        <div class="tile-container">
-          <div
-            class="tile"
-            *ngFor="let char of word.split('')"
-            [ngClass]="{ 'tile-small': word.length > 7 }"
-          >
-            {{ char }}
-          </div>
+          {{ char }}
         </div>
       </div>
     </div>
