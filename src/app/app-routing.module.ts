@@ -1,4 +1,4 @@
-import { Component, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './views/login/login.component';
 import { CreateAccountComponent } from './views/create-account/create-account.component';
@@ -10,12 +10,16 @@ import { CanActivate } from './guard/auth.guard';
 import { CreateAccountEmailConfirmationComponent } from './views/create-account-email-confirmation/create-account-email-confirmation.component';
 import { PlayComponent } from './views/play/play.component';
 import { NotFoundComponent } from './views/not-found/not-found.component';
-import { GameBoardComponent } from './components/game-board/game-board.component';
 
 const routes: Routes = [
+  // {
+  //   path: '',
+  //   redirectTo: '/login',
+  //   pathMatch: 'full',
+  // },
   {
     path: '',
-    redirectTo: '/login',
+    redirectTo: '/home',
     pathMatch: 'full',
   },
   { path: 'login', component: LoginComponent },

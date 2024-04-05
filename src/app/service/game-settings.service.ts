@@ -6,4 +6,5 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class GameSettingsService {
   gameBorderColor = new BehaviorSubject('')
+  hasWonRankedGame$ = new BehaviorSubject<boolean>(false)
 }

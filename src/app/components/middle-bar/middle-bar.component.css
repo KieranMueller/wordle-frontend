@@ -31,6 +31,11 @@ button {
   box-shadow: -5px 5px 5px rgba(0, 0, 0, 0.418);
 }
 
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
 .play-btn {
   background-color: var(--green);
   color: white;

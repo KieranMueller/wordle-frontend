@@ -90,10 +90,9 @@ export class GameBoardComponent implements OnInit {
   - add haptic feedback to button clicks?
   - Ensure I wipe timers from local storage after custom games end (can't figure out how)
   - Implement only show green tiles option
-  - Add button hover events etc for laptop
   - Get CSS looking good!
   - Find a better random word API
-  - Stop countdown timer in ranked game after win! (does it continue after lose?) lost modal popped up on top of win modal
+  - Put time to live on local storage properties? Game state props etc remain if game is abandoned during play and not returned to
   */
 
   constructor(
@@ -462,8 +461,10 @@ export class GameBoardComponent implements OnInit {
     setTimeout(() => {
       this.win = true;
     }, 600);
-    if (!this.isFreePlay)
+    if (!this.isFreePlay) {
       this.wordleService.deleteWordleByUuidLink(this.gameUuid).subscribe();
+      this.settingsService.hasWonRankedGame$.next(true);
+    }
     this.clearGameHistoryFromLocalStorage();
   }
 

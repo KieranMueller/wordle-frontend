@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, map, take, timer } from 'rxjs';
+import { GameSettingsService } from 'src/app/service/game-settings.service';
 
 @Component({
   selector: 'app-game-board-options-bar',
@@ -18,13 +19,22 @@ export class GameBoardOptionsBarComponent {
   showHelpModal = false;
   gameUuid = '';
   @Input() randomBtnColor = '';
+  hasWon = false;
 
   // show time remaining as mm:ss
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(
+    private route: ActivatedRoute,
+    private gameService: GameSettingsService
+  ) {}
 
   ngOnInit() {
     this.gameUuid = this.route.snapshot.url[1].path;
+    this.gameService.hasWonRankedGame$.subscribe({
+      next: (res) => {
+        this.hasWon = res;
+      },
+    });
     this.timeLimit$.subscribe({
       next: (secs) => {
         this.startTimer(secs);
@@ -50,7 +60,7 @@ export class GameBoardOptionsBarComponent {
         map((s) => secs - s)
       )
       .subscribe((secs) => {
-        if (secs === 1) {
+        if (secs === 1 || this.hasWon) {
           timer$.unsubscribe();
           this.handleQuit();
         }
@@ -82,6 +92,6 @@ export class GameBoardOptionsBarComponent {
         JSON.stringify(0)
       );
     }
-    this.quitEmitter.emit();
+    if (!this.hasWon) this.quitEmitter.emit();
   }
 }
