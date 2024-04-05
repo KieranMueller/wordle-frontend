@@ -32,6 +32,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NotFoundComponent } from './views/not-found/not-found.component';
+import { HowToPlayModalComponent } from './overlays/how-to-play-modal/how-to-play-modal.component';
+import { GameSettingsService } from './service/game-settings.service'
+import { WinModalComponent } from './overlays/win-modal/win-modal.component'
+import { LoseModalComponent } from './overlays/lose-modal/lose-modal.component'
+import { WordleService } from './service/wordle.service'
 
 @NgModule({
   declarations: [
@@ -59,6 +65,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     CreateWordleOptionsModalComponent,
     GameBoardOptionsBarComponent,
     PlaySettingsComponent,
+    NotFoundComponent,
+    HowToPlayModalComponent,
+    WinModalComponent,
+    LoseModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -69,7 +79,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatProgressSpinnerModule,
     BrowserAnimationsModule,
   ],
-  providers: [Window, provideAnimationsAsync()],
+  providers: [Window, provideAnimationsAsync(), GameSettingsService, WordleService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

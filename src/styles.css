@@ -6,6 +6,10 @@
   --blue: #5b8e7d;
 }
 
+*::-webkit-scrollbar {
+  display: none;
+}
+
 body {
   margin: 0;
 }
@@ -17,5 +21,17 @@ body {
   font-style: normal;
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: var(--yellow);
+}
+
+button {
+  touch-action: manipulation;
+  cursor: pointer;
+}

@@ -1,21 +1,48 @@
-.container {
+.container1 {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin: 0;
 }
 
 .board {
   display: grid;
   gap: 1px;
-  padding: 10px;
+  padding: 6px;
   box-sizing: border-box;
   margin: 10px;
-  min-width: 355px;
+  margin-top: 0;
   box-shadow: -5px 8px 15px rgba(0, 0, 0, 0.34);
-  min-height: 385px;
   max-height: 450px;
   overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.board::-webkit-scrollbar {
+  display: none;
+}
+
+.fade-board-in {
+  animation: fade-in 1s;
+}
+
+@keyframes fade-in {
+  0% {
+    scale: 0.8;
+    opacity: 0.5;
+    transform: translate(1px, -1px) rotate(-2deg);
+  }
+  50% {
+    scale: 1.1;
+    opacity: 0.7;
+    transform: translate(1px, 1px) rotate(2deg);
+  }
+  75% {
+    scale: 0.95;
+    opacity: 0.9;
+    transform: translate(1px, 1px) rotate(-2deg);
+  }
 }
 
 .blue-board {
@@ -128,45 +155,48 @@
 }
 
 .four-tile {
-  font-size: 2.2rem;
-  min-width: 50px;
-  min-height: 50px;
+  font-size: 10vw;
+  width: 20vw;
+  height: 20vw;
 }
 
 .five-tile {
-  font-size: 2rem;
-  min-width: 50px;
-  min-height: 60px;
+  font-size: 8vw;
+  width: 16vw;
+  height: 16vw;
 }
 
 .six-tile {
-  font-size: 2rem;
-  min-width: 50px;
-  min-height: 50px;
+  font-size: 8vw;
+  width: 14vw;
+  height: 14vw;
 }
 
 .seven-tile {
-  font-size: 1.8rem;
-  min-width: 45px;
-  min-height: 45px;
+  font-size: 7vw;
+  width: 12vw;
+  height: 12vw;
 }
 
 .eight-tile {
-  font-size: 1.6rem;
-  min-width: 40px;
-  min-height: 40px;
+  font-size: 7vw;
+  width: 11vw;
+  height: 11vw;
 }
 
 .nine-tile {
-  font-size: 1.5rem;
-  min-width: 35px;
-  min-height: 35px;
+  font-size: 6vw;
+  width: 9vw;
+  height: 9vw;
+}
+
+.keyboard-container {
+  margin-bottom: 20px;
 }
 
 .keyboard-row {
   display: flex;
   justify-content: center;
-  width: 100%;
   margin: 0;
 }
 
@@ -176,9 +206,9 @@
   align-items: center;
   border: none;
   margin: 0.75px;
-  width: 33px;
-  height: 50px;
-  font-size: 20px;
+  width: 9vw;
+  height: 13vw;
+  font-size: 5vw;
   cursor: pointer;
   color: white;
   touch-action: manipulation;
@@ -187,8 +217,20 @@
   border-radius: 4px;
 }
 
+.btn:active {
+  background-color: rgba(25, 25, 25, 0.81);
+  animation: btn-press 0.1s;
+}
+
+@keyframes btn-press {
+  50% {
+    scale: 1.1;
+    transform: translate(1px, -1px) rotate(-1deg);
+  }
+}
+
 .enter-btn {
-  width: 80px;
+  width: 17vw;
 }
 
 .enter-btn:enabled {
@@ -210,7 +252,7 @@
 }
 
 .del-btn {
-  width: 50px;
+  width: 12vw;
 }
 
 .invalid-guess-del {
@@ -271,6 +313,10 @@
   animation-iteration-count: infinite;
 }
 
+.flash-off {
+  background-color: rgba(255, 255, 255, 0.677);
+}
+
 @keyframes active-tile-blink {
   0% {
     background-color: rgb(255, 255, 255);
@@ -280,5 +326,93 @@
   }
   100% {
     background-color: rgb(255, 255, 255);
+  }
+}
+
+.error-msg {
+  margin: 0;
+  color: var(--red);
+}
+
+.hidden {
+  visibility: none;
+}
+
+.error-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  position: relative;
+  margin: 20px;
+}
+
+.spinner {
+  position: absolute;
+  top: 10px;
+}
+
+/* screen WIDER than 700px */
+@media screen and (min-width: 700px) {
+  .board {
+    max-height: 400px;
+  }
+
+  .four-tile {
+    font-size: 2vw;
+    width: 4vw;
+    height: 4vw;
+  }
+
+  .five-tile {
+    font-size: 2vw;
+    width: 4vw;
+    height: 4vw;
+  }
+
+  .six-tile {
+    font-size: 2vw;
+    width: 4vw;
+    height: 4vw;
+  }
+
+  .seven-tile {
+    font-size: 2vw;
+    width: 4vw;
+    height: 4vw;
+  }
+
+  .eight-tile {
+    font-size: 2vw;
+    width: 4vw;
+    height: 4vw;
+  }
+
+  .nine-tile {
+    font-size: 2vw;
+    width: 4vw;
+    height: 4vw;
+  }
+
+  .btn {
+    width: 3vw;
+    height: 4vw;
+    font-size: 1.3vw;
+  }
+
+  .btn:hover {
+    background-color: #9f4348;
+  }
+
+  .enter-btn {
+    width: 6vw;
+  }
+
+  .enter-btn:hover {
+    background-color: #75945a;
+  }
+
+  .del-btn {
+    width: 4vw;
   }
 }

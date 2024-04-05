@@ -4,67 +4,98 @@
       class="x-mark"
       src="../../../assets/icons/x-mark.png"
       alt="close modal"
-      (click)="emitClose()"
+      (click)="handleClose()"
     />
-    <div class="tile-blink-box">
-      <p>active tile flash</p>
-      <div class="tile-blink-inner">
-        <div>
-          <input
-            type="radio"
-            name="disable-blink"
-            value="false"
-            checked="checked"
-          />
-          <label for="disable-blink">on</label>
+    <div class="anytime-options">
+      <div class="option-box">
+        <p>active tile flash</p>
+        <div class="option-inner">
+          <div class="radio-box">
+            <input
+              type="radio"
+              name="disable-blink"
+              id="disable-blink-false"
+              value="false"
+              [value]="false"
+              [(ngModel)]="flashOff"
+            />
+            <label class="radio-label" for="disable-blink-false">on</label>
+          </div>
+          <div class="radio-box">
+            <input
+              type="radio"
+              name="disable-blink"
+              id="disable-blink-true"
+              value="true"
+              [(ngModel)]="flashOff"
+            />
+            <label class="radio-label" for="disable-blink-true">off</label>
+          </div>
         </div>
-        <div>
-          <input type="radio" name="disable-blink" value="true" />
-          <label for="disable-blink">off</label>
+      </div>
+      <button class="btn" (click)="changeGameColors()"
+      [ngClass]="{
+        'green': randomBtnColor === 'green',
+        'red': randomBtnColor === 'red',
+        'orange': randomBtnColor === 'orange',
+        'blue': randomBtnColor === 'blue',
+        'yellow': randomBtnColor === 'yellow',
+        'green-border': randomBtnBorder === 'green',
+        'red-border': randomBtnBorder === 'red',
+        'orange-border': randomBtnBorder === 'orange',
+        'blue-border': randomBtnBorder === 'blue',
+        'yellow-border': randomBtnBorder === 'yellow'
+      }"
+      >
+        randomize board color
+      </button>
+      <button
+        class="btn give-up"
+        [disabled]="disableBtn"
+        (click)="handleQuit(giveUpMessage)"
+      >
+        {{ giveUpMessage }}
+      </button>
+    </div>
+    <div class="options-outer">
+      <div class="option-box">
+        <p>word length</p>
+        <div class="option-inner">
+          <select
+            name="word-length"
+            id="word-length"
+            [(ngModel)]="wordLengthSetting"
+            [disabled]="!isFreePlay"
+          >
+            <option value="random">random</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+          </select>
+        </div>
+      </div>
+      <div class="option-box">
+        <p>attempts</p>
+        <div class="option-inner">
+          <select
+            name="word-length"
+            id="word-length"
+            [(ngModel)]="attemptsSetting"
+            [disabled]="!isFreePlay"
+          >
+            <option value="4">4</option>
+            <option value="6">6</option>
+            <option value="8">8</option>
+            <option value="100">100</option>
+          </select>
         </div>
       </div>
     </div>
-    <hr />
-    <div class="tile-blink-box">
-      <p>sound effects</p>
-      <div class="tile-blink-inner">
-        <div>
-          <input
-            type="radio"
-            name="disable-sound"
-            value="false"
-            checked="checked"
-          />
-          <label for="disable-sound">on</label>
-        </div>
-        <div>
-          <input type="radio" name="disable-sound" value="true" />
-          <label for="disable-sound">off</label>
-        </div>
-      </div>
+    <div>
+      <button class="btn green load-game" [disabled]="!isFreePlay" (click)="loadGame()">load game</button>
     </div>
-    <hr />
-    <div class="tile-blink-box">
-      <p>display timer</p>
-      <div class="tile-blink-inner">
-        <div>
-          <input
-            type="radio"
-            name="disable-timer"
-            value="false"
-            checked="checked"
-          />
-          <label for="disable-timer">on</label>
-        </div>
-        <div>
-          <input type="radio" name="disable-timer" value="true" />
-          <label for="disable-timer">off</label>
-        </div>
-      </div>
-    </div>
-    <hr />
-    <button class="btn">randomize board color</button>
-    <hr />
-    <button class="btn">how to play</button>
   </div>
 </div>

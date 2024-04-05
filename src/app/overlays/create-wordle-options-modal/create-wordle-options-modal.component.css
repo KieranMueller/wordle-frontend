@@ -1,4 +1,4 @@
-.container {
+.container1 {
   position: absolute;
   background-color: rgba(0, 0, 0, 0.874);
   width: 100vw;
@@ -6,31 +6,25 @@
   display: flex;
   justify-content: center;
   align-items: flex-start;
-}
-
-.content {
-  position: fixed;
-  background-color: var(--green);
-  margin-top: 30px;
-  border-radius: 20px;
-  width: 85%;
-  height: 75%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  z-index: 2;
 }
 
 .inner {
+  position: fixed;
+  margin-top: 20px;
+  overflow-y: scroll;
   background-color: rgb(26, 26, 26);
   border-radius: 20px;
-  width: 98%;
-  height: 98%;
+  width: 90%;
+  max-width: 350px;
+  height: 78vh;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   color: white;
   overflow-y: scroll;
+  border: 5px solid var(--green);
 }
 
 .stuff {
@@ -73,6 +67,15 @@ select {
   margin: 3px;
   border-radius: 8px;
   margin-bottom: 10px;
+  cursor: pointer;
+}
+
+input {
+  cursor: pointer;
+}
+
+.radio-label {
+  cursor: pointer;
 }
 
 img {
@@ -83,6 +86,8 @@ img {
 p {
   margin: 0;
   margin-top: 3px;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 ul {
@@ -99,6 +104,7 @@ ul {
   width: 25px;
   top: -2px;
   right: 12px;
+  cursor: pointer;
 }
 
 .radio-option-box {
@@ -107,28 +113,29 @@ ul {
   align-items: center;
 }
 
-button {
-  outline: none;
-  border: none;
-  color: black;
-  background-color: rgb(255, 255, 255);
-  padding: 7px;
-  border-radius: 10px;
-  box-shadow: -1px 1px 20px rgba(255, 255, 255, 0.359);
-  margin-bottom: 10px;
-  margin-top: 6px;
-}
-
-button:disabled {
-  background-color: rgb(159, 159, 159);
-}
-
 .tile-container {
   outline: 2px solid white;
   background-color: white;
   display: flex;
   justify-content: center;
   align-items: center;
+  animation: pulse 2s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes pulse {
+  25% {
+    scale: 1.02;
+    transform: translate(-1px, 1px) rotate(-1deg);
+  }
+  50% {
+    scale: 0.98;
+    transform: translate(1px, -1px) rotate(-1deg);
+  }
+  75% {
+    scale: 1.02;
+    transform: translate(1px, 1px) rotate(1deg);
+  }
 }
 
 .tile {
@@ -158,4 +165,38 @@ button:disabled {
   color: white;
   padding: 6px;
   overflow: hidden;
+}
+
+button {
+  outline: none;
+  border: none;
+  color: rgb(26, 26, 26);
+  background-color: rgb(255, 255, 255);
+  padding: 7px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  margin-top: 6px;
+}
+
+.create-btn {
+  position: relative;
+  width: 130px;
+  height: 60px;
+  text-align: center;
+}
+
+button:disabled {
+  background-color: rgb(159, 159, 159);
+}
+
+.spinner {
+  position: absolute;
+  top: 15px;
+  left: 50px;
+}
+
+@media screen and (min-width: 700px) {
+  .inner {
+    width: 50vw;
+  }
 }

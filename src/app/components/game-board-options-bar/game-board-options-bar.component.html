@@ -1,8 +1,23 @@
-<div class="container">
-  <p>time: 43s</p>
-  <button class="options" (click)="showSettings = true">settings</button>
-  <app-play-settings
-    *ngIf="showSettings"
-    (emitter)="closeSettings()"
-  ></app-play-settings>
+<app-how-to-play-modal
+  (emitter)="closeModal()"
+  *ngIf="showHelpModal"
+></app-how-to-play-modal>
+<app-play-settings
+  [randomBtnColor]="randomBtnColor"
+  *ngIf="showSettings"
+  (closeModalEmitter)="closeSettings()"
+  (changeGameColorsEmitter)="changeGameBoardColorsEmitter.emit()"
+  (quitEmitter)="handleQuit()"
+></app-play-settings>
+<div class="container1">
+  <p
+    class="timer"
+    *ngIf="seconds"
+    [ngClass]="{ warning: seconds < 90 && seconds > 45, danger: seconds <= 45 }"
+  >
+    time: {{ seconds }}s
+  </p>
+  <div class="options br" (click)="showSettings = true">settings</div>
+  <div class="options" (click)="showHelpModal = true">help</div>
+  <!-- <button (click)="test()">test</button> -->
 </div>

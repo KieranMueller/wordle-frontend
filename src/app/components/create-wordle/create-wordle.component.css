@@ -1,6 +1,6 @@
-.container {
+.container1 {
   background-color: var(--green);
-  width: 100vw;
+  width: 100%;
   height: 100vh;
 }
 
@@ -12,18 +12,33 @@
   height: 70vh;
 }
 
-.header {
-  font-size: 18px;
-  font-weight: 800;
+.top-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
 }
 
-button {
-  touch-action: manipulation;
+.line {
+  border: 2px solid rgba(21, 21, 21, 0.114);
+  width: 100%;
+  margin: 10px;
 }
 
 p {
   margin: 0;
   color: white;
+  font-size: 18px;
+}
+
+.header {
+  font-size: 30px;
+  font-weight: 800;
+  text-align: center;
+}
+
+button {
+  touch-action: manipulation;
 }
 
 .tile-container {
@@ -114,9 +129,9 @@ p {
   align-items: center;
   border: none;
   margin: 0.75px;
-  width: 30px;
-  height: 45px;
-  font-size: 20px;
+  width: 8.8vw;
+  height: 13vw;
+  font-size: 4vw;
   cursor: pointer;
   color: white;
   background-color: rgba(43, 43, 43, 0.744);
@@ -125,12 +140,12 @@ p {
 }
 
 .enter-btn {
-  width: 70px;
+  width: 13vw;
   background-color: var(--blue);
 }
 
 .del-btn {
-  width: 50px;
+  width: 13vw;
   background-color: var(--red);
 }
 
@@ -141,6 +156,11 @@ p {
 
 .create-btn {
   background-color: rgb(31, 31, 31);
+  width: 100px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   color: white;
   outline: none;
   border: none;
@@ -150,6 +170,7 @@ p {
   box-shadow: -10px 10px 20px rgba(0, 0, 0, 0.48);
   animation: pulse 2s;
   animation-iteration-count: infinite;
+  position: relative;
 }
 
 @keyframes pulse {
@@ -237,9 +258,24 @@ p {
   }
 }
 
-/* .spinner {
-  width: 20px;
-  z-index: 2;
-  color: rgb(208, 20, 20);
-  background-color: rgb(152, 149, 149);
-} */
+.spinner {
+  position: absolute;
+  top: 10px;
+  left: 35px;
+}
+
+@media screen and (min-width: 700px) {
+  .btn {
+    width: 4vw;
+    height: 4vw;
+    font-size: 1.5vw;
+  }
+
+  .enter-btn {
+    width: 6vw;
+  }
+
+  .del-btn {
+    width: 5vw;
+  }
+}

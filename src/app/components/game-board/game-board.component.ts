@@ -1,7 +1,10 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, HostListener, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
+import { GameSettingsService } from 'src/app/service/game-settings.service';
+import { wordsList } from './randomWordsList';
+import { WordleService } from 'src/app/service/wordle.service';
 
 @Component({
   selector: 'app-game-board',
@@ -15,7 +18,7 @@ export class GameBoardComponent implements OnInit {
     bottomRow: ['z', 'x', 'c', 'v', 'b', 'n', 'm'],
   };
   currentGuessLength = 0;
-  word = ''; // must be between 4-9 chars inclusive
+  word = '';
   maxAttempts = 0;
   totalTiles = 0;
   lastGuess = '';
@@ -59,34 +62,79 @@ export class GameBoardComponent implements OnInit {
     'y',
     'z',
   ];
+  timeLimit = new BehaviorSubject<number | null>(null);
+  flashOff = false;
+  canRefresh = false;
+  win = false;
+  lose = false;
+  errorMessage = '';
+  loading = false;
+  exchangesBetweenRandomWordApiAndDictionaryApiCounter = 0;
+  boardInitialized = false;
+  hasInternetConnection = true;
+  wordLengthPreference = 'random';
+  attemptsPreference = 'random';
+  isFreePlay = true;
+  gameUuid = '';
+  hasGameHistory = false;
 
   /* TODO
   - Have UI keyboard buttons look like they are being clicked when using personal keyboard
-  - Add a how to play button/modal for first timers + instructions (How the game works, what colors mean etc.)
-  - Remove the possibility of simply refreshing page to restart game and guesses
-  - Add sound effects
   - Randomize color of keyboard
-  - Allow user to randomize colors of page by button, without reloading page or game, anytime
   - Add ability to play the daily wordle
-  - Add loading spinner while API checks word
   - Implement scoring system, show on game over modal based on num guesses, correct guesses etc
-  - Implement timer for timed mode
-  - Add ability for unlimited guesses? Have game board scroll if so?
-  - Add bad internet connection modal
-  - Add option to turn off blinking active tile
-  - Add win/lose end game modal!
-  - Create bad request modal (couldn't retrieve wordle with uuid, add option to play with random word)
+  - Implement timer for free play mode
+  - option to share game results after game
+  - fill up wordslist for manually setting word
+  - add modern theme color scheme option?
+  - add haptic feedback to button clicks?
+  - Ensure I wipe timers from local storage after custom games end (can't figure out how)
+  - Implement only show green tiles option
+  - Get CSS looking good!
+  - Find a better random word API
+  - Put time to live on local storage properties? Game state props etc remain if game is abandoned during play and not returned to
   */
 
-  constructor(private http: HttpClient, private route: ActivatedRoute) {}
+  constructor(
+    private http: HttpClient,
+    private route: ActivatedRoute,
+    private router: Router,
+    private settingsService: GameSettingsService,
+    private wordleService: WordleService
+  ) {}
 
   ngOnInit() {
+    this.loading = true;
+    setTimeout(() => {
+      this.boardInitialized = true;
+    }, 1000);
+    this.wipeExpiredLocalStorageTimers();
+    this.handleAnyModeSettings();
     if (this.route.snapshot.params['uuidLink']) {
+      this.isFreePlay = false;
       const uuid = this.route.snapshot.params['uuidLink'];
+      this.gameUuid = uuid;
+      if (JSON.parse(localStorage.getItem('gameHistory' + this.gameUuid)!)) {
+        this.hasGameHistory = true;
+      }
       this.getWordleFromDB(uuid);
-    } else this.initializeFields();
+    } else {
+      this.handleFreePlaySettings();
+      this.getRandomWordRequest();
+    }
     this.initializeOccurencesOfCharInWordMap();
     this.initalizeBoardAndTileColor();
+  }
+
+  wipeExpiredLocalStorageTimers() {
+    for (let i = 0; i < localStorage.length; i++) {
+      let key = localStorage.key(i);
+      if (key?.startsWith('timeRemainingFor:')) {
+        if (JSON.parse(localStorage.getItem(key)!) === 0) {
+          localStorage.removeItem(key);
+        }
+      }
+    }
   }
 
   getWordleFromDB(uuid: string) {
@@ -95,12 +143,10 @@ export class GameBoardComponent implements OnInit {
         this.initalizeFieldsFromDBWordle(res);
       },
       error: (e) => {
+        this.loading = false;
         if (e.status.toString().startsWith('4')) this.handleBadRequest(e);
-        if (
-          e.status.toString().startsWith('5') ||
-          e.status.toString().startsWith('0')
-        )
-          this.handleFailedRequest(e);
+        if (e.status.toString().startsWith('5')) this.handleFailedRequest(e);
+        if (e.status.toString().startsWith('0')) this.handleNoInternet(e);
       },
     });
   }
@@ -110,24 +156,123 @@ export class GameBoardComponent implements OnInit {
     this.word = wordle.word;
     this.maxAttempts = wordle.attempts;
     this.startTimer(wordle.timeLimit);
-    this.totalTiles = this.word.length * this.maxAttempts;
-    this.charArr = Array(this.totalTiles).fill(null);
+    if (!this.hasGameHistory) {
+      this.totalTiles = this.word.length * this.maxAttempts;
+      this.charArr = Array(this.totalTiles).fill(null);
+    } else {
+      this.loadGameHistory();
+    }
+    this.loading = false;
+  }
+
+  loadGameHistory() {
+    let histCharArr = JSON.parse(
+      localStorage.getItem('charArr' + this.gameUuid)!
+    );
+    if (histCharArr) this.charArr = histCharArr;
+    let histGuessList = JSON.parse(
+      localStorage.getItem('guessList' + this.gameUuid)!
+    );
+    if (histGuessList) this.guessList = histGuessList;
+    let histCurrentAttempt = JSON.parse(
+      localStorage.getItem('currentAttempt' + this.gameUuid)!
+    );
+    if (histCurrentAttempt) this.currentAttempt = histCurrentAttempt;
+    let histCurrentGuessStartIndex = JSON.parse(
+      localStorage.getItem('currentGuessStartIndex' + this.gameUuid)!
+    );
+    if (histCurrentGuessStartIndex)
+      this.currentGuessStartIndex = histCurrentGuessStartIndex;
+    this.keyMap = new Map(
+      JSON.parse(localStorage.getItem('keyMap' + this.gameUuid)!)
+    );
+    this.tileMap = new Map(
+      JSON.parse(localStorage.getItem('tileMap' + this.gameUuid)!)
+    );
   }
 
   handleBadRequest(error: any) {
     console.log(error);
+    this.router.navigateByUrl('/not-found');
   }
 
-  initializeFields() {
-    // refactor logic for all of this, local storage??
-    if (localStorage.getItem('word')) {
-      this.word = localStorage.getItem('word')!;
-    } else {
-      this.word = 'indigo';
+  handleNoInternet(error: any) {
+    this.loading = false;
+    console.log(error);
+    this.errorMessage = 'no internet connection...';
+    setTimeout(() => {
+      this.errorMessage = '';
+    }, 1000);
+  }
+
+  handleFailedRequest(e: HttpErrorResponse | null) {
+    this.loading = false;
+    this.errorMessage = 'issues communicating with our servers...';
+    setTimeout(() => {
+      this.errorMessage = '';
+    }, 1000);
+    console.log(e);
+    console.log('Experiencing internet connection issues');
+  }
+
+  getRandomWordRequest() {
+    let length = Math.floor(Math.random() * 6) + 4;
+    if (this.wordLengthPreference !== 'random')
+      length = parseInt(this.wordLengthPreference);
+    this.http
+      .get(`https://random-word-api.herokuapp.com/word?length=${length}`)
+      .subscribe({
+        next: (res) => {
+          console.log(res.toString());
+          this.ensureRandomWordExistsInDictionaryAPI(res.toString());
+        },
+        error: (e) => {
+          console.log(e);
+          this.manuallySetRandomWord();
+        },
+      });
+  }
+
+  ensureRandomWordExistsInDictionaryAPI(word: string) {
+    this.exchangesBetweenRandomWordApiAndDictionaryApiCounter++;
+    if (this.exchangesBetweenRandomWordApiAndDictionaryApiCounter > 6) {
+      alert('something went wrong, server down');
+      this.handleFailedRequest(null);
+      return;
     }
-    if (localStorage.getItem('maxAttempts')) {
-      this.maxAttempts = JSON.parse(localStorage.getItem('maxAttempts')!);
-    } else this.maxAttempts = 6;
+    this.http
+      .get(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
+      .subscribe({
+        next: (res) => {
+          console.log(res);
+          this.word = word;
+          this.loading = false;
+          this.initializeFreePlayFields();
+        },
+        error: (e) => {
+          if (e.status.toString().startsWith('4')) this.getRandomWordRequest();
+          if (e.status.toString().startsWith('5')) this.handleFailedRequest(e);
+          if (e.status.toString().startsWith('0')) this.handleNoInternet(e);
+        },
+      });
+  }
+
+  manuallySetRandomWord() {
+    this.errorMessage =
+      'error fetching word, setting manually, guesses will NOT be checked';
+    let length = Math.floor(Math.random() * 6) + 4;
+    if (this.wordLengthPreference !== 'random')
+      length = parseInt(this.wordLengthPreference);
+    let arrToSelectFrom = wordsList[length];
+    let randomIndex = Math.floor(Math.random() * arrToSelectFrom.length);
+    this.word = arrToSelectFrom[randomIndex];
+    this.loading = false;
+    this.hasInternetConnection = false;
+    this.initializeFreePlayFields();
+  }
+
+  initializeFreePlayFields() {
+    this.maxAttempts = parseInt(this.attemptsPreference);
     this.totalTiles = this.word.length * this.maxAttempts;
     this.charArr = Array(this.totalTiles).fill(null);
   }
@@ -147,6 +292,7 @@ export class GameBoardComponent implements OnInit {
     let colors = ['red', 'green', 'yellow', 'orange', 'blue'];
     let rando = Math.floor(Math.random() * colors.length);
     this.boardColor = colors[rando];
+    this.settingsService.gameBorderColor.next(this.boardColor);
     colors.splice(colors.indexOf(this.boardColor), 1);
     colors.splice(colors.indexOf('green'), 1);
     colors.splice(colors.indexOf('orange'), 1);
@@ -156,7 +302,6 @@ export class GameBoardComponent implements OnInit {
 
   startTimer(timeLimit: string) {
     if (timeLimit === 'none') return;
-    console.log(timeLimit);
     let time = 1000 * 60 * 60;
     switch (timeLimit) {
       case '30s': {
@@ -180,6 +325,7 @@ export class GameBoardComponent implements OnInit {
         break;
       }
     }
+    this.timeLimit.next(time);
   }
 
   @HostListener('window:keydown', ['$event.key'])
@@ -238,33 +384,33 @@ export class GameBoardComponent implements OnInit {
       guess += this.charArr[i];
     }
     if (this.guessList.includes(guess)) {
-      this.handleInvalidGuess();
+      this.handleInvalidGuess('(already used this word)');
       return;
     }
     if (guess === this.word) {
       this.handleWin();
       return;
     }
-    this.validateGuess(guess).subscribe({
-      next: () => this.handleValidGuess(guess),
-      error: (e) => {
-        if (e.status.toString().startsWith('4')) this.handleInvalidGuess();
-        if (
-          e.status.toString().startsWith('5') ||
-          e.status.toString().startsWith('0')
-        )
-          this.handleFailedRequest(e);
-      },
-    });
-  }
-
-  validateGuess(guess: string): Observable<any> {
-    return this.http.get(
-      `https://api.dictionaryapi.dev/api/v2/entries/en/${guess}`
-    );
+    this.loading = true;
+    if (this.hasInternetConnection) {
+      this.http
+        .get(`https://api.dictionaryapi.dev/api/v2/entries/en/${guess}`)
+        .subscribe({
+          next: () => this.handleValidGuess(guess),
+          error: (e) => {
+            if (e.status.toString().startsWith('4')) this.handleInvalidGuess();
+            if (e.status.toString().startsWith('5'))
+              this.handleFailedRequest(e);
+            if (e.status.toString().startsWith('0')) this.handleNoInternet(e);
+          },
+        });
+    } else {
+      this.handleValidGuess(guess);
+    }
   }
 
   handleValidGuess(guess: string) {
+    this.loading = false;
     this.lastGuess = guess;
     this.guessList.push(this.lastGuess);
     this.handleKeyAndTileHighlight();
@@ -275,29 +421,71 @@ export class GameBoardComponent implements OnInit {
     }
     this.currentGuessLength = 0;
     this.currentGuessStartIndex += this.word.length;
+    this.setGameHistoryInRankedMode();
   }
 
-  handleInvalidGuess() {
+  setGameHistoryInRankedMode() {
+    if (this.isFreePlay) return;
+    localStorage.setItem('gameHistory' + this.gameUuid, JSON.stringify(true));
+    localStorage.setItem(
+      'charArr' + this.gameUuid,
+      JSON.stringify(this.charArr)
+    );
+    localStorage.setItem(
+      'guessList' + this.gameUuid,
+      JSON.stringify(this.guessList)
+    );
+    localStorage.setItem(
+      'currentAttempt' + this.gameUuid,
+      JSON.stringify(this.currentAttempt)
+    );
+    localStorage.setItem(
+      'currentGuessStartIndex' + this.gameUuid,
+      JSON.stringify(this.currentGuessStartIndex)
+    );
+  }
+
+  handleInvalidGuess(message: string = '(not a word)') {
+    this.loading = false;
+    this.errorMessage = message;
+    setTimeout(() => {
+      this.errorMessage = '';
+    }, 1000);
     this.animateInvalidGuess = true;
     this.hasChangedInvalidGuess = false;
-  }
-
-  handleFailedRequest(e: HttpErrorResponse) {
-    console.log(e);
-    console.log(
-      'Experiencing internet connection issues.\nMessage is: ' + e.message
-    );
   }
 
   handleWin() {
     this.handleKeyAndTileHighlight();
     this.isGameOver = true;
-    alert('You Win');
+    setTimeout(() => {
+      this.win = true;
+    }, 600);
+    if (!this.isFreePlay) {
+      this.wordleService.deleteWordleByUuidLink(this.gameUuid).subscribe();
+      this.settingsService.hasWonRankedGame$.next(true);
+    }
+    this.clearGameHistoryFromLocalStorage();
   }
 
   handleLose() {
     this.isGameOver = true;
-    alert('You Lose');
+    setTimeout(() => {
+      this.lose = true;
+    }, 600);
+    if (!this.isFreePlay)
+      this.wordleService.deleteWordleByUuidLink(this.gameUuid).subscribe();
+    this.clearGameHistoryFromLocalStorage();
+  }
+
+  clearGameHistoryFromLocalStorage() {
+    localStorage.removeItem('charArr' + this.gameUuid);
+    localStorage.removeItem('gameHistory' + this.gameUuid);
+    localStorage.removeItem('guessList' + this.gameUuid);
+    localStorage.removeItem('currentAttempt' + this.gameUuid);
+    localStorage.removeItem('currentGuessStartIndex' + this.gameUuid);
+    localStorage.removeItem('keyMap' + this.gameUuid);
+    localStorage.removeItem('tileMap' + this.gameUuid);
   }
 
   handleKeyAndTileHighlight() {
@@ -319,6 +507,10 @@ export class GameBoardComponent implements OnInit {
         this.keyMap.set(char, 'grey');
       }
     }
+    localStorage.setItem(
+      'keyMap' + this.gameUuid,
+      JSON.stringify(Array.from(this.keyMap))
+    );
   }
 
   /* Notes
@@ -365,6 +557,33 @@ export class GameBoardComponent implements OnInit {
             : 1
         );
       }
+    }
+    localStorage.setItem(
+      'tileMap' + this.gameUuid,
+      JSON.stringify(Array.from(this.tileMap))
+    );
+  }
+
+  handleAnyModeSettings() {
+    if (localStorage.getItem('flashOff')) {
+      this.flashOff = JSON.parse(localStorage.getItem('flashOff')!);
+    }
+  }
+
+  handleFreePlaySettings() {
+    if (localStorage.getItem('wordLengthSetting')) {
+      this.wordLengthPreference = JSON.parse(
+        localStorage.getItem('wordLengthSetting')!
+      );
+    } else {
+      this.wordLengthPreference = 'random';
+    }
+    if (localStorage.getItem('attemptsSetting')) {
+      this.attemptsPreference = JSON.parse(
+        localStorage.getItem('attemptsSetting')!
+      );
+    } else {
+      this.attemptsPreference = '6';
     }
   }
 }

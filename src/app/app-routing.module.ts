@@ -9,11 +9,17 @@ import { ResetPasswordComponent } from './views/reset-password/reset-password.co
 import { CanActivate } from './guard/auth.guard';
 import { CreateAccountEmailConfirmationComponent } from './views/create-account-email-confirmation/create-account-email-confirmation.component';
 import { PlayComponent } from './views/play/play.component';
+import { NotFoundComponent } from './views/not-found/not-found.component';
 
 const routes: Routes = [
+  // {
+  //   path: '',
+  //   redirectTo: '/login',
+  //   pathMatch: 'full',
+  // },
   {
     path: '',
-    redirectTo: '/login',
+    redirectTo: '/home',
     pathMatch: 'full',
   },
   { path: 'login', component: LoginComponent },
@@ -25,8 +31,12 @@ const routes: Routes = [
   { path: 'set-password/:passwordUUID', component: ResetPasswordComponent },
   { path: 'home', component: HomeComponent, canActivate: [CanActivate] },
   { path: 'play', component: PlayComponent },
-  { path: 'play/:uuidLink', component: PlayComponent },
-  { path: '**', redirectTo: '/login' },
+  {
+    path: 'play/:uuidLink',
+    component: PlayComponent,
+  },
+  { path: 'not-found', component: NotFoundComponent },
+  { path: '**', redirectTo: '/not-found' },
 ];
 
 @NgModule({
