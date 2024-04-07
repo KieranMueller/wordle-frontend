@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { prodBaseUrl } from 'environment-variables'
 
 @Component({
   selector: 'app-forgot-password',
@@ -17,7 +18,7 @@ export class ForgotPasswordComponent {
 
   submit() {
     this.http
-      .post('http://localhost:8080/forgot-password', this.forgotPasswordRequest)
+      .post(`${prodBaseUrl}/forgot-password`, this.forgotPasswordRequest)
       .subscribe({
         next: (res) => {
           console.log(res);
