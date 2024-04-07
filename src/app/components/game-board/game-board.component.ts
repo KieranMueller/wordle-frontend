@@ -5,6 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 import { GameSettingsService } from 'src/app/service/game-settings.service';
 import { wordsList } from './randomWordsList';
 import { WordleService } from 'src/app/service/wordle.service';
+import { localBaseUrl, prodBaseUrl } from 'environment-variables';
 
 @Component({
   selector: 'app-game-board',
@@ -138,7 +139,7 @@ export class GameBoardComponent implements OnInit {
   }
 
   getWordleFromDB(uuid: string) {
-    this.http.get(`http://localhost:8080/free-wordle/${uuid}`).subscribe({
+    this.http.get(`${prodBaseUrl}/free-wordle/${uuid}`).subscribe({
       next: (res) => {
         this.initalizeFieldsFromDBWordle(res);
       },

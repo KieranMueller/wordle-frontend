@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ClipboardService } from 'ngx-clipboard';
+import { localBaseUrl, prodBaseUrl } from 'environment-variables';
 
 @Component({
   selector: 'app-create-wordle-options-modal',
@@ -39,19 +40,17 @@ export class CreateWordleOptionsModalComponent implements OnInit {
   create() {
     this.loading = true;
     this.request.word = this.word;
-    this.http
-      .post(`http://localhost:8080/free-wordle`, this.request)
-      .subscribe({
-        next: (res) => this.handleSuccess(res),
-        error: (e) => {
-          if (e.status.toString().startsWith('4')) this.handleInvalidRequest(e);
-          if (
-            e.status.toString().startsWith('5') ||
-            e.status.toString().startsWith('0')
-          )
-            this.handleFailedRequest(e);
-        },
-      });
+    this.http.post(`${prodBaseUrl}/free-wordle`, this.request).subscribe({
+      next: (res) => this.handleSuccess(res),
+      error: (e) => {
+        if (e.status.toString().startsWith('4')) this.handleInvalidRequest(e);
+        if (
+          e.status.toString().startsWith('5') ||
+          e.status.toString().startsWith('0')
+        )
+          this.handleFailedRequest(e);
+      },
+    });
   }
 
   handleSuccess(res: any) {

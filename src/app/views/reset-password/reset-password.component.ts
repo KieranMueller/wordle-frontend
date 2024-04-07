@@ -5,6 +5,7 @@ import {
   ActivatedRouteSnapshot,
   Router,
 } from '@angular/router';
+import { prodBaseUrl } from 'environment-variables'
 
 @Component({
   selector: 'app-reset-password',
@@ -33,7 +34,7 @@ export class ResetPasswordComponent {
       this.route.snapshot.params['passwordUUID'];
     this.http
       .post(
-        'http://localhost:8080/create-new-password',
+        `${prodBaseUrl}/create-new-password`,
         this.newPasswordRequest
       )
       .subscribe({
