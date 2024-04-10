@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { prodBaseUrl } from 'environment-variables'
+import { backendBaseUrl } from 'environment-variables';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
@@ -13,7 +13,7 @@ export class AuthService {
   constructor(private http: HttpClient, private router: Router) {}
 
   login(user: any) {
-    this.http.post(`${prodBaseUrl}/login`, user).subscribe({
+    this.http.post(`${backendBaseUrl}/login`, user).subscribe({
       next: (res) => {
         this.loggedIn.next(true);
         this.router.navigateByUrl('/home');
