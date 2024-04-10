@@ -1,3 +1,3 @@
-export const localBaseUrl = 'http://localhost:8080';
-export const prodBaseUrl =
+export const backendBaseUrl =
   'https://wordle-kieran-api.us-east-2.elasticbeanstalk.com';
+export const frontendBaseUrl = 'https://wordle-by-kieran.netlify.app'

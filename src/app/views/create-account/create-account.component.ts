@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { prodBaseUrl } from 'environment-variables'
+import { backendBaseUrl } from 'environment-variables';
 
 @Component({
   selector: 'app-create-account',
@@ -21,7 +21,7 @@ export class CreateAccountComponent {
   constructor(private router: Router, private http: HttpClient) {}
 
   create() {
-    this.http.post(`${prodBaseUrl}/create`, this.user).subscribe({
+    this.http.post(`${backendBaseUrl}/create`, this.user).subscribe({
       next: (res) => {
         console.log(res);
         this.router.navigateByUrl('/login');

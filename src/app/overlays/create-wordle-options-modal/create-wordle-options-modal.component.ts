@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ClipboardService } from 'ngx-clipboard';
-import { localBaseUrl, prodBaseUrl } from 'environment-variables';
+import { backendBaseUrl, frontendBaseUrl } from 'environment-variables';
 
 @Component({
   selector: 'app-create-wordle-options-modal',
@@ -40,7 +40,7 @@ export class CreateWordleOptionsModalComponent implements OnInit {
   create() {
     this.loading = true;
     this.request.word = this.word;
-    this.http.post(`${prodBaseUrl}/free-wordle`, this.request).subscribe({
+    this.http.post(`${backendBaseUrl}/free-wordle`, this.request).subscribe({
       next: (res) => this.handleSuccess(res),
       error: (e) => {
         if (e.status.toString().startsWith('4')) this.handleInvalidRequest(e);
@@ -58,7 +58,7 @@ export class CreateWordleOptionsModalComponent implements OnInit {
     console.log(res);
     console.log(res.uuidLink);
     this.created = true;
-    this.gameLink = `http://localhost:4200/play/${res.uuidLink}`;
+    this.gameLink = `${frontendBaseUrl}/play/${res.uuidLink}`;
     this.copy('copied!');
   }
 
