@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { backendBaseUrl } from 'environment-variables';
-import { BehaviorSubject } from 'rxjs'
+import { backendBaseUrl, frontendBaseUrl } from 'environment-variables';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -17,10 +17,12 @@ export class ShareResultService {
     timeLimit: 'none',
     greenTilesOnly: false,
   };
+  result = new BehaviorSubject<string>('');
+  didWin = false;
 
   constructor(private http: HttpClient) {}
 
-  getResultString(): string {
+  getResultString() {
     let result = `(${this.gotItIn})\n`;
     for (let i = 0; i < this.totalTiles; i++) {
       if (i > 0 && i % this.wordLength === 0) {
@@ -28,7 +30,7 @@ export class ShareResultService {
       }
       switch (this.tileMap.get(i)) {
         case undefined: {
-          result += '⬛';
+          result += '⬜';
           break;
         }
         case 'orange': {
@@ -41,21 +43,25 @@ export class ShareResultService {
         }
       }
     }
-    result += `\n${this.createNewGameLink()}`
-    return result;
+    this.createNewGameLink();
+    this.result.next(result);
   }
 
-  createNewGameLink(): string {
-    let link = ''
+  createNewGameLink() {
+    if (!this.request.timeLimit) this.request.timeLimit = 'none';
     this.http.post(`${backendBaseUrl}/free-wordle`, this.request).subscribe({
-      next: (res) => {
-        console.log(res)
-        link = 'sup'
+      next: (res: any) => {
+        this.result.next(
+          `${this.result.getValue()}\n\nI ${this.didWin ? 'GOT IT' : 'lost'} in ${
+            this.gotItIn
+          } attempts playing Wordle By Kieran, try your luck with this word using the link below!\n\n${frontendBaseUrl}/play/${
+            res.uuidLink
+          }`
+        );
       },
-      error: (e) => {
-        console.log(e);
+      error: () => {
+        this.result.next(`${this.result.getValue()}\nerror creating shareable link :(`)
       },
     });
-    return link;
   }
 }

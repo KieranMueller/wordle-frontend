@@ -65,7 +65,7 @@ export class GameBoardComponent implements OnInit {
     'z',
   ];
   timeLimit = new BehaviorSubject<number | null>(null);
-  timeLimitString = ''
+  timeLimitString = '';
   flashOff = false;
   canRefresh = false;
   win = false;
@@ -87,7 +87,8 @@ export class GameBoardComponent implements OnInit {
   - Add ability to play the daily wordle
   - Implement scoring system, show on game over modal based on num guesses, correct guesses etc
   - Implement timer for free play mode
-  - implement share results, make the share a link to play the same word
+  - implement share results, do custom words work?
+  - add option to share on social media
   - fill up wordslist for manually setting word
   - add modern theme color scheme option?
   - Ensure I wipe timers from local storage after custom games end (can't figure out how)
@@ -462,7 +463,7 @@ export class GameBoardComponent implements OnInit {
   }
 
   handleWin() {
-    this.handleShareResults();
+    this.handleShareResults(true);
     this.handleKeyAndTileHighlight();
     this.isGameOver = true;
     this.gameDisabled = true;
@@ -498,15 +499,18 @@ export class GameBoardComponent implements OnInit {
     localStorage.removeItem('tileMap' + this.gameUuid);
   }
 
-  handleShareResults() {
+  handleShareResults(didWin: boolean = false) {
     this.shareResultsService.tileMap = this.tileMap;
     this.shareResultsService.totalTiles = this.totalTiles;
     this.shareResultsService.wordLength = this.word.length;
     this.shareResultsService.gotItIn =
-      (this.currentAttempt + 1) + '/' + this.maxAttempts;
+      (didWin ? this.currentAttempt + 1 : this.currentAttempt) +
+      '/' +
+      this.maxAttempts;
     this.shareResultsService.request.word = this.word;
     this.shareResultsService.request.attempts = this.maxAttempts;
     this.shareResultsService.request.timeLimit = this.timeLimitString;
+    this.shareResultsService.didWin = didWin;
   }
 
   handleKeyAndTileHighlight() {

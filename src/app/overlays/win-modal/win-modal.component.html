@@ -1,23 +1,29 @@
 <div class="background">
   <div class="inner">
     <img
-    class="x-mark"
-    src="../../../assets/icons/x-mark.png"
-    alt="close modal"
-    (click)="handleClose()"
-  />
+      class="x-mark"
+      src="../../../assets/icons/x-mark.png"
+      alt="close modal"
+      (click)="handleClose()"
+    />
     <h1>WINNER!</h1>
     <h3>
       in {{ attempts + (attempts === 1 ? " attempt" : " attempts") }}, you
       guessed
     </h3>
-    <h3 class="word">{{word}}</h3>
+    <h3 class="word">{{ word }}</h3>
     <hr />
     <div>
-      <button (click)="newGame()">new game</button>
-      <button>share results!</button>
-      <button routerLink="/home">create wordle</button>
-      <textarea class="results">{{results}}</textarea>
+      <div class="btns-div">
+        <div class="btns-div-inner">
+          <button (click)="newGame()">new game</button>
+          <button routerLink="/home">create wordle</button>
+        </div>
+        <button [disabled]="copied" (click)="getResults()">{{shareBtnText}}</button>
+      </div>
+      <textarea *ngIf="shareResults" readonly>{{
+        results
+      }}</textarea>
     </div>
   </div>
 </div>
