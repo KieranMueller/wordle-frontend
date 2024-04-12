@@ -78,9 +78,9 @@ export class GameBoardComponent implements OnInit {
   isFreePlay = true;
   gameUuid = '';
   hasGameHistory = false;
+  gameDisabled = false;
 
   /* TODO
-  - Have UI keyboard buttons look like they are being clicked when using personal keyboard
   - Randomize color of keyboard
   - Add ability to play the daily wordle
   - Implement scoring system, show on game over modal based on num guesses, correct guesses etc
@@ -88,7 +88,6 @@ export class GameBoardComponent implements OnInit {
   - option to share game results after game
   - fill up wordslist for manually setting word
   - add modern theme color scheme option?
-  - add haptic feedback to button clicks?
   - Ensure I wipe timers from local storage after custom games end (can't figure out how)
   - Implement only show green tiles option
   - Get CSS looking good!
@@ -331,6 +330,7 @@ export class GameBoardComponent implements OnInit {
 
   @HostListener('window:keydown', ['$event.key'])
   onKeyDown($event: string) {
+    if (this.gameDisabled) return;
     if (this.validChars.includes($event.toLocaleLowerCase()))
       this.type($event.toLocaleLowerCase());
     if ($event === 'Backspace') this.del();
@@ -345,6 +345,7 @@ export class GameBoardComponent implements OnInit {
   until current guess length === word.length
   */
   type(value: string) {
+    if (this.gameDisabled) return;
     if (this.charArr.indexOf(null) === -1) return;
     if (this.currentGuessLength < this.word.length) {
       this.charArr[this.charArr.indexOf(null)] = value;
@@ -459,6 +460,7 @@ export class GameBoardComponent implements OnInit {
   handleWin() {
     this.handleKeyAndTileHighlight();
     this.isGameOver = true;
+    this.gameDisabled = true;
     setTimeout(() => {
       this.win = true;
     }, 600);
@@ -471,6 +473,7 @@ export class GameBoardComponent implements OnInit {
 
   handleLose() {
     this.isGameOver = true;
+    this.gameDisabled = true;
     setTimeout(() => {
       this.lose = true;
     }, 600);
@@ -586,5 +589,11 @@ export class GameBoardComponent implements OnInit {
     } else {
       this.attemptsPreference = '6';
     }
+  }
+
+  hideGameOverModal() {
+    this.lose = false;
+    this.win = false;
+    this.gameDisabled = true;
   }
 }

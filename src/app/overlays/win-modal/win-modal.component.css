@@ -23,6 +23,30 @@
   padding: 20px;
   position: relative;
   animation: pop-up 1s;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.x-mark {
+  position: absolute;
+  width: 25px;
+  top: 10px;
+  right: 8px;
+  cursor: pointer;
+}
+
+.word {
+  margin: 10px 10px;
+  width: fit-content;
+  background-color: white;
+  color: var(--green);
+  border-radius: 8px;
+  margin-right: 10px;
+  padding: 10px 20px;
+  font-size: 28px;
+  font-weight: 700;
 }
 
 @keyframes pop-up {

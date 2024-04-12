@@ -1,12 +1,18 @@
 <div class="background">
   <div class="inner">
+    <img
+    class="x-mark"
+    src="../../../assets/icons/x-mark.png"
+    alt="close modal"
+    (click)="handleClose()"
+  />
     <h1>SNAP!</h1>
     <h3>
       guesses: {{attempts}}
     </h3>
-    <h3>the word was <span>{{word}}</span></h3>
+    <h3>the word was</h3>
+    <h3 class="word">{{word}}</h3>
     <hr />
-    <h4>create an account <span>here</span>to track your scores!</h4>
     <div>
       <button (click)="newGame()">new game</button>
       <button routerLink="/home">create wordle</button>

@@ -11,12 +11,14 @@
     [attempts]="currentAttempt + 1"
     [word]="word!"
     [isFreePlay]="isFreePlay"
+    (closeModalEmitter)="hideGameOverModal()"
   ></app-win-modal>
   <app-lose-modal
     *ngIf="lose"
     [attempts]="currentAttempt"
     [word]="word!"
     [isFreePlay]="isFreePlay"
+    (closeModalEmitter)="hideGameOverModal()"
   ></app-lose-modal>
   <div class="error-div">
     <p class="error-msg" *ngIf="errorMessage">{{ errorMessage }}</p>
