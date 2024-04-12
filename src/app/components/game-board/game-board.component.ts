@@ -6,6 +6,7 @@ import { GameSettingsService } from 'src/app/service/game-settings.service';
 import { wordsList } from './randomWordsList';
 import { WordleService } from 'src/app/service/wordle.service';
 import { backendBaseUrl } from 'environment-variables';
+import { ShareResultService } from 'src/app/service/share-result.service';
 
 @Component({
   selector: 'app-game-board',
@@ -64,6 +65,7 @@ export class GameBoardComponent implements OnInit {
     'z',
   ];
   timeLimit = new BehaviorSubject<number | null>(null);
+  timeLimitString = '';
   flashOff = false;
   canRefresh = false;
   win = false;
@@ -78,17 +80,17 @@ export class GameBoardComponent implements OnInit {
   isFreePlay = true;
   gameUuid = '';
   hasGameHistory = false;
+  gameDisabled = false;
 
   /* TODO
-  - Have UI keyboard buttons look like they are being clicked when using personal keyboard
   - Randomize color of keyboard
   - Add ability to play the daily wordle
   - Implement scoring system, show on game over modal based on num guesses, correct guesses etc
   - Implement timer for free play mode
-  - option to share game results after game
+  - implement share results, do custom words work?
+  - add option to share on social media
   - fill up wordslist for manually setting word
   - add modern theme color scheme option?
-  - add haptic feedback to button clicks?
   - Ensure I wipe timers from local storage after custom games end (can't figure out how)
   - Implement only show green tiles option
   - Get CSS looking good!
@@ -101,7 +103,8 @@ export class GameBoardComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private settingsService: GameSettingsService,
-    private wordleService: WordleService
+    private wordleService: WordleService,
+    private shareResultsService: ShareResultService
   ) {}
 
   ngOnInit() {
@@ -156,6 +159,7 @@ export class GameBoardComponent implements OnInit {
     console.log(wordle);
     this.word = wordle.word;
     this.maxAttempts = wordle.attempts;
+    this.timeLimitString = wordle.timeLimit;
     this.startTimer(wordle.timeLimit);
     if (!this.hasGameHistory) {
       this.totalTiles = this.word.length * this.maxAttempts;
@@ -331,6 +335,7 @@ export class GameBoardComponent implements OnInit {
 
   @HostListener('window:keydown', ['$event.key'])
   onKeyDown($event: string) {
+    if (this.gameDisabled) return;
     if (this.validChars.includes($event.toLocaleLowerCase()))
       this.type($event.toLocaleLowerCase());
     if ($event === 'Backspace') this.del();
@@ -345,6 +350,7 @@ export class GameBoardComponent implements OnInit {
   until current guess length === word.length
   */
   type(value: string) {
+    if (this.gameDisabled) return;
     if (this.charArr.indexOf(null) === -1) return;
     if (this.currentGuessLength < this.word.length) {
       this.charArr[this.charArr.indexOf(null)] = value;
@@ -457,8 +463,10 @@ export class GameBoardComponent implements OnInit {
   }
 
   handleWin() {
+    this.handleShareResults(true);
     this.handleKeyAndTileHighlight();
     this.isGameOver = true;
+    this.gameDisabled = true;
     setTimeout(() => {
       this.win = true;
     }, 600);
@@ -470,7 +478,9 @@ export class GameBoardComponent implements OnInit {
   }
 
   handleLose() {
+    this.handleShareResults();
     this.isGameOver = true;
+    this.gameDisabled = true;
     setTimeout(() => {
       this.lose = true;
     }, 600);
@@ -487,6 +497,20 @@ export class GameBoardComponent implements OnInit {
     localStorage.removeItem('currentGuessStartIndex' + this.gameUuid);
     localStorage.removeItem('keyMap' + this.gameUuid);
     localStorage.removeItem('tileMap' + this.gameUuid);
+  }
+
+  handleShareResults(didWin: boolean = false) {
+    this.shareResultsService.tileMap = this.tileMap;
+    this.shareResultsService.totalTiles = this.totalTiles;
+    this.shareResultsService.wordLength = this.word.length;
+    this.shareResultsService.gotItIn =
+      (didWin ? this.currentAttempt + 1 : this.currentAttempt) +
+      '/' +
+      this.maxAttempts;
+    this.shareResultsService.request.word = this.word;
+    this.shareResultsService.request.attempts = this.maxAttempts;
+    this.shareResultsService.request.timeLimit = this.timeLimitString;
+    this.shareResultsService.didWin = didWin;
   }
 
   handleKeyAndTileHighlight() {
@@ -586,5 +610,11 @@ export class GameBoardComponent implements OnInit {
     } else {
       this.attemptsPreference = '6';
     }
+  }
+
+  hideGameOverModal() {
+    this.lose = false;
+    this.win = false;
+    this.gameDisabled = true;
   }
 }
