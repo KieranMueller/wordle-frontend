@@ -37,6 +37,10 @@
   cursor: pointer;
 }
 
+.results {
+  text-align: left;
+}
+
 .word {
   margin: 10px 10px;
   width: fit-content;
