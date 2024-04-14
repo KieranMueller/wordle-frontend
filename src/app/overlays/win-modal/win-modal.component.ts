@@ -21,7 +21,7 @@ export class WinModalComponent {
   constructor(
     private router: Router,
     public shareResultsService: ShareResultService,
-    private clipboard: ClipboardService
+    private clipboard: ClipboardService,
   ) {}
 
   newGame() {

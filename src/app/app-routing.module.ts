@@ -10,6 +10,7 @@ import { CanActivate } from './guard/auth.guard';
 import { CreateAccountEmailConfirmationComponent } from './views/create-account-email-confirmation/create-account-email-confirmation.component';
 import { PlayComponent } from './views/play/play.component';
 import { NotFoundComponent } from './views/not-found/not-found.component';
+import { TestingComponent } from './components/testing/testing.component'
 
 const routes: Routes = [
   // {
@@ -36,6 +37,7 @@ const routes: Routes = [
     component: PlayComponent,
   },
   { path: 'not-found', component: NotFoundComponent },
+  { path: 'test', component: TestingComponent },
   { path: '**', redirectTo: '/not-found' },
 ];
 
