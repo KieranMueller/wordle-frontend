@@ -43,16 +43,31 @@ export class WinModalComponent {
         this.copied = true;
         this.shareBtnText = 'copied!';
         setTimeout(() => {
-          this.shareBtnText = 'share game!';
           this.copied = false;
-        }, 5000);
+        }, 2000);
+        this.shareTool()
       },
       error: (e) => {
         this.shareBtnText = 'error :(';
         setTimeout(() => {
           this.shareBtnText = 'share game!';
         }, 4000);
+        this.shareTool()
       },
     });
+  }
+
+  shareTool() {
+    console.log(this.results)
+    const navigator = window.navigator;
+    let data = {
+      title: 'share your victory!',
+      text: this.results,
+      url: `https://wordle.kieranmueller.com`
+    }
+    navigator.share(data).catch(e => {
+      console.log('error, do something')
+      console.log(e)
+    })
   }
 }
