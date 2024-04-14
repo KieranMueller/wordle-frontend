@@ -1,5 +1,6 @@
-export const backendBaseUrl = 'http://wordle-kieran-api.us-east-2.elasticbeanstalk.com';
-export const frontendBaseUrl = 'https://wordle.kieranmueller.com';
+export const backendBaseUrl =
+  'http://localhost:8080';
+export const frontendBaseUrl = 'http://localhost:4200';
 
 // http://localhost:8080
 // http://localhost:4200

@@ -87,9 +87,9 @@ export class GameBoardComponent implements OnInit {
   - Add ability to play the daily wordle
   - Implement scoring system, show on game over modal based on num guesses, correct guesses etc
   - Implement timer for free play mode
-  - implement share results, do custom words work?
+  - implement client default share tool sharing (ios), need backend hooked up in prod to test well
   - add option to share on social media
-  - fill up wordslist for manually setting word
+  - fill up wordslist for manually setting word, set toggle?
   - add modern theme color scheme option?
   - Ensure I wipe timers from local storage after custom games end (can't figure out how)
   - Implement only show green tiles option
@@ -108,6 +108,7 @@ export class GameBoardComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    console.log('get out of here you cheater!')
     this.loading = true;
     setTimeout(() => {
       this.boardInitialized = true;

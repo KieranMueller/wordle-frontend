@@ -58,16 +58,16 @@ export class WinModalComponent {
   }
 
   shareTool() {
-    console.log(this.results)
-    const navigator = window.navigator;
-    let data = {
-      title: 'share your victory!',
-      text: this.results,
-      url: `https://wordle.kieranmueller.com`
-    }
-    navigator.share(data).catch(e => {
-      console.log('error, do something')
-      console.log(e)
-    })
+    // console.log(this.results)
+    // const navigator = window.navigator;
+    // let data = {
+    //   title: 'share your victory!',
+    //   text: this.results,
+    //   url: `https://wordle.kieranmueller.com`
+    // }
+    // navigator.share(data).catch(e => {
+    //   console.log('error, do something')
+    //   console.log(e)
+    // })
   }
 }
