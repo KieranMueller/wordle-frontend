@@ -52,7 +52,7 @@ export class ShareResultService {
     this.http.post(`${backendBaseUrl}/free-wordle`, this.request).subscribe({
       next: (res: any) => {
         this.result.next(
-          `${this.result.getValue()}\n\nI ${this.didWin ? 'GOT IT' : 'lost'} in ${
+          `${this.result.getValue()}\n\nI ${this.didWin ? '🎉WON🎉' : 'lost'} in ${
             this.gotItIn
           } attempts playing Wordle By Kieran, try your luck with this word using the link below!\n\n${frontendBaseUrl}/play/${
             res.uuidLink
