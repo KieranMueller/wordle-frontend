@@ -37,7 +37,7 @@ const routes: Routes = [
     component: PlayComponent,
   },
   { path: 'not-found', component: NotFoundComponent },
-  { path: 'test', component: TestingComponent },
+  // { path: 'test', component: TestingComponent },
   { path: '**', redirectTo: '/not-found' },
 ];
 
