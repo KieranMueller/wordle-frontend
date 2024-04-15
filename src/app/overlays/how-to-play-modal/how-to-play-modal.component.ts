@@ -15,4 +15,8 @@ export class HowToPlayModalComponent {
   navigateToPortfolio() {
     window.open('https://kieran-mueller.netlify.app/')
   }
+
+  closeFromOutside(event: any) {
+    if (event.target.className === 'background') this.closeModal()
+  }
 }

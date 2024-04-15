@@ -114,4 +114,8 @@ export class PlaySettingsComponent implements OnInit {
     this.saveFreePlaySettings();
     location.reload();
   }
+
+  closeModal(event: any) {
+    if (event.target.className === 'container1') this.handleClose()
+  }
 }

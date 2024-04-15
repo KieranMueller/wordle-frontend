@@ -10,4 +10,10 @@ export class HelpModalComponent {
   emitClose() {
     this.emitter.emit();
   }
+
+  closeModal(event: any) {
+    if (event.target.className === 'container1') {
+      this.emitter.emit()
+    }
+  }
 }

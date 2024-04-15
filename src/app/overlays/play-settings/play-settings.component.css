@@ -16,9 +16,11 @@
   z-index: 2;
   color: rgb(23, 23, 23);
   overflow-y: scroll;
+  cursor: pointer;
 }
 
 .inner {
+  cursor: default;
   border: 5px solid var(--blue);
   background-color: var(--yellow);
   width: 80vw;

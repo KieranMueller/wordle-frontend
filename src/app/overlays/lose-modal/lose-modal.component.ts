@@ -33,6 +33,10 @@ export class LoseModalComponent {
     this.closeModalEmitter.emit();
   }
 
+  closeFromOutside(event: any) {
+    if (event.target.className === 'background') this.handleClose()
+  }
+
   getResults() {
     this.shareResults = true;
     this.shareResultsService.getResultString();

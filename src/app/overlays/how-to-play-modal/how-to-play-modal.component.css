@@ -10,9 +10,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 }
 
 .inner {
+  cursor: default;
   border: 10px solid var(--yellow);
   background-color: var(--green);
   width: 90vw;

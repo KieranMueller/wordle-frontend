@@ -10,9 +10,11 @@
   top: 0;
   left: 0;
   background-color: rgba(0, 0, 0, 0.448);
+  cursor: pointer;
 }
 
 .inner {
+  cursor: default;
   margin-top: 50px;
   width: 90%;
   overflow-y: scroll;
