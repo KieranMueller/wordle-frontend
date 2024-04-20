@@ -23,12 +23,10 @@ export class CreateAccountComponent {
   create() {
     this.http.post(`${backendBaseUrl}/create`, this.user).subscribe({
       next: (res) => {
-        console.log(res);
         this.router.navigateByUrl('/login');
       },
       error: (e) => {
         alert(e.error.message);
-        console.log(e);
       },
     });
   }

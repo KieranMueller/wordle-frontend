@@ -83,7 +83,7 @@ export class GameBoardComponent implements OnInit {
   gameDisabled = false;
 
   /* TODO
-  - Randomize color of keyboard
+  - game board on init scroll to bottom of page to view keyboard automatically?
   - Add ability to play the daily wordle
   - Implement scoring system, show on game over modal based on num guesses, correct guesses etc
   - Implement timer for free play mode
@@ -92,7 +92,6 @@ export class GameBoardComponent implements OnInit {
   - fill up wordslist for manually setting word, set toggle?
   - add modern theme color scheme option?
   - Ensure I wipe timers from local storage after custom games end (can't figure out how)
-  - Implement only show green tiles option
   - Get CSS looking good!
   - Find a better random word API
   - Put time to live on local storage properties? Game state props etc remain if game is abandoned during play and not returned to
@@ -198,13 +197,11 @@ export class GameBoardComponent implements OnInit {
   }
 
   handleBadRequest(error: any) {
-    console.log(error);
     this.router.navigateByUrl('/not-found');
   }
 
   handleNoInternet(error: any) {
     this.loading = false;
-    console.log(error);
     this.errorMessage = 'no internet connection...';
     setTimeout(() => {
       this.errorMessage = '';
@@ -217,8 +214,6 @@ export class GameBoardComponent implements OnInit {
     setTimeout(() => {
       this.errorMessage = '';
     }, 1000);
-    console.log(e);
-    console.log('Experiencing internet connection issues');
   }
 
   getRandomWordRequest() {
@@ -229,11 +224,9 @@ export class GameBoardComponent implements OnInit {
       .get(`https://random-word-api.herokuapp.com/word?length=${length}`)
       .subscribe({
         next: (res) => {
-          console.log(res.toString());
           this.ensureRandomWordExistsInDictionaryAPI(res.toString());
         },
         error: (e) => {
-          console.log(e);
           this.manuallySetRandomWord();
         },
       });
@@ -250,8 +243,8 @@ export class GameBoardComponent implements OnInit {
       .get(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
       .subscribe({
         next: (res) => {
-          console.log(res);
           this.word = word;
+          console.log(word)
           this.loading = false;
           this.initializeFreePlayFields();
         },
@@ -283,10 +276,6 @@ export class GameBoardComponent implements OnInit {
     this.charArr = Array(this.totalTiles).fill(null);
   }
 
-  /* Notes
-  used to help color tiles in checkTiles() method, takes a char and returns the number
-  of occurences of the char in the word (char: a, word: adam -> 2)
-  */
   initializeOccurencesOfCharInWordMap() {
     for (let char of this.word) {
       let count = this.occurencesOfCharInWordMap.get(char);
@@ -343,13 +332,6 @@ export class GameBoardComponent implements OnInit {
     if ($event === 'Enter') this.enter();
   }
 
-  /* Notes
-  Board is initialized, charArr is initialized to array of width x height size, filled with 0's.
-  Conditionally not rendering 0s in html
-  board layout is only correct now based on hard coded css (grid columns)
-  this type() method, finds first element that is 0, replaces with the typed character,
-  until current guess length === word.length
-  */
   type(value: string) {
     if (this.gameDisabled) return;
     if (this.charArr.indexOf(null) === -1) return;
@@ -359,10 +341,6 @@ export class GameBoardComponent implements OnInit {
     }
   }
 
-  /* Notes
-  backspace button, finds most recent typed char (which is the element before the first occurence of '0')
-  and 'removes it' by setting it equal to 0, decrement current guess length
-  */
   del() {
     this.animateInvalidGuess = false;
     this.hasChangedInvalidGuess = true;
@@ -373,9 +351,6 @@ export class GameBoardComponent implements OnInit {
     this.currentGuessLength--;
   }
 
-  /* Notes
-  Handles enter key, button is only enabled if the current guess length == word length.
-  */
   enter() {
     if (
       this.currentGuessLength !== this.word.length ||
@@ -519,9 +494,6 @@ export class GameBoardComponent implements OnInit {
     this.checkTiles();
   }
 
-  /* Notes
-  handles keyboard key highlighting based on keyMap<key, color>
-  */
   checkKeys() {
     for (let i = 0; i < this.word.length; i++) {
       let char = this.lastGuess.charAt(i);
@@ -539,16 +511,6 @@ export class GameBoardComponent implements OnInit {
     );
   }
 
-  /* Notes
-  Handles turning tiles the correct color after each guess. OnInit, we initialize occurencesOfCharInWordMap to track
-  how many times a character appears in the word. This is important for setting the duplicate char tiles orange
-  example -> word has 3 e's, we guess 4, 2 in right spot should be green, the first e in wrong spot should be orange
-  and the last e in the wrong spot should be grey/nothing. We create numOccurencesOfCharInLastGuessMap to update
-  the char count from the last guess as we loop, this variable is used in the conditional for the loop responsible for
-  setting tiles orange. We do not enter the loop to set the fourth 'e' in our example orange since this map.get('e') is not
-  less than occurencesOfCharInWordMap.get('e'). They are equal, therefore we do NOT want to enter the conditional to set the
-  tile orange
-  */
   checkTiles() {
     let occurencesOfCharInLastGuessMap = new Map<string, number>();
     let span = this.currentGuessStartIndex + this.word.length;

@@ -32,7 +32,6 @@ import { GameSettingsService } from './service/game-settings.service';
 import { WinModalComponent } from './overlays/win-modal/win-modal.component';
 import { LoseModalComponent } from './overlays/lose-modal/lose-modal.component';
 import { WordleService } from './service/wordle.service';
-import { TestingComponent } from './components/testing/testing.component'
 
 @NgModule({
   declarations: [
@@ -58,7 +57,6 @@ import { TestingComponent } from './components/testing/testing.component'
     HowToPlayModalComponent,
     WinModalComponent,
     LoseModalComponent,
-    TestingComponent
   ],
   imports: [
     BrowserModule,

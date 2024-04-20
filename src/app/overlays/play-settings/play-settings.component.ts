@@ -41,10 +41,6 @@ export class PlaySettingsComponent implements OnInit {
     this.initializeSettings();
   }
 
-  test() {
-    console.log(this.randomBtnBorder);
-  }
-
   changeGameColors() {
     this.changeGameColorsEmitter.emit();
   }

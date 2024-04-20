@@ -15,7 +15,6 @@ export class ShareResultService {
     word: '',
     attempts: 6,
     timeLimit: 'none',
-    greenTilesOnly: false,
   };
   result = new BehaviorSubject<string>('');
   didWin = false;
