@@ -75,4 +75,10 @@ export class LoseModalComponent {
       navigator.share(data).catch((e) => {});
     }, 800);
   }
+
+  shareToX() {
+    window.open(
+      `https://twitter.com/intent/tweet?text=I lost a game in ${this.shareResultsService.gotItIn} attempts playing Wordle By Kieran 🎉 Try your luck at ${frontendBaseUrl}`
+    );
+  }
 }

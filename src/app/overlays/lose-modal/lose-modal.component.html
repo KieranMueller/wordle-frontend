@@ -17,6 +17,7 @@
       <button (click)="newGame()">new game</button>
       <button routerLink="/home">create wordle</button>
       <button [disabled]="copied" (click)="getResults()">{{shareBtnText}}</button>
+      <button (click)="shareToX()">share on Twitter</button>
     </div>
     <textarea *ngIf="shareResults" readonly>{{
       results

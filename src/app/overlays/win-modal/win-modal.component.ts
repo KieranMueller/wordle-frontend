@@ -1,4 +1,4 @@
-import { Clipboard } from '@angular/cdk/clipboard'
+import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { frontendBaseUrl } from 'environment-variables';
@@ -77,7 +77,8 @@ export class WinModalComponent {
   }
 
   shareToX() {
-    // don't share same word, just share url to play
-    window.open(`https://twitter.com/intent/tweet`)
+    window.open(
+      `https://twitter.com/intent/tweet?text=I just won a game in ${this.shareResultsService.gotItIn} attempts playing Wordle By Kieran 🎉 Try your luck at ${frontendBaseUrl}`
+    );
   }
 }

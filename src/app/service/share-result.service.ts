@@ -21,7 +21,7 @@ export class ShareResultService {
 
   constructor(private http: HttpClient) {}
 
-  getResultString() {
+  getResultString(saveWord: boolean = true) {
     let result = `(${this.gotItIn})\n`;
     for (let i = 0; i < this.totalTiles; i++) {
       if (i > 0 && i % this.wordLength === 0) {
@@ -42,11 +42,12 @@ export class ShareResultService {
         }
       }
     }
-    this.createNewGameLink();
+    this.createNewGameLink(saveWord);
     this.result.next(result);
   }
 
-  createNewGameLink() {
+  createNewGameLink(saveWord: boolean = true) {
+    if (!saveWord) return
     if (!this.request.timeLimit) this.request.timeLimit = 'none';
     this.http.post(`${backendBaseUrl}/free-wordle`, this.request).subscribe({
       next: (res: any) => {
