@@ -41,10 +41,6 @@ export class PlaySettingsComponent implements OnInit {
     this.initializeSettings();
   }
 
-  test() {
-    console.log(this.randomBtnBorder);
-  }
-
   changeGameColors() {
     this.changeGameColorsEmitter.emit();
   }
@@ -113,5 +109,9 @@ export class PlaySettingsComponent implements OnInit {
   loadGame() {
     this.saveFreePlaySettings();
     location.reload();
+  }
+
+  closeModal(event: any) {
+    if (event.target.className === 'container1') this.handleClose()
   }
 }

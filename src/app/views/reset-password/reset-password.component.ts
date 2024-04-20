@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import {
   ActivatedRoute,
-  ActivatedRouteSnapshot,
   Router,
 } from '@angular/router';
 import { backendBaseUrl } from 'environment-variables';
@@ -36,12 +35,10 @@ export class ResetPasswordComponent {
       .post(`${backendBaseUrl}/create-new-password`, this.newPasswordRequest)
       .subscribe({
         next: (res) => {
-          console.log(res);
           this.router.navigateByUrl('/login');
         },
         error: (e) => {
           alert(e.error.message);
-          console.log(e);
         },
       });
   }

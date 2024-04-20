@@ -124,7 +124,6 @@ export class CreateWordleComponent {
   }
 
   showNotWordMessage(e: any) {
-    console.log(e);
     this.validatingWord = false;
     this.isNotWord = true;
     setTimeout(() => {
@@ -134,22 +133,18 @@ export class CreateWordleComponent {
 
   handleFailedRequest(e: any) {
     this.validatingWord = false;
-    console.log('unable to communicate with dictionary API to check word');
     this.errorMessage =
       'unable to communicate with dictionary API to check word, please try again later';
     setTimeout(() => {
       this.errorMessage = '';
     }, 5000);
-    console.log(e);
   }
 
   handleNoInternetConnection(e: any) {
     this.validatingWord = false;
-    console.log('no internet connection');
     this.errorMessage = 'no internet connection!';
     setTimeout(() => {
       this.errorMessage = '';
     }, 4000);
-    console.log(e);
   }
 }

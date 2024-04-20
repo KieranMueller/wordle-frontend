@@ -15,17 +15,11 @@ export class CreateWordleOptionsModalComponent implements OnInit {
     word: '',
     attempts: 6,
     timeLimit: 'none',
-    greenTilesOnly: false,
   };
   gameLink = '';
   created = false;
   generateBtnText = 'generate link!';
   loading = false;
-
-  /*
-  - Have generate button turn into loading spinner while waiting for response
-  - After creating word, wipe word from create-wordle component (it's still there when exit out of modal)
-  */
 
   constructor(private http: HttpClient, private clipBoard: ClipboardService) {}
 
@@ -35,6 +29,10 @@ export class CreateWordleOptionsModalComponent implements OnInit {
 
   emitClose(createdWord: boolean) {
     this.closeEmitter.emit(createdWord);
+  }
+
+  closeFromOutside(event: any, createdWord: boolean) {
+    if (event.target.className === 'container1') this.emitClose(createdWord)
   }
 
   create() {
@@ -55,25 +53,19 @@ export class CreateWordleOptionsModalComponent implements OnInit {
 
   handleSuccess(res: any) {
     this.loading = false;
-    console.log(res);
-    console.log(res.uuidLink);
     this.created = true;
     this.gameLink = `${frontendBaseUrl}/play/${res.uuidLink}`;
     this.copy('copied!');
   }
 
   handleInvalidRequest(e: any) {
-    console.log('invalid request');
     this.generateBtnText = 'oops...';
     this.loading = false;
-    console.log(e);
   }
 
   handleFailedRequest(e: any) {
-    console.log('internal server error');
     this.loading = false;
     this.generateBtnText = 'oops...';
-    console.log(e);
   }
 
   copy(message: string) {

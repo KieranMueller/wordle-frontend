@@ -19,10 +19,8 @@ export class AuthService {
         this.router.navigateByUrl('/home');
       },
       error: (e) => {
-        console.log(e);
       },
       complete: () => {
-        console.log(this.getLoggedIn());
       },
     });
   }
