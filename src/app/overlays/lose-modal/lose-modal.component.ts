@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
+import { frontendBaseUrl } from 'environment-variables';
 import { ClipboardService } from 'ngx-clipboard';
 import { ShareResultService } from 'src/app/service/share-result.service';
 
@@ -34,7 +35,7 @@ export class LoseModalComponent {
   }
 
   closeFromOutside(event: any) {
-    if (event.target.className === 'background') this.handleClose()
+    if (event.target.className === 'background') this.handleClose();
   }
 
   getResults() {
@@ -43,13 +44,16 @@ export class LoseModalComponent {
     this.shareResultsService.result.subscribe({
       next: (res) => {
         this.results = res;
-        this.clipboard.copy(res);
+        setTimeout(() => {
+          this.clipboard.copy(res);
+        }, 300);
         this.copied = true;
         this.shareBtnText = 'copied!';
         setTimeout(() => {
           this.shareBtnText = 'share game!';
           this.copied = false;
         }, 5000);
+        this.shareTool();
       },
       error: (e) => {
         this.shareBtnText = 'error :(';
@@ -58,5 +62,17 @@ export class LoseModalComponent {
         }, 4000);
       },
     });
+  }
+
+  shareTool() {
+    const navigator = window.navigator;
+    setTimeout(() => {
+      let data = {
+        title: 'share with a friend!',
+        text: this.results,
+        url: `${frontendBaseUrl}`,
+      };
+      navigator.share(data).catch((e) => {});
+    }, 300);
   }
 }

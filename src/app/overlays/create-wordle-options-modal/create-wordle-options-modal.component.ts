@@ -32,7 +32,7 @@ export class CreateWordleOptionsModalComponent implements OnInit {
   }
 
   closeFromOutside(event: any, createdWord: boolean) {
-    if (event.target.className === 'container1') this.emitClose(createdWord)
+    if (event.target.className === 'container1') this.emitClose(createdWord);
   }
 
   create() {
@@ -69,7 +69,9 @@ export class CreateWordleOptionsModalComponent implements OnInit {
   }
 
   copy(message: string) {
-    this.clipBoard.copy(this.gameLink);
+    setTimeout(() => {
+      this.clipBoard.copy(this.gameLink);
+    }, 300);
     this.generateBtnText = message;
   }
 }

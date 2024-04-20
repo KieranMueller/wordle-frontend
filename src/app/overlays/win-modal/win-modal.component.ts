@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
+import { frontendBaseUrl } from 'environment-variables';
 import { ClipboardService } from 'ngx-clipboard';
 import { ShareResultService } from 'src/app/service/share-result.service';
 
@@ -21,7 +22,7 @@ export class WinModalComponent {
   constructor(
     private router: Router,
     public shareResultsService: ShareResultService,
-    private clipboard: ClipboardService,
+    private clipboard: ClipboardService
   ) {}
 
   newGame() {
@@ -34,7 +35,7 @@ export class WinModalComponent {
   }
 
   closeFromOutside(event: any) {
-    if (event.target.className === 'background') this.handleClose()
+    if (event.target.className === 'background') this.handleClose();
   }
 
   getResults() {
@@ -43,32 +44,35 @@ export class WinModalComponent {
     this.shareResultsService.result.subscribe({
       next: (res) => {
         this.results = res;
-        this.clipboard.copy(res);
+        setTimeout(() => {
+          this.clipboard.copy(res);
+        }, 300);
         this.copied = true;
         this.shareBtnText = 'copied!';
         setTimeout(() => {
           this.copied = false;
         }, 2000);
-        this.shareTool()
+        this.shareTool();
       },
       error: (e) => {
         this.shareBtnText = 'error :(';
         setTimeout(() => {
           this.shareBtnText = 'share game!';
         }, 4000);
-        this.shareTool()
+        this.shareTool();
       },
     });
   }
 
   shareTool() {
     const navigator = window.navigator;
-    let data = {
-      title: 'share your victory!',
-      text: this.results,
-      url: `https://wordle.kieranmueller.com`
-    }
-    navigator.share(data).catch(e => {
-    })
+    setTimeout(() => {
+      let data = {
+        title: 'share your victory! 🎉',
+        text: this.results,
+        url: `${frontendBaseUrl}`,
+      };
+      navigator.share(data);
+    }, 300);
   }
 }

@@ -19,7 +19,7 @@ import { MiddleBarComponent } from './components/middle-bar/middle-bar.component
 import { CreateWordleComponent } from './components/create-wordle/create-wordle.component';
 import { HelpModalComponent } from './overlays/help-modal/help-modal.component';
 import { CreateWordleOptionsModalComponent } from './overlays/create-wordle-options-modal/create-wordle-options-modal.component';
-import { ClipboardModule } from 'ngx-clipboard';
+// import { ClipboardModule } from 'ngx-clipboard';
 import { GameBoardOptionsBarComponent } from './components/game-board-options-bar/game-board-options-bar.component';
 import { PlaySettingsComponent } from './overlays/play-settings/play-settings.component';
 import { BrowserModule } from '@angular/platform-browser';
@@ -32,6 +32,7 @@ import { GameSettingsService } from './service/game-settings.service';
 import { WinModalComponent } from './overlays/win-modal/win-modal.component';
 import { LoseModalComponent } from './overlays/lose-modal/lose-modal.component';
 import { WordleService } from './service/wordle.service';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 @NgModule({
   declarations: [

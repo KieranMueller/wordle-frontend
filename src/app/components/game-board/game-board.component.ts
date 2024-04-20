@@ -83,12 +83,14 @@ export class GameBoardComponent implements OnInit {
   gameDisabled = false;
 
   /* TODO
-  - game board on init scroll to bottom of page to view keyboard automatically?
+  - Add area where users can submit requests for bugs etc. Or recomendations
+  - Copy to clipboard not working on mobile after generating custom word
   - Add ability to play the daily wordle
   - Implement scoring system, show on game over modal based on num guesses, correct guesses etc
   - Implement timer for free play mode
   - implement client default share tool sharing (ios), need backend hooked up in prod to test well
   - add option to share on social media
+  - Ensure share game works in lose modal as well
   - fill up wordslist for manually setting word, set toggle?
   - add modern theme color scheme option?
   - Ensure I wipe timers from local storage after custom games end (can't figure out how)
