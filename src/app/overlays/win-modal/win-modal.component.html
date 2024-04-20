@@ -20,6 +20,7 @@
           <button routerLink="/home">create wordle</button>
         </div>
         <button [disabled]="copied" (click)="getResults()">{{shareBtnText}}</button>
+        <!-- <button (click)="shareToX()">share to X/Twitter</button> -->
       </div>
       <textarea *ngIf="shareResults" readonly>{{
         results

@@ -73,6 +73,6 @@ export class LoseModalComponent {
         url: `${frontendBaseUrl}`,
       };
       navigator.share(data).catch((e) => {});
-    }, 300);
+    }, 800);
   }
 }

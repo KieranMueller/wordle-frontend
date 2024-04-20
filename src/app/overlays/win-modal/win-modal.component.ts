@@ -73,6 +73,11 @@ export class WinModalComponent {
         url: `${frontendBaseUrl}`,
       };
       navigator.share(data);
-    }, 300);
+    }, 800);
+  }
+
+  shareToX() {
+    // don't share same word, just share url to play
+    window.open(`https://twitter.com/intent/tweet`)
   }
 }

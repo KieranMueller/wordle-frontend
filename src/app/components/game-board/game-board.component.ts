@@ -84,7 +84,8 @@ export class GameBoardComponent implements OnInit {
 
   /* TODO
   - Add area where users can submit requests for bugs etc. Or recomendations
-  - Copy to clipboard not working on mobile after generating custom word
+  - Copy to clipboard still not working on mobile after generating custom word, setTimeout? Touch action manipulation, idk
+  - Share game with share tool not capturing link and text when sending
   - Add ability to play the daily wordle
   - Implement scoring system, show on game over modal based on num guesses, correct guesses etc
   - Implement timer for free play mode
