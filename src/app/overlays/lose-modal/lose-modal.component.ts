@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { frontendBaseUrl } from 'environment-variables';
-import { ClipboardService } from 'ngx-clipboard';
+import { Clipboard } from '@angular/cdk/clipboard'
 import { ShareResultService } from 'src/app/service/share-result.service';
 
 @Component({
@@ -22,7 +22,7 @@ export class LoseModalComponent {
   constructor(
     private router: Router,
     public shareResultsService: ShareResultService,
-    private clipboard: ClipboardService
+    private clipboard: Clipboard
   ) {}
 
   newGame() {

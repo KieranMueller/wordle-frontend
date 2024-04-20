@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ClipboardService } from 'ngx-clipboard';
+import { Clipboard } from '@angular/cdk/clipboard'
 import { backendBaseUrl, frontendBaseUrl } from 'environment-variables';
 
 @Component({
@@ -21,7 +21,7 @@ export class CreateWordleOptionsModalComponent implements OnInit {
   generateBtnText = 'generate link!';
   loading = false;
 
-  constructor(private http: HttpClient, private clipBoard: ClipboardService) {}
+  constructor(private http: HttpClient, private clipBoard: Clipboard) {}
 
   ngOnInit() {
     this.created = false;
